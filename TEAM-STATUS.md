@@ -8,7 +8,7 @@
 | 项目 | 值 |
 | --- | --- |
 | 目标仓库 | `qcl-kernel/tgoskits-very_special` |
-| 第二阶段交付分支 | `openrace/task3-yolo-ncnn` |
+| 第二阶段交付分支 | `openrace/phase2-delivery` |
 | 总结前代码提交 | `df0791fa1dc056c5fd33cfad59004bf1880671c5` |
 | 第一阶段状态索引 | `dev@2d40d224b20dc8c4fab2567097594280af7161cc` |
 | 官方同步审计点 | `rcore-os/tgoskits:dev@8e39cbd586a4a34ab9f522931ca4b1e7523709c7` |

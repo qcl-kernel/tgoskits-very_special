@@ -226,6 +226,27 @@ mod scenario {
 /// Trajectory of the fixed target: `[(start_ms, value), ...]`.
 const TARGET_STEPS: [(u64, i32); 3] = [(0, 300), (5_000, 800), (15_000, 500)];
 
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum ExecutionMode {
+    Endpoint,
+    ModelOnly,
+    ModelLoop,
+}
+
+impl ExecutionMode {
+    fn parse(first_argument: Option<&str>, has_extra_argument: bool) -> Result<Self, &'static str> {
+        if has_extra_argument {
+            return Err("task2-net accepts at most one run-mode argument");
+        }
+        match first_argument {
+            None => Ok(Self::Endpoint),
+            Some("model-only") => Ok(Self::ModelOnly),
+            Some("model-loop") => Ok(Self::ModelLoop),
+            Some(_) => Err("run mode must be model-only or model-loop"),
+        }
+    }
+}
+
 fn main() {
     if let Err(message) = run() {
         report_failure(message);
@@ -245,10 +266,15 @@ fn report_failure(message: &'static str) -> ! {
 }
 
 fn run() -> Result<(), &'static str> {
-    let local_ip = parse_ipv4(LOCAL_IP).ok_or("TASK2_LOCAL_IP is invalid")?;
-    let peer_ip = parse_ipv4(PEER_IP).ok_or("TASK2_PEER_IP is invalid")?;
+    let execution_mode = execution_mode()?;
     let model = ModelKind::configured()?;
     let yolo_policy = yolo_policy()?;
+    if execution_mode != ExecutionMode::Endpoint {
+        return run_model_probe(execution_mode, model, yolo_policy);
+    }
+
+    let local_ip = parse_ipv4(LOCAL_IP).ok_or("TASK2_LOCAL_IP is invalid")?;
+    let peer_ip = parse_ipv4(PEER_IP).ok_or("TASK2_PEER_IP is invalid")?;
     configure_network(local_ip)?;
 
     let socket = UdpSocket::bind(SocketAddr::from((local_ip, LOCAL_PORT)))
@@ -265,23 +291,7 @@ fn run() -> Result<(), &'static str> {
     if ROLE == "controller" {
         if TASK3_CONTROL {
             if model == ModelKind::Yolo {
-                println!(
-                    "TASK3_MODEL_READY model=yolo11n.ncnn runtime=ncnn ncnn_revision={} \
-                     param_sha256={} bin_sha256={} input_sha256={} path={} mode=in-guest \
-                     input=rgb-resize-640x640-normalize-1/255 threads=1",
-                    TASK3_NCNN_REVISION,
-                    TASK3_NCNN_PARAM_SHA256,
-                    TASK3_NCNN_MODEL_SHA256,
-                    TASK3_NCNN_INPUT_SHA256,
-                    TASK3_MODEL_PATH
-                );
-                println!(
-                    "TASK3_MODEL_POLICY min_confidence_milli={} min_area_milli={} \
-                     max_target_step={}",
-                    yolo_policy.min_confidence_milli,
-                    yolo_policy.min_area_milli,
-                    yolo_policy.max_target_step
-                );
+                report_yolo_model_ready(yolo_policy, "control-loop");
             } else {
                 println!(
                     "TASK3_MODEL_READY model={} version={} sha256={} path={} mode=bounded-contract",
@@ -417,6 +427,87 @@ fn run() -> Result<(), &'static str> {
     }
 }
 
+fn execution_mode() -> Result<ExecutionMode, &'static str> {
+    #[cfg(feature = "arceos")]
+    {
+        Ok(ExecutionMode::Endpoint)
+    }
+    #[cfg(not(feature = "arceos"))]
+    {
+        let mut arguments = std::env::args().skip(1);
+        let first_argument = arguments.next();
+        ExecutionMode::parse(first_argument.as_deref(), arguments.next().is_some())
+    }
+}
+
+fn report_yolo_model_ready(yolo_policy: task3_model::perception::YoloPolicy, run_mode: &str) {
+    println!(
+        "TASK3_MODEL_READY model=yolo11n.ncnn runtime=ncnn ncnn_revision={} param_sha256={} \
+         bin_sha256={} input_sha256={} path={} mode=in-guest \
+         input=rgb-resize-640x640-normalize-1/255 threads=1 run_mode={run_mode}",
+        TASK3_NCNN_REVISION,
+        TASK3_NCNN_PARAM_SHA256,
+        TASK3_NCNN_MODEL_SHA256,
+        TASK3_NCNN_INPUT_SHA256,
+        TASK3_MODEL_PATH
+    );
+    println!(
+        "TASK3_MODEL_POLICY min_confidence_milli={} min_area_milli={} max_target_step={}",
+        yolo_policy.min_confidence_milli, yolo_policy.min_area_milli, yolo_policy.max_target_step
+    );
+}
+
+#[cfg(feature = "arceos")]
+fn run_model_probe(
+    _execution_mode: ExecutionMode,
+    _model: ModelKind,
+    _yolo_policy: task3_model::perception::YoloPolicy,
+) -> Result<(), &'static str> {
+    Err("model probe modes require the Linux userspace build")
+}
+
+#[cfg(not(feature = "arceos"))]
+fn run_model_probe(
+    execution_mode: ExecutionMode,
+    model: ModelKind,
+    yolo_policy: task3_model::perception::YoloPolicy,
+) -> Result<(), &'static str> {
+    if ROLE != "controller" || !TASK3_CONTROL || model != ModelKind::Yolo {
+        return Err("model probe modes require a Task-3 YOLO controller build");
+    }
+
+    let run_mode = match execution_mode {
+        ExecutionMode::ModelOnly => "model-only",
+        ExecutionMode::ModelLoop => "model-loop",
+        ExecutionMode::Endpoint => return Err("endpoint mode cannot run the model probe"),
+    };
+    report_yolo_model_ready(yolo_policy, run_mode);
+    let started = Instant::now();
+    let mut control = Controller::new(model, yolo_policy);
+    let mut sample = 1u64;
+
+    loop {
+        let start_ms = now_ms(&started);
+        println!("TASK3_INFER_STARTED elapsed_ms={start_ms} sample={sample} model=yolo11n.ncnn");
+        let result = infer_yolo_once();
+        let (target, infer_us) = control.process_yolo_result(result);
+        let output = control.baseline_output(target, control.last_state);
+        let elapsed_ms = now_ms(&started);
+        println!(
+            "TASK3_INFER elapsed_ms={elapsed_ms} sample={sample} output={output} \
+             infer_us={infer_us} model=yolo11n.ncnn target={target}"
+        );
+
+        if execution_mode == ExecutionMode::ModelOnly {
+            println!("TASK3_MODEL_PROBE_COMPLETE samples=1 elapsed_ms={elapsed_ms}");
+            return Ok(());
+        }
+        sample = sample
+            .checked_add(1)
+            .ok_or("model probe sample counter overflow")?;
+    }
+}
+
 /// Task-3 control-loop state on the controller side.
 ///
 /// The loop is request-response: a new CONTROL is queued only after the
@@ -443,8 +534,20 @@ struct Controller {
     yolo_worker: Option<YoloInferenceWorker>,
 }
 
-#[cfg(not(feature = "arceos"))]
 type YoloInferenceResult = Result<(task3_ncnn::Detection, u64), (i32, u64)>;
+
+fn infer_yolo_once() -> YoloInferenceResult {
+    // SAFETY: all three pointers reference static, NUL-terminated byte strings.
+    // The ncnn boundary only borrows them for this call and reports missing or
+    // invalid assets through its numeric error result.
+    unsafe {
+        task3_ncnn::infer(
+            TASK3_NCNN_PARAM_PATH.as_ptr().cast(),
+            TASK3_NCNN_MODEL_PATH.as_ptr().cast(),
+            TASK3_NCNN_INPUT_PATH.as_ptr().cast(),
+        )
+    }
+}
 
 #[cfg(not(feature = "arceos"))]
 struct YoloInferenceWorker {
@@ -456,13 +559,7 @@ impl YoloInferenceWorker {
     fn start() -> Self {
         let (sender, receiver) = mpsc::sync_channel(1);
         thread::spawn(move || {
-            let result = unsafe {
-                task3_ncnn::infer(
-                    TASK3_NCNN_PARAM_PATH.as_ptr().cast(),
-                    TASK3_NCNN_MODEL_PATH.as_ptr().cast(),
-                    TASK3_NCNN_INPUT_PATH.as_ptr().cast(),
-                )
-            };
+            let result = infer_yolo_once();
             // Safe-state cancellation deliberately drops the receiver while a
             // non-cancellable ncnn forward pass finishes.
             let _ = sender.send(result);
@@ -673,13 +770,7 @@ impl Controller {
 
     #[cfg(feature = "arceos")]
     fn poll_yolo_target(&mut self, _request_id: u32, _now_ms: u64) -> Option<(i32, u64)> {
-        let result = unsafe {
-            task3_ncnn::infer(
-                TASK3_NCNN_PARAM_PATH.as_ptr().cast(),
-                TASK3_NCNN_MODEL_PATH.as_ptr().cast(),
-                TASK3_NCNN_INPUT_PATH.as_ptr().cast(),
-            )
-        };
+        let result = infer_yolo_once();
         Some(self.process_yolo_result(result))
     }
 
@@ -1144,4 +1235,35 @@ fn is_would_block(error: &ax_errno::AxError) -> bool {
 #[cfg(not(feature = "arceos"))]
 fn is_would_block(error: &std::io::Error) -> bool {
     error.kind() == std::io::ErrorKind::WouldBlock
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn execution_mode_defaults_to_the_network_endpoint() {
+        assert_eq!(
+            ExecutionMode::parse(None, false),
+            Ok(ExecutionMode::Endpoint)
+        );
+    }
+
+    #[test]
+    fn execution_mode_accepts_single_and_continuous_model_probes() {
+        assert_eq!(
+            ExecutionMode::parse(Some("model-only"), false),
+            Ok(ExecutionMode::ModelOnly)
+        );
+        assert_eq!(
+            ExecutionMode::parse(Some("model-loop"), false),
+            Ok(ExecutionMode::ModelLoop)
+        );
+    }
+
+    #[test]
+    fn execution_mode_rejects_unknown_or_extra_arguments() {
+        assert!(ExecutionMode::parse(Some("unknown"), false).is_err());
+        assert!(ExecutionMode::parse(Some("model-loop"), true).is_err());
+    }
 }

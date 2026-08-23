@@ -1,6 +1,6 @@
 use std::{
     env,
-    ffi::CStr,
+    ffi::{CStr, CString},
     net::{SocketAddr, UdpSocket},
     sync::mpsc::{self, Receiver, TryRecvError},
     thread,
@@ -15,7 +15,10 @@ use task3_model::perception::{
     PerceptionDecision, PerceptionRejectReason, YoloDetection, YoloPolicy, yolo_detection_to_target,
 };
 
+mod experiment;
 mod ncnn;
+
+use experiment::{ImageSample, RunMode, TargetSource, load_task3_ab_manifest};
 
 const SESSION: SessionId = SessionId::new(0x5452_5432);
 const POLICY: RetryPolicy = match RetryPolicy::new(500, 5, 200, 5_000) {
@@ -29,47 +32,16 @@ const NCNN_REVISION: &str = "946fe3fb14a8dff8c06df763f67be522167b2f00";
 const MODEL_PARAM_SHA256: &str = "d2c0adf8939dc9ce02964ce8ada104447768ffd8e3bffad8fa11e2e61e709c1f";
 const MODEL_BIN_SHA256: &str = "0ae562447923999779b12b4f91f96b9ef263add8c9902d10e22e6dd6a2932c12";
 const MODEL_INPUT_SHA256: &str = "608c8a61ff0bb43e5a8613f1f6f8aa08af74b084363610ed2b526ad925e4cb6f";
+const AB_MANIFEST_SHA256: &str = "3406b58bb1920dba66462b982304294324bc5d4cdb3ed80f14e4c6ba595dd47b";
 const MODEL_PARAM_PATH: &CStr = c"/usr/share/task3-yolo/yolo11n.ncnn.param";
 const MODEL_BIN_PATH: &CStr = c"/usr/share/task3-yolo/yolo11n.ncnn.bin";
 const MODEL_INPUT_PATH: &CStr = c"/usr/share/task3-yolo/input.ppm";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-enum RunMode {
-    Normal,
-    ModelOnly,
-    OutOfOrder,
-    InvalidParameter,
-    ModelRejected,
-}
-
-impl RunMode {
-    fn parse(value: Option<&str>) -> Result<Self, &'static str> {
-        match value {
-            None | Some("normal") => Ok(Self::Normal),
-            Some("model-only") => Ok(Self::ModelOnly),
-            Some("out-of-order") => Ok(Self::OutOfOrder),
-            Some("invalid-parameter") => Ok(Self::InvalidParameter),
-            Some("model-rejected") => Ok(Self::ModelRejected),
-            Some(_) => {
-                Err("mode must be normal, model-only, out-of-order, invalid-parameter, or model-rejected")
-            }
-        }
-    }
-
-    const fn name(self) -> &'static str {
-        match self {
-            Self::Normal => "normal",
-            Self::ModelOnly => "model-only",
-            Self::OutOfOrder => "out-of-order",
-            Self::InvalidParameter => "invalid-parameter",
-            Self::ModelRejected => "model-rejected",
-        }
-    }
-}
-
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum InferenceRejection {
-    DeadlineExceeded,
+    DeadlineExceeded {
+        infer_us: u64,
+    },
     #[cfg(all(target_arch = "aarch64", target_os = "linux"))]
     NoDetection {
         infer_us: u64,
@@ -81,16 +53,35 @@ enum InferenceRejection {
     },
     #[cfg(not(all(target_arch = "aarch64", target_os = "linux")))]
     UnsupportedPlatform,
-    Perception(PerceptionRejectReason),
+    Perception {
+        reason: PerceptionRejectReason,
+        infer_us: u64,
+    },
     InjectedInvalidOutput,
     WorkerDisconnected,
 }
 
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+impl InferenceRejection {
+    const fn infer_us(self) -> Option<u64> {
+        match self {
+            Self::DeadlineExceeded { infer_us } | Self::Perception { infer_us, .. } => {
+                Some(infer_us)
+            }
+            #[cfg(all(target_arch = "aarch64", target_os = "linux"))]
+            Self::NoDetection { infer_us } | Self::RuntimeError { infer_us, .. } => Some(infer_us),
+            Self::InjectedInvalidOutput | Self::WorkerDisconnected => None,
+            #[cfg(not(all(target_arch = "aarch64", target_os = "linux")))]
+            Self::UnsupportedPlatform => None,
+        }
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
 struct InferenceOutput {
-    detection: YoloDetection,
+    detection: Option<YoloDetection>,
     control_value: i32,
     infer_us: u64,
+    source: TargetSource,
 }
 
 struct InferenceWorker {
@@ -114,6 +105,10 @@ struct ControlLoop {
     inference_worker: Option<InferenceWorker>,
     discard_inference_result: bool,
     last_target: i32,
+    last_state: i32,
+    samples: Vec<ImageSample>,
+    sample_index: usize,
+    experiment_complete: bool,
 }
 
 fn main() {
@@ -124,14 +119,19 @@ fn main() {
 
 fn run() -> Result<(), String> {
     let mode = parse_run_mode()?;
-    println!(
-        "TASK3_MODEL_READY model=yolo11n.ncnn runtime=ncnn ncnn_revision={NCNN_REVISION} \
-         param_sha256={MODEL_PARAM_SHA256} bin_sha256={MODEL_BIN_SHA256} \
-         input_sha256={MODEL_INPUT_SHA256} mode=in-guest run_mode={}",
-        mode.name()
-    );
-    println!("TASK3_INFER_STARTED model=yolo11n.ncnn request=1 phase=startup");
-    let initial_inference = run_inference(mode, CONTROL_TARGET);
+    let samples = if mode.is_ab_experiment() {
+        load_task3_ab_manifest()?
+    } else {
+        Vec::new()
+    };
+    report_experiment_ready(mode, &samples);
+    let initial_sample = samples.first().cloned();
+    if mode.requires_model() {
+        println!("TASK3_INFER_STARTED model=yolo11n.ncnn request=1 phase=startup");
+    } else {
+        println!("TASK3_MANUAL_STARTED request=1 target={CONTROL_TARGET} phase=startup");
+    }
+    let initial_inference = make_control_decision(mode, CONTROL_TARGET, initial_sample);
 
     if mode == RunMode::ModelOnly {
         return match initial_inference {
@@ -140,15 +140,7 @@ fn run() -> Result<(), String> {
                     "TASK3_INFER model=yolo11n.ncnn infer_us={} request=1 elapsed_ms=0",
                     inference.infer_us
                 );
-                println!(
-                    "TASK3_DETECTION model=yolo11n.ncnn class={} confidence_milli={} \
-                     center_x_milli={} area_milli={} target={} request=1",
-                    inference.detection.class_id,
-                    inference.detection.confidence_milli,
-                    inference.detection.center_x_milli,
-                    inference.detection.area_milli,
-                    inference.control_value
-                );
+                report_detection(&inference, 1);
                 Ok(())
             }
             Err(reason) => {
@@ -170,7 +162,7 @@ fn run() -> Result<(), String> {
         .map_err(|error| format!("peer address error={error}"))?;
     let started = Instant::now();
     let mut endpoint = Endpoint::new(SESSION, POLICY, 0);
-    let mut control = ControlLoop::with_initial_inference(mode, initial_inference);
+    let mut control = ControlLoop::with_initial_inference(mode, samples, initial_inference);
     let mut inbound = [0u8; MAX_DATAGRAM_LEN];
     let mut response = [0u8; MAX_DATAGRAM_LEN];
     let mut outbound = [0u8; MAX_DATAGRAM_LEN];
@@ -215,6 +207,47 @@ fn parse_run_mode() -> Result<RunMode, String> {
         return Err("only one run-mode argument is accepted".to_owned());
     }
     Ok(mode)
+}
+
+fn report_experiment_ready(mode: RunMode, samples: &[ImageSample]) {
+    if mode == RunMode::Manual {
+        println!(
+            "TASK3_EXPERIMENT_READY run_mode=manual source=manual frozen_target={CONTROL_TARGET} \
+             samples={}",
+            samples.len()
+        );
+        return;
+    }
+    println!(
+        "TASK3_MODEL_READY model=yolo11n.ncnn runtime=ncnn ncnn_revision={NCNN_REVISION} \
+         param_sha256={MODEL_PARAM_SHA256} bin_sha256={MODEL_BIN_SHA256} \
+         input_sha256={MODEL_INPUT_SHA256} input_manifest_sha256={AB_MANIFEST_SHA256} \
+         mode=in-guest run_mode={} samples={}",
+        mode.name(),
+        samples.len()
+    );
+}
+
+fn report_detection(inference: &InferenceOutput, request_id: u32) {
+    match inference.detection {
+        Some(detection) => println!(
+            "TASK3_DETECTION model=yolo11n.ncnn class={} confidence_milli={} center_x_milli={} \
+             area_milli={} target={} request={request_id}",
+            detection.class_id,
+            detection.confidence_milli,
+            detection.center_x_milli,
+            detection.area_milli,
+            inference.control_value
+        ),
+        None => println!(
+            "TASK3_MANUAL_TARGET source=manual target={} infer_us=0 request={request_id}",
+            inference.control_value
+        ),
+    }
+}
+
+fn format_truth_target(target: Option<i32>) -> String {
+    target.map_or_else(|| "none".to_owned(), |value| value.to_string())
 }
 
 fn receive_datagram(
@@ -313,14 +346,20 @@ impl ControlLoop {
             inference_worker: None,
             discard_inference_result: false,
             last_target: CONTROL_TARGET,
+            last_state: 300,
+            samples: Vec::new(),
+            sample_index: 0,
+            experiment_complete: false,
         }
     }
 
     fn with_initial_inference(
         mode: RunMode,
+        samples: Vec<ImageSample>,
         initial_inference: Result<InferenceOutput, InferenceRejection>,
     ) -> Self {
         let mut control = Self::new(mode);
+        control.samples = samples;
         control.inference_worker = Some(InferenceWorker::completed(initial_inference));
         control
     }
@@ -336,6 +375,7 @@ impl ControlLoop {
         if endpoint.state() != EndpointState::Active
             || self.request_in_flight
             || self.model_rejected
+            || self.experiment_complete
             || now_ms < self.next_send_at_ms
         {
             return Ok(());
@@ -409,6 +449,24 @@ impl ControlLoop {
         let inference = match inference_result {
             Ok(inference) => inference,
             Err(reason) => {
+                if self.mode == RunMode::Yolo {
+                    if let Some(infer_us) = reason.infer_us() {
+                        println!(
+                            "TASK3_INFER model=yolo11n.ncnn source=yolo infer_us={infer_us} \
+                             request={} elapsed_ms={now_ms}",
+                            self.request_id
+                        );
+                    }
+                    self.report_current_sample("rejected", now_ms);
+                    println!(
+                        "TASK3_MODEL_REJECTED model=yolo11n.ncnn reason={reason:?} action=safe \
+                         request={} elapsed_ms={now_ms}",
+                        self.request_id
+                    );
+                    println!("STARRY_T2N1_SAFE source=model reason={reason:?} elapsed_ms={now_ms}");
+                    self.finish_rejected_ab_sample(now_ms);
+                    return Ok(());
+                }
                 self.model_rejected = true;
                 println!(
                     "TASK3_MODEL_REJECTED model=yolo11n.ncnn reason={reason:?} action=safe \
@@ -418,20 +476,21 @@ impl ControlLoop {
                 return Ok(());
             }
         };
-        println!(
-            "TASK3_INFER model=yolo11n.ncnn infer_us={} request={} elapsed_ms={now_ms}",
-            inference.infer_us, self.request_id
-        );
-        println!(
-            "TASK3_DETECTION model=yolo11n.ncnn class={} confidence_milli={} center_x_milli={} \
-             area_milli={} target={} request={}",
-            inference.detection.class_id,
-            inference.detection.confidence_milli,
-            inference.detection.center_x_milli,
-            inference.detection.area_milli,
-            inference.control_value,
-            self.request_id
-        );
+        self.report_current_sample("accepted", now_ms);
+        if inference.source == TargetSource::Yolo {
+            println!(
+                "TASK3_INFER model=yolo11n.ncnn source=yolo infer_us={} request={} \
+                 elapsed_ms={now_ms}",
+                inference.infer_us, self.request_id
+            );
+        } else {
+            println!(
+                "TASK3_MANUAL_INPUT source=manual target={} infer_us=0 request={} \
+                 elapsed_ms={now_ms}",
+                inference.control_value, self.request_id
+            );
+        }
+        report_detection(&inference, self.request_id);
 
         let mut payload = [0u8; 12];
         let command = ControlMessage::new(
@@ -467,15 +526,40 @@ impl ControlLoop {
             inference.control_value,
             self.request_id
         );
+        if let Some(sample) = self.current_sample() {
+            println!(
+                "TASK3_CONTROL_SENT elapsed_ms={now_ms} sample={} image_id={} source={} \
+                 request={} value={} truth_target={} state={} seq={}",
+                self.sample_index + 1,
+                sample.id,
+                inference.source.name(),
+                self.request_id,
+                inference.control_value,
+                format_truth_target(sample.truth_target),
+                self.last_state,
+                transmission.sequence().get()
+            );
+        }
         Ok(())
     }
 
     fn start_inference(&mut self, now_ms: u64) {
-        println!(
-            "TASK3_INFER_STARTED model=yolo11n.ncnn request={} elapsed_ms={now_ms}",
-            self.request_id
-        );
-        self.inference_worker = Some(InferenceWorker::start(self.mode, self.last_target));
+        if self.mode.requires_model() {
+            println!(
+                "TASK3_INFER_STARTED model=yolo11n.ncnn request={} elapsed_ms={now_ms}",
+                self.request_id
+            );
+        } else {
+            println!(
+                "TASK3_MANUAL_STARTED request={} target={CONTROL_TARGET} elapsed_ms={now_ms}",
+                self.request_id
+            );
+        }
+        self.inference_worker = Some(InferenceWorker::start(
+            self.mode,
+            self.last_target,
+            self.current_sample().cloned(),
+        ));
     }
 
     fn handle_receive_event(&mut self, event: ReceiveEvent<'_>, endpoint: &Endpoint, now_ms: u64) {
@@ -494,6 +578,8 @@ impl ControlLoop {
                         self.status_received = true;
                         self.successful_cycles = self.successful_cycles.saturating_add(1);
                         self.next_send_at_ms = now_ms + CONTROL_INTERVAL_MS;
+                        let state_before = self.last_state;
+                        self.last_state = status.value();
                         println!(
                             "STARRY_T2N1_STATUS_DELIVERED seq={} bytes={} request={} state={:?} \
                              value={} rtt_ms={rtt_ms}",
@@ -503,6 +589,19 @@ impl ControlLoop {
                             status.state(),
                             status.value()
                         );
+                        if let Some(sample) = self.current_sample() {
+                            println!(
+                                "TASK3_STATUS_RECEIVED elapsed_ms={now_ms} sample={} image_id={} \
+                                 request={} value={} state_before={} state_after={} \
+                                 rtt_ms={rtt_ms}",
+                                self.sample_index + 1,
+                                sample.id,
+                                status.last_control_request(),
+                                self.last_target,
+                                state_before,
+                                status.value()
+                            );
+                        }
                         if self.recovery_pending {
                             println!(
                                 "STARRY_T2N1_FAULT_RECOVERY_COMPLETE mode={} request={} \
@@ -514,6 +613,9 @@ impl ControlLoop {
                             self.protocol_safe_observed = false;
                         }
                         self.request_id = next_request_id(self.request_id);
+                        if self.mode.is_ab_experiment() {
+                            self.finish_ab_sample(now_ms);
+                        }
                     }
                     Ok(status) => println!(
                         "STARRY_T2N1_STATUS_IGNORED seq={} request={} in_flight={}",
@@ -589,6 +691,49 @@ impl ControlLoop {
             println!("STARRY_T2N1_PASS");
         }
     }
+
+    fn current_sample(&self) -> Option<&ImageSample> {
+        self.samples.get(self.sample_index)
+    }
+
+    fn report_current_sample(&self, outcome: &str, now_ms: u64) {
+        let Some(sample) = self.current_sample() else {
+            return;
+        };
+        println!(
+            "TASK3_SAMPLE sample={} image_id={} image_sha256={} truth_target={} expected={} \
+             source={} outcome={outcome} request={} elapsed_ms={now_ms}",
+            self.sample_index + 1,
+            sample.id,
+            sample.sha256,
+            format_truth_target(sample.truth_target),
+            sample.expected.name(),
+            if self.mode == RunMode::Manual {
+                "manual"
+            } else {
+                "yolo"
+            },
+            self.request_id
+        );
+    }
+
+    fn finish_ab_sample(&mut self, now_ms: u64) {
+        self.sample_index += 1;
+        self.next_send_at_ms = now_ms + CONTROL_INTERVAL_MS;
+        if self.sample_index >= self.samples.len() {
+            self.experiment_complete = true;
+            println!(
+                "TASK3_EXPERIMENT_COMPLETE run_mode={} samples={} elapsed_ms={now_ms}",
+                self.mode.name(),
+                self.samples.len()
+            );
+        }
+    }
+
+    fn finish_rejected_ab_sample(&mut self, now_ms: u64) {
+        self.request_id = next_request_id(self.request_id);
+        self.finish_ab_sample(now_ms);
+    }
 }
 
 impl InferenceWorker {
@@ -600,12 +745,12 @@ impl InferenceWorker {
         Self { receiver }
     }
 
-    fn start(mode: RunMode, current_target: i32) -> Self {
+    fn start(mode: RunMode, current_target: i32, sample: Option<ImageSample>) -> Self {
         let (sender, receiver) = mpsc::sync_channel(1);
         thread::spawn(move || {
             // A Safe transition may intentionally drop the receiver while ncnn
             // finishes the non-cancellable forward pass.
-            let _ = sender.send(run_inference(mode, current_target));
+            let _ = sender.send(make_control_decision(mode, current_target, sample));
         });
         Self { receiver }
     }
@@ -623,10 +768,40 @@ fn run_inference(
     mode: RunMode,
     current_target: i32,
 ) -> Result<InferenceOutput, InferenceRejection> {
+    run_inference_with_input(mode, current_target, MODEL_INPUT_PATH)
+}
+
+fn make_control_decision(
+    mode: RunMode,
+    current_target: i32,
+    sample: Option<ImageSample>,
+) -> Result<InferenceOutput, InferenceRejection> {
+    if mode == RunMode::Manual {
+        return Ok(InferenceOutput {
+            detection: None,
+            control_value: CONTROL_TARGET,
+            infer_us: 0,
+            source: TargetSource::Manual,
+        });
+    }
+    if mode != RunMode::Yolo {
+        return run_inference(mode, current_target);
+    }
+    let sample = sample.ok_or(InferenceRejection::InjectedInvalidOutput)?;
+    let input_path = CString::new(sample.installed_path())
+        .map_err(|_| InferenceRejection::InjectedInvalidOutput)?;
+    run_inference_with_input(mode, current_target, &input_path)
+}
+
+fn run_inference_with_input(
+    mode: RunMode,
+    current_target: i32,
+    input_path: &CStr,
+) -> Result<InferenceOutput, InferenceRejection> {
     if mode == RunMode::ModelRejected {
         return Err(InferenceRejection::InjectedInvalidOutput);
     }
-    let (raw_detection, infer_us) = ncnn::infer(MODEL_PARAM_PATH, MODEL_BIN_PATH, MODEL_INPUT_PATH)
+    let (raw_detection, infer_us) = ncnn::infer(MODEL_PARAM_PATH, MODEL_BIN_PATH, input_path)
         .map_err(|error| match error {
             #[cfg(all(target_arch = "aarch64", target_os = "linux"))]
             ncnn::Error::NoDetection { infer_us } => InferenceRejection::NoDetection { infer_us },
@@ -652,18 +827,21 @@ fn validate_detection(
     current_target: i32,
     mode: RunMode,
 ) -> Result<InferenceOutput, InferenceRejection> {
-    /* model-only is a latency-probe driver: it must report the inference
-     * result even when the shared hypervisor scheduler makes it slow. */
+    // model-only is a latency-probe driver: it must report the inference
+    // result even when the shared hypervisor scheduler makes it slow.
     if infer_us > MAX_INFERENCE_US && mode != RunMode::ModelOnly {
-        return Err(InferenceRejection::DeadlineExceeded);
+        return Err(InferenceRejection::DeadlineExceeded { infer_us });
     }
     match yolo_detection_to_target(detection, current_target, YoloPolicy::task3_default()) {
         PerceptionDecision::Target { target, .. } => Ok(InferenceOutput {
-            detection,
+            detection: Some(detection),
             control_value: target,
             infer_us,
+            source: TargetSource::Yolo,
         }),
-        PerceptionDecision::Reject(reason) => Err(InferenceRejection::Perception(reason)),
+        PerceptionDecision::Reject(reason) => {
+            Err(InferenceRejection::Perception { reason, infer_us })
+        }
     }
 }
 
@@ -675,7 +853,11 @@ fn encode_fault_frame(
     let sequence = match mode {
         RunMode::OutOfOrder => SequenceNumber::from_wire(2),
         RunMode::InvalidParameter => SequenceNumber::FIRST,
-        RunMode::Normal | RunMode::ModelOnly | RunMode::ModelRejected => return Ok(None),
+        RunMode::Normal
+        | RunMode::ModelOnly
+        | RunMode::Manual
+        | RunMode::Yolo
+        | RunMode::ModelRejected => return Ok(None),
     };
     let mut payload = [0u8; 12];
     match mode {
@@ -690,7 +872,11 @@ fn encode_fault_frame(
             payload[4..8].copy_from_slice(&(ControlMessage::MAX_OUTPUT_VALUE + 1).to_be_bytes());
             payload[8..12].copy_from_slice(&request_id.to_be_bytes());
         }
-        RunMode::Normal | RunMode::ModelOnly | RunMode::ModelRejected => unreachable!(),
+        RunMode::Normal
+        | RunMode::ModelOnly
+        | RunMode::Manual
+        | RunMode::Yolo
+        | RunMode::ModelRejected => unreachable!(),
     }
     let frame = Frame::reliable(MessageKind::Control, SESSION, sequence, &payload)
         .map_err(|error| format!("fault frame construction error={error}"))?;
@@ -737,11 +923,14 @@ mod tests {
     use task2_net_protocol::PayloadError;
 
     use super::*;
+    use crate::experiment::ExpectedBehavior;
 
     #[test]
     fn parses_supported_run_modes() {
         assert_eq!(RunMode::parse(None), Ok(RunMode::Normal));
         assert_eq!(RunMode::parse(Some("normal")), Ok(RunMode::Normal));
+        assert_eq!(RunMode::parse(Some("manual")), Ok(RunMode::Manual));
+        assert_eq!(RunMode::parse(Some("yolo")), Ok(RunMode::Yolo));
         assert_eq!(
             RunMode::parse(Some("out-of-order")),
             Ok(RunMode::OutOfOrder)
@@ -767,16 +956,24 @@ mod tests {
         };
 
         assert_eq!(
-            validate_detection(detection, 13_000_000, CONTROL_TARGET),
+            validate_detection(detection, 13_000_000, CONTROL_TARGET, RunMode::Normal,),
             Ok(InferenceOutput {
-                detection,
+                detection: Some(detection),
                 control_value: 421,
                 infer_us: 13_000_000,
+                source: TargetSource::Yolo,
             })
         );
         assert_eq!(
-            validate_detection(detection, MAX_INFERENCE_US + 1, CONTROL_TARGET),
-            Err(InferenceRejection::DeadlineExceeded)
+            validate_detection(
+                detection,
+                MAX_INFERENCE_US + 1,
+                CONTROL_TARGET,
+                RunMode::Normal,
+            ),
+            Err(InferenceRejection::DeadlineExceeded {
+                infer_us: MAX_INFERENCE_US + 1,
+            })
         );
 
         let low_confidence = YoloDetection {
@@ -784,11 +981,65 @@ mod tests {
             ..detection
         };
         assert_eq!(
-            validate_detection(low_confidence, 1, CONTROL_TARGET),
-            Err(InferenceRejection::Perception(
-                PerceptionRejectReason::LowConfidence
-            ))
+            validate_detection(low_confidence, 1, CONTROL_TARGET, RunMode::Normal),
+            Err(InferenceRejection::Perception {
+                reason: PerceptionRejectReason::LowConfidence,
+                infer_us: 1,
+            })
         );
+    }
+
+    #[test]
+    fn rejected_ab_sample_advances_request_identity() {
+        let mut control = ControlLoop::new(RunMode::Yolo);
+        control.samples = load_task3_ab_manifest().unwrap();
+        control.sample_index = 3;
+        control.request_id = 4;
+
+        control.finish_rejected_ab_sample(100);
+
+        assert_eq!(control.sample_index, 4);
+        assert_eq!(control.request_id, 5);
+        assert!(!control.experiment_complete);
+    }
+
+    #[test]
+    fn task3_ab_manifest_freezes_order_truth_and_expected_behavior() {
+        let samples = load_task3_ab_manifest().unwrap();
+
+        assert_eq!(
+            samples
+                .iter()
+                .map(|sample| sample.id.as_str())
+                .collect::<Vec<_>>(),
+            [
+                "vase-left",
+                "vase-center",
+                "vase-right",
+                "no-target",
+                "small-target"
+            ]
+        );
+        assert_eq!(samples[0].truth_target, Some(321));
+        assert_eq!(samples[1].truth_target, Some(421));
+        assert_eq!(samples[2].truth_target, Some(521));
+        assert_eq!(samples[3].truth_target, None);
+        assert_eq!(samples[4].truth_target, Some(500));
+        assert_eq!(samples[0].expected, ExpectedBehavior::Accept);
+        assert_eq!(samples[3].expected, ExpectedBehavior::Reject);
+        assert_eq!(samples[4].expected, ExpectedBehavior::Reject);
+    }
+
+    #[test]
+    fn manual_mode_returns_frozen_target_without_a_detection() {
+        let sample = load_task3_ab_manifest().unwrap().remove(0);
+
+        let output = make_control_decision(RunMode::Manual, CONTROL_TARGET, Some(sample)).unwrap();
+
+        assert_eq!(output.control_value, CONTROL_TARGET);
+        assert_eq!(output.infer_us, 0);
+        assert_eq!(output.detection, None);
+        assert_eq!(output.source, TargetSource::Manual);
     }
 
     #[test]

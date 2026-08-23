@@ -208,15 +208,23 @@ fn record_dedicated_cpu_owner(
     vcpu_id: usize,
     cpu_id: usize,
 ) -> Result<()> {
-    if cpu_id >= host_cpu_count {
-        bail!("VM[{vm_id}] vCPU{vcpu_id} targets offline physical CPU {cpu_id}");
+    let logical_cpu_id = ax_std::os::arceos::modules::ax_hal::topology::resolve_cpu_index(cpu_id)
+        .ok_or_else(|| {
+        anyhow::anyhow!("VM[{vm_id}] vCPU{vcpu_id} targets unknown hardware CPU ID {cpu_id:#x}")
+    })?;
+    if logical_cpu_id >= host_cpu_count {
+        bail!(
+            "VM[{vm_id}] vCPU{vcpu_id} targets offline hardware CPU ID {cpu_id:#x} \
+             (logical CPU {logical_cpu_id})"
+        );
     }
-    if cpu_id >= usize::BITS as usize || dedicated_mask & (1usize << cpu_id) == 0 {
+    if logical_cpu_id >= usize::BITS as usize || dedicated_mask & (1usize << logical_cpu_id) == 0 {
         return Ok(());
     }
-    if let Some((owner_vm, owner_vcpu)) = owners.insert(cpu_id, (vm_id, vcpu_id)) {
+    if let Some((owner_vm, owner_vcpu)) = owners.insert(logical_cpu_id, (vm_id, vcpu_id)) {
         bail!(
-            "dedicated physical CPU {cpu_id} is assigned to both VM[{owner_vm}] vCPU{owner_vcpu} and VM[{vm_id}] vCPU{vcpu_id}"
+            "dedicated logical CPU {logical_cpu_id} (hardware ID {cpu_id:#x}) is assigned to both \
+             VM[{owner_vm}] vCPU{owner_vcpu} and VM[{vm_id}] vCPU{vcpu_id}"
         );
     }
     Ok(())
@@ -402,8 +410,7 @@ fn vm_config_needs_host_filesystem_release(config: &GuestConfig) -> bool {
     // host filesystem must release the PCI controller in that case too;
     // restricting this check to `image_location = "fs"` leaves the host NVMe
     // driver holding the device and the Guest sees no usable root disk.
-    config.base.guest_type == GuestType::Passthrough
-        || !config.devices.passthrough.is_empty()
+    config.base.guest_type == GuestType::Passthrough || !config.devices.passthrough.is_empty()
 }
 
 #[cfg(all(

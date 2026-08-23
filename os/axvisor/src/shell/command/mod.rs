@@ -41,11 +41,30 @@ pub static COMMAND_TREE: LazyLock<BTreeMap<String, CommandNode>> =
     LazyLock::new(build_command_tree);
 
 pub(super) fn shutdown(exit_code: i32) -> ! {
+    quiesce_host_filesystems();
+    std::process::exit(exit_code);
+}
+
+/// Resets the whole board through the platform's PSCI `SYSTEM_RESET`.
+///
+/// [`shutdown`] halts the machine, and `vm reset` only recycles one guest, so
+/// neither can hand the board back to its bootloader. Without this, swapping a
+/// RAM-booted image requires someone to physically press the board's reset
+/// button, which is the dominant cost of a bring-up loop on hardware such as
+/// the ATK-DLRK3588.
+///
+/// Host filesystems are flushed first, exactly as [`shutdown`] does; resetting
+/// with a dirty ext4 rootfs corrupts it.
+pub(super) fn reboot() -> ! {
+    quiesce_host_filesystems();
+    ax_std::os::arceos::modules::ax_hal::power::system_reset()
+}
+
+fn quiesce_host_filesystems() {
     #[cfg(feature = "fs")]
     if let Err(error) = axvm::shutdown_host_filesystems() {
         println!("Warning: failed to shut down host filesystems: {error}");
     }
-    std::process::exit(exit_code);
 }
 
 #[derive(Debug, Clone)]
@@ -618,6 +637,19 @@ mod tests {
         let tokens = CommandParser::tokenize("echo\u{2003}value").unwrap();
 
         assert_eq!(tokens, ["echo\u{2003}value"]);
+    }
+
+    #[test]
+    fn reboot_is_registered_and_distinct_from_vm_reset() {
+        // `exit` halts and `vm reset` recycles one guest; only `reboot` hands
+        // the board back to its bootloader, which is what a RAM-boot loop
+        // needs in order to load the next image without a physical button.
+        let parsed = CommandParser::parse("reboot").unwrap();
+        assert_eq!(parsed.command_path, ["reboot"]);
+        assert!(COMMAND_TREE.contains_key("reboot"));
+
+        let vm_reset = CommandParser::parse("vm reset 1").unwrap();
+        assert_eq!(vm_reset.command_path, ["vm", "reset"]);
     }
 
     #[test]

@@ -15,7 +15,7 @@
 use std::{ptr::NonNull, string::String, vec::Vec};
 
 use ax_memory_addr::MemoryAddr;
-use axvmconfig::GuestConfig;
+use axvmconfig::{GuestConfig, VmMemMappingType};
 use fdt_edit::{Fdt, Node, NodeId, Property};
 use fdt_raw::RegInfo;
 
@@ -54,9 +54,59 @@ pub fn create_guest_fdt(
             &machine_interrupt_providers,
         )
     })?;
+    remove_host_reservations_for_guest_ram(&mut guest_tree, crate_config);
     rebuild_guest_cpu_nodes(&mut guest_tree, phys_cpu_ids)?;
     prune_dangling_interrupts_extended(fdt, &mut guest_tree)?;
     Ok(guest_tree.finish())
+}
+
+/// Host-owned reserved memory can be the intentional identity backing for a
+/// guest RAM bank.  Keep the reservation in the host FDT, but do not copy an
+/// exactly matching `/reserved-memory` child into the guest FDT: inside the
+/// guest that same range is ordinary usable RAM.
+fn remove_host_reservations_for_guest_ram(tree: &mut FdtTree, config: &GuestConfig) {
+    let configured_count = if config.kernel.configured_memory_region_count == 0 {
+        config.kernel.memory_regions.len()
+    } else {
+        config
+            .kernel
+            .configured_memory_region_count
+            .min(config.kernel.memory_regions.len())
+    };
+    let guest_ram = config
+        .kernel
+        .memory_regions
+        .iter()
+        .take(configured_count)
+        .filter(|region| region.map_type == VmMemMappingType::MapReserved)
+        .map(|region| (region.gpa as u64, region.size as u64))
+        .collect::<Vec<_>>();
+
+    if guest_ram.is_empty() {
+        return;
+    }
+
+    let paths = tree
+        .inner()
+        .iter_node_ids()
+        .filter_map(|node_id| {
+            let path = tree.inner().path_of(node_id);
+            if !path.starts_with("/reserved-memory/") {
+                return None;
+            }
+            let matches_guest_ram = tree.inner().view_typed(node_id).is_some_and(|node| {
+                node.regs().iter().any(|reg| {
+                    reg.size
+                        .is_some_and(|size| guest_ram.contains(&(reg.address, size)))
+                })
+            });
+            matches_guest_ram.then_some(path)
+        })
+        .collect::<Vec<_>>();
+
+    for path in paths {
+        tree.inner_mut().remove_by_path(&path);
+    }
 }
 
 /// Rebuilds the CPU subtree so node names and `reg` values both match the

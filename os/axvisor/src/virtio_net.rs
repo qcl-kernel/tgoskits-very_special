@@ -11,9 +11,9 @@ use axdevice_base::{
 };
 use axvirtio_common::{GuestMemory, NoGuestMemoryAccessor, VirtioError};
 use axvirtio_net::{
-    switch::{SwitchPort, SwitchPortId, SwitchPortRegistration, VirtualSwitch},
     DeviceEvent, NetworkBackend, NetworkBackendError, RxOutcome, VirtioMmioNetDevice,
     VirtioNetConfig,
+    switch::{SwitchPort, SwitchPortId, SwitchPortRegistration, VirtualSwitch},
 };
 use axvm::{ConfiguredDeviceError, ConfiguredModelRegistration, DeviceInstantiationContext};
 use axvm_types::GuestPhysAddr;

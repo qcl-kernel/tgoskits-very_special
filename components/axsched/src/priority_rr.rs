@@ -130,9 +130,10 @@ pub struct PriorityRRScheduler<T: SchedPriority, const MAX_TIME_SLICE: usize> {
 }
 
 // A runnable high-priority guest must remain dominant, but it must not be able
-// to starve a lower-priority guest indefinitely. With the default 1 ms host
-// tick this bounds lower-priority dispatch delay to roughly 20 ms plus one
-// quantum. The bound is independent of workload duration.
+// to starve a lower-priority guest indefinitely. The host scheduler tick is
+// 10 ms (TICKS_PER_SEC = 100), so this bounds lower-priority dispatch delay to
+// roughly 200 ms of accumulated higher-priority runnable time plus one service
+// tick. The bound is independent of workload duration.
 const LOWER_SERVICE_INTERVAL_TICKS: u16 = 20;
 // One complete host tick is enough for a vCPU to process accumulated timer
 // work. This window survives VM-exit yields and wakeup preemptions, but remains
@@ -234,9 +235,7 @@ impl<T: SchedPriority, const S: usize> BaseScheduler for PriorityRRScheduler<T, 
         // lower-priority task).  Keep the task running and replenish its
         // budget; once a same-priority peer appears, normal bounded RR starts.
         let current_priority = Self::priority_index(current);
-        if self.forced_service_priority == Some(current_priority)
-            && current.has_forced_service()
-        {
+        if self.forced_service_priority == Some(current_priority) && current.has_forced_service() {
             if current.consume_forced_service_tick() {
                 current.end_forced_service();
                 self.forced_service_priority = None;

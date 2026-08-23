@@ -33,6 +33,7 @@ class VerifyStarryTask1AbTests(unittest.TestCase):
             VERIFY.verify_shared_pcpu_configs(
                 CONFIG_DIR / "vm-aarch64-starry-task1-shared.toml",
                 CONFIG_DIR / "vm-aarch64-zephyr-task1-shared.toml",
+                "zephyr",
             ),
             [],
         )
@@ -83,11 +84,16 @@ class VerifyStarryTask1AbTests(unittest.TestCase):
 
     def test_guest_artifact_hashes_must_match(self) -> None:
         hashes = {role: f"hash-{role}" for role in VERIFY.GUEST_ARTIFACT_SUFFIXES}
-        self.assertEqual(VERIFY.verify_guest_artifact_equivalence(hashes, hashes), [])
+        hashes["zephyr"] = "hash-zephyr"
+        self.assertEqual(
+            VERIFY.verify_guest_artifact_equivalence(hashes, hashes, "zephyr"), []
+        )
 
         changed = dict(hashes)
         changed["zephyr"] = "different"
-        self.assertTrue(VERIFY.verify_guest_artifact_equivalence(hashes, changed))
+        self.assertTrue(
+            VERIFY.verify_guest_artifact_equivalence(hashes, changed, "zephyr")
+        )
 
     def test_rootfs_content_must_match_endpoint_script_and_yolo_assets(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

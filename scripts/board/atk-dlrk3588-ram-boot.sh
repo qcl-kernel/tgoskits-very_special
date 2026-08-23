@@ -31,6 +31,7 @@
 #   ATK_FASTBOOT_SN   fastboot serial number (default 8d4bd3e013e56633)
 #   ATK_BREAK_WINDOW  seconds to keep flooding Ctrl-C (default 60)
 #   ATK_LOG           console capture path (default a mktemp file)
+#   ATK_POST_BOOT_CAPTURE seconds to keep capturing after booti (default 0)
 
 set -euo pipefail
 
@@ -40,6 +41,7 @@ port="${ATK_PORT:-/dev/ttyACM0}"
 baud="${ATK_BAUD:-1500000}"
 fastboot_sn="${ATK_FASTBOOT_SN:-8d4bd3e013e56633}"
 break_window="${ATK_BREAK_WINDOW:-60}"
+post_boot_capture="${ATK_POST_BOOT_CAPTURE:-0}"
 fit_path=""
 console_log=""
 reader_pid=""
@@ -52,7 +54,15 @@ main() {
     reach_uboot_prompt
     stage_fit_into_ram
     boot_fit_from_ram
+    capture_post_boot
     printf 'booted %s from RAM; console capture: %s\n' "$fit_path" "$console_log"
+}
+
+capture_post_boot() {
+    if [[ "$post_boot_capture" != "0" ]]; then
+        printf 'capturing the booted system for %ss\n' "$post_boot_capture"
+        sleep "$post_boot_capture"
+    fi
 }
 
 parse_arguments() {

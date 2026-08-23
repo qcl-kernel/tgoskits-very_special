@@ -43,7 +43,7 @@ static void print_samples(const struct latency_sample *captured)
 }
 
 #ifdef RT_START_GATED
-static void wait_for_start(void)
+static void wait_for_console_byte(unsigned char expected)
 {
 	const struct device *console = DEVICE_DT_GET(DT_CHOSEN(zephyr_console));
 	unsigned char byte = 0;
@@ -53,14 +53,23 @@ static void wait_for_start(void)
 		return;
 	}
 
-	printk("PERIODIC LATENCY READY\n");
-	while (byte != 'g') {
+	while (byte != expected) {
 		if (uart_poll_in(console, &byte) != 0) {
 			k_sleep(K_MSEC(1));
 		}
 	}
+}
+
+static void wait_for_start(void)
+{
+	printk("PERIODIC LATENCY READY\n");
+	wait_for_console_byte('g');
 	printk("PERIODIC LATENCY START\n");
 }
+#endif
+
+#if defined(RT_DUMP_GATED) && !defined(RT_START_GATED)
+#error "RT_DUMP_GATED requires RT_START_GATED for console input support"
 #endif
 
 int main(void)
@@ -103,6 +112,10 @@ int main(void)
 		};
 	}
 
+	#ifdef RT_DUMP_GATED
+	printk("PERIODIC LATENCY SAMPLING COMPLETE samples=%d\n", SAMPLE_COUNT);
+	wait_for_console_byte('d');
+	#endif
 	print_samples(samples);
 	printk("PERIODIC LATENCY COMPLETE samples=%d\n", SAMPLE_COUNT);
 	return 0;

@@ -9,6 +9,10 @@ if(RT_START_GATED)
   target_compile_definitions(app PRIVATE RT_START_GATED=1)
 endif()
 
+if(RT_DUMP_GATED)
+  target_compile_definitions(app PRIVATE RT_DUMP_GATED=1)
+endif()
+
 if(DEFINED RT_SAMPLE_COUNT)
   target_compile_definitions(app PRIVATE RT_SAMPLE_COUNT=${RT_SAMPLE_COUNT})
 endif()

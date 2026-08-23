@@ -3,7 +3,8 @@
  *
  * Mirrors the Zephyr probe contract (scripts/test/zephyr-periodic):
  * - waits for a single 'g' byte on the console before sampling,
- * - records 300 absolute-deadline wake-ups at a 10 ms period,
+ * - records a build-configurable number of wake-ups at a configurable period,
+ * - waits for a 'd' byte after sampling so CSV export is outside measurement,
  * - prints CSV rows (sequence,timestamp_ns,deadline_ns,actual_ns,jitter_ns),
  * - prints "PERIODIC LATENCY COMPLETE samples=300" when done.
  *
@@ -24,8 +25,13 @@
 #include <rthw.h>
 #include <rtthread.h>
 
+#ifndef PERIOD_MS
 #define PERIOD_MS 10
+#endif
+
+#ifndef SAMPLE_COUNT
 #define SAMPLE_COUNT 300
+#endif
 #define UART0_PHYS UINT64_C(0x09000000)
 #define PL011_DR 0x000
 #define PL011_FR 0x018
@@ -60,18 +66,36 @@ static uint64_t read_cntfrq(void)
 
 static int64_t cycles_to_ns(uint64_t cycles, uint64_t freq)
 {
+	uint64_t seconds;
+	uint64_t remainder;
+
 	if (freq == 0) {
 		return 0;
 	}
-	return (int64_t)((cycles * UINT64_C(1000000000)) / freq);
+	/*
+	 * Split before scaling. At 24 MHz, cycles * 1e9 overflows uint64_t
+	 * after about 768 seconds even though the converted duration fits.
+	 */
+	seconds = cycles / freq;
+	remainder = cycles % freq;
+	return (int64_t)(seconds * UINT64_C(1000000000) +
+			 remainder * UINT64_C(1000000000) / freq);
 }
 
 static int64_t signed_cycles_to_ns(int64_t cycles, uint64_t freq)
 {
+	int64_t signed_freq;
+	int64_t seconds;
+	int64_t remainder;
+
 	if (freq == 0) {
 		return 0;
 	}
-	return (int64_t)((cycles * INT64_C(1000000000)) / (int64_t)freq);
+	signed_freq = (int64_t)freq;
+	seconds = cycles / signed_freq;
+	remainder = cycles % signed_freq;
+	return seconds * INT64_C(1000000000) +
+	       remainder * INT64_C(1000000000) / signed_freq;
 }
 
 static volatile int vtimer_fired;
@@ -105,6 +129,7 @@ static void sleep_until_cycles(uint64_t deadline_cycles)
 }
 
 static volatile uint32_t *uart_base;
+static rt_device_t console_device;
 
 static int uart_init(void)
 {
@@ -127,37 +152,55 @@ static int uart_getc(void)
 	return (int)(uart_base[PL011_DR / 4] & 0xff);
 }
 
-static void wait_for_start(void)
+static int control_getc(void)
 {
 	char byte = 0;
-	rt_device_t console = rt_device_find(RT_CONSOLE_DEVICE_NAME);
+	int ch = uart_getc();
+
+	if (console_device != RT_NULL &&
+	    rt_device_read(console_device, 0, &byte, 1) == 1) {
+		return (int)byte;
+	}
+	return ch;
+}
+
+static int wait_for_start(void)
+{
+	int ch = -1;
 
 	if (uart_init() != 0) {
 		rt_kprintf("PERIODIC LATENCY ERROR uart-map-failed\n");
-		return;
+		return -1;
 	}
-	if (console != RT_NULL &&
-	    rt_device_open(console, RT_DEVICE_OFLAG_RDWR | RT_DEVICE_FLAG_INT_RX) != RT_EOK) {
+	console_device = rt_device_find(RT_CONSOLE_DEVICE_NAME);
+	if (console_device != RT_NULL &&
+	    rt_device_open(console_device,
+			   RT_DEVICE_OFLAG_RDWR | RT_DEVICE_FLAG_INT_RX) != RT_EOK) {
 		rt_kprintf("PERIODIC LATENCY ERROR console-open-failed\n");
-		console = RT_NULL;
+		console_device = RT_NULL;
 	}
 
 	rt_kprintf("PERIODIC LATENCY READY\n");
-	while (byte != 'g') {
-		int ch = uart_getc();
-		char dev_byte = 0;
-
-		if (console != RT_NULL &&
-		    rt_device_read(console, 0, &dev_byte, 1) == 1) {
-			byte = dev_byte;
-		} else if (ch >= 0) {
-			byte = (char)ch;
-		}
-		if (byte != 'g') {
+	while (ch != 'g') {
+		ch = control_getc();
+		if (ch != 'g') {
 			rt_thread_mdelay(1);
 		}
 	}
 	rt_kprintf("PERIODIC LATENCY START\n");
+	return 0;
+}
+
+static void wait_for_dump(void)
+{
+	int ch = -1;
+
+	while (ch != 'd') {
+		ch = control_getc();
+		if (ch != 'd') {
+			rt_thread_mdelay(1);
+		}
+	}
 }
 
 int main(void)
@@ -175,7 +218,9 @@ int main(void)
 		return 1;
 	}
 
-	wait_for_start();
+	if (wait_for_start() != 0) {
+		return 1;
+	}
 	vtimer_init();
 
 	base_ticks = rt_tick_get();
@@ -207,11 +252,14 @@ int main(void)
 			cycles_to_ns(actual_cycles - base_cycles, freq);
 		samples[sequence].jitter_ns =
 			signed_cycles_to_ns(
-				(int64_t)actual_cycles - (int64_t)deadline_cycles,
-				freq);
+					(int64_t)actual_cycles - (int64_t)deadline_cycles,
+					freq);
 		next_deadline_cycles = actual_cycles + period_cycles;
 	}
 
+	rt_kprintf("PERIODIC LATENCY SAMPLING COMPLETE samples=%d\n",
+		   SAMPLE_COUNT);
+	wait_for_dump();
 	rt_kprintf("sequence,timestamp_ns,deadline_ns,actual_ns,jitter_ns\n");
 	for (sequence = 0; sequence < SAMPLE_COUNT; sequence++) {
 		rt_kprintf("%ld,%ld,%ld,%ld,%ld\n",

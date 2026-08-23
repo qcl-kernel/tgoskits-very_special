@@ -33,6 +33,12 @@ TIMER_WORKER_AB_RUNNER_PATH = (
     ROOT / "scripts/test/rt-partition/run-timer-worker-priority-ab.sh"
 )
 ZEPHYR_MAIN = (ROOT / "scripts/test/zephyr-periodic/src/main.c").read_text()
+RTTHREAD_MAIN = (
+    ROOT / "scripts/test/net-dual-guest/rtthread-periodic/main.c"
+).read_text()
+BUILD_RTTHREAD = (
+    ROOT / "scripts/test/net-dual-guest/build-rtthread-periodic.sh"
+).read_text()
 
 
 class RtBuildScriptsTest(unittest.TestCase):
@@ -81,9 +87,17 @@ class RtBuildScriptsTest(unittest.TestCase):
         self.assertIn('out_dir="$(realpath -m "$out_dir")"', BUILD_ZEPHYR)
         self.assertIn('build_dir="$(realpath -m "$build_dir")"', BUILD_ZEPHYR)
 
+    def test_zephyr_build_accepts_a_board_guest_overlay(self):
+        self.assertIn('extra_overlay="${ZEPHYR_EXTRA_OVERLAY:-}"', BUILD_ZEPHYR)
+        self.assertIn('overlay_files=("$overlay")', BUILD_ZEPHYR)
+        self.assertIn('overlay_files+=("$(realpath "$extra_overlay")")', BUILD_ZEPHYR)
+        self.assertIn('IFS=";"; printf "%s" "${overlay_files[*]}"', BUILD_ZEPHYR)
+        self.assertIn('printf \'extra_overlay=%s\\n\'', BUILD_ZEPHYR)
+
     def test_zephyr_build_records_the_uart_start_gate(self):
         self.assertIn('start_gated="${ZEPHYR_START_GATED:-1}"', BUILD_ZEPHYR)
         self.assertIn('-DRT_START_GATED="$start_gated"', BUILD_ZEPHYR)
+        self.assertIn('-DRT_DUMP_GATED="$dump_gated"', BUILD_ZEPHYR)
         self.assertIn('start_delay_ms="${ZEPHYR_START_DELAY_MS:-0}"', BUILD_ZEPHYR)
         self.assertIn('-DRT_START_DELAY_MS="$start_delay_ms"', BUILD_ZEPHYR)
         self.assertIn("start_gated=%s", BUILD_ZEPHYR)
@@ -105,6 +119,22 @@ class RtBuildScriptsTest(unittest.TestCase):
         self.assertIn("expected_samples = int(sys.argv[4])", MATRIX_RUNNER)
         self.assertIn("expected_samples = int(sys.argv[13])", MATRIX_RUNNER)
         self.assertIn("zephyr_sample_count=%s", MATRIX_RUNNER)
+
+    def test_rtthread_period_and_sample_count_remain_build_configurable(self):
+        self.assertIn("#ifndef PERIOD_MS", RTTHREAD_MAIN)
+        self.assertIn("#ifndef SAMPLE_COUNT", RTTHREAD_MAIN)
+        self.assertIn('period_ms="${RTTHREAD_PERIOD_MS:-10}"', BUILD_RTTHREAD)
+        self.assertIn('sample_count="${RTTHREAD_SAMPLE_COUNT:-300}"', BUILD_RTTHREAD)
+        self.assertIn("s/#define PERIOD_MS 10/#define PERIOD_MS $period_ms/", BUILD_RTTHREAD)
+        self.assertIn("s/#define SAMPLE_COUNT 300/#define SAMPLE_COUNT $sample_count/", BUILD_RTTHREAD)
+
+    def test_rtthread_counter_conversion_avoids_long_run_multiply_overflow(self):
+        self.assertIn("cycles / freq", RTTHREAD_MAIN)
+        self.assertIn("cycles % freq", RTTHREAD_MAIN)
+        self.assertNotIn(
+            "cycles * UINT64_C(1000000000)",
+            RTTHREAD_MAIN,
+        )
 
     def test_matrix_runner_rejects_tracked_dirty_sources_by_default(self):
         self.assertIn('allow_dirty="${RT_ALLOW_DIRTY:-0}"', MATRIX_RUNNER)

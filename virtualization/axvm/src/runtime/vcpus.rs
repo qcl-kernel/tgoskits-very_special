@@ -29,9 +29,7 @@ use crate::{
     ax_err_type,
     host::HostTime,
     irq::model::{PendingVcpuInterrupt, VirtualInterruptId},
-    runtime::{
-        VCpuRef, VIRQ_INJECTOR_TASK_PRIORITY, VMRef, sub_running_vm_count,
-    },
+    runtime::{VCpuRef, VIRQ_INJECTOR_TASK_PRIORITY, VMRef, sub_running_vm_count},
     vm::{PendingInterrupt, VmRuntimeHandle},
 };
 
@@ -1189,8 +1187,17 @@ fn vcpu_run() {
                     warn!("VM[{vm_id}] VCpu[{vcpu_id}] CPU_OFF cleanup failed: {err:?}");
                 }
                 runtime.remove_vcpu_task(vcpu_id);
-                if !runtime.consume_cpu_off_reservation(vcpu_id) {
-                    let _ = runtime.mark_vcpu_exiting();
+                let remaining = if runtime.consume_cpu_off_reservation(vcpu_id) {
+                    // A pending CPU_ON holds this slot open, so the VM keeps a
+                    // vCPU even though this task is gone.
+                    RemainingVcpus::Present
+                } else if runtime.mark_vcpu_exiting() {
+                    RemainingVcpus::None
+                } else {
+                    RemainingVcpus::Present
+                };
+                if vcpu_exit_duty(VcpuExitDoor::CpuOff, remaining) == VcpuExitDuty::FinishVmStop {
+                    finish_vm_stop_from_last_vcpu(&vm, &runtime, vcpu_id, VcpuExitDoor::CpuOff);
                 }
                 break;
             }
@@ -1257,27 +1264,13 @@ fn vcpu_run() {
                 vm_id, vcpu_id
             );
 
-            if runtime.mark_vcpu_exiting() {
-                let reset_after_stop = runtime.take_deferred_reset_request();
-                info!("VM[{vm_id}] VCpu[{vcpu_id}] last VCpu exiting, decreasing running VM count");
-
-                if let Err(err) = CurrentArch::on_last_vcpu_exit(&vm) {
-                    warn!("VM[{vm_id}] architecture device cleanup failed: {err:?}");
-                    runtime.record_lifecycle_error(err);
-                }
-                if let Err(err) = vm.finish_stop() {
-                    warn!("VM[{vm_id}] finish stop failed: {err:?}");
-                    runtime.record_lifecycle_error(err);
-                } else {
-                    info!("VM[{}] state changed to Stopped", vm_id);
-                }
-
-                sub_running_vm_count(1);
-                if reset_after_stop {
-                    spawn_deferred_reset_task(vm_id);
-                } else {
-                    crate::host::task::wait_queue_wake(&super::VMM, 1);
-                }
+            let remaining = if runtime.mark_vcpu_exiting() {
+                RemainingVcpus::None
+            } else {
+                RemainingVcpus::Present
+            };
+            if vcpu_exit_duty(VcpuExitDoor::VmStopping, remaining) == VcpuExitDuty::FinishVmStop {
+                finish_vm_stop_from_last_vcpu(&vm, &runtime, vcpu_id, VcpuExitDoor::VmStopping);
             }
 
             break;
@@ -1296,6 +1289,98 @@ fn vcpu_run() {
     }
 
     info!("VM[{}] VCpu[{}] exiting...", vm_id, vcpu_id);
+}
+
+/// Releases the VM-wide state that only the last vCPU out can release.
+///
+/// Runs architecture device cleanup, drives the machine to `Stopped`, drops the
+/// host running-VM count, and then either hands the VM to a deferred reset or
+/// wakes the VMM. Lifecycle failures are recorded rather than propagated: the
+/// caller is a vCPU task on its way out and has no one left to report to.
+fn finish_vm_stop_from_last_vcpu(
+    vm: &VMRef,
+    runtime: &VmRuntimeHandle,
+    vcpu_id: usize,
+    door: VcpuExitDoor,
+) {
+    let vm_id = vm.id();
+    let reset_after_stop = runtime.take_deferred_reset_request();
+    info!("VM[{vm_id}] VCpu[{vcpu_id}] last VCpu exiting, decreasing running VM count");
+
+    if let Err(err) = CurrentArch::on_last_vcpu_exit(vm) {
+        warn!("VM[{vm_id}] architecture device cleanup failed: {err:?}");
+        runtime.record_lifecycle_error(err);
+    }
+    if let Err(err) = vm.finish_stop_from_last_vcpu(unrecorded_stop_reason(door)) {
+        warn!("VM[{vm_id}] finish stop failed: {err:?}");
+        runtime.record_lifecycle_error(err);
+    } else {
+        info!("VM[{vm_id}] state changed to Stopped");
+    }
+
+    sub_running_vm_count(1);
+    if reset_after_stop {
+        spawn_deferred_reset_task(vm_id);
+    } else {
+        crate::host::task::wait_queue_wake(&super::VMM, 1);
+    }
+}
+
+/// The reason to record when the machine has not been asked to stop yet.
+///
+/// Only the `CPU_OFF` door reaches a still-`Running` machine: the guest brought
+/// its own last CPU down, which is a guest-initiated system shutdown. The
+/// `Stopping` door always finds a reason already recorded by whoever requested
+/// the stop, so its value here is an unreachable fallback.
+fn unrecorded_stop_reason(door: VcpuExitDoor) -> StopReason {
+    match door {
+        VcpuExitDoor::CpuOff => StopReason::SystemDown,
+        VcpuExitDoor::VmStopping => StopReason::Forced,
+    }
+}
+
+/// The way a vCPU task leaves [`vcpu_run`].
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum VcpuExitDoor {
+    /// The guest turned this vCPU off through PSCI `CPU_OFF`.
+    CpuOff,
+    /// The vCPU observed the VM-wide `Stopping` state.
+    VmStopping,
+}
+
+/// Whether any vCPU task of the same VM can still reach a lifecycle check.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum RemainingVcpus {
+    /// At least one sibling vCPU is still in its run loop.
+    Present,
+    /// This task is the last one leaving, and no `CPU_ON` reservation holds a
+    /// slot open for a later restart.
+    None,
+}
+
+/// Lifecycle work a leaving vCPU still owes its VM.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+enum VcpuExitDuty {
+    /// A sibling vCPU will observe the lifecycle state later.
+    LeaveToSiblings,
+    /// Complete the stop so the VM reaches `Stopped`.
+    FinishVmStop,
+}
+
+/// Decides what a leaving vCPU still owes its VM.
+///
+/// Both doors converge once no sibling remains: after the last vCPU task is
+/// gone, nothing is left that could observe `Stopping` and complete the
+/// transition, so whichever task leaves last has to do it. Listing the doors
+/// explicitly keeps this match non-exhaustive if a third door is added, which
+/// forces that author to make the same decision deliberately.
+fn vcpu_exit_duty(door: VcpuExitDoor, remaining: RemainingVcpus) -> VcpuExitDuty {
+    match (door, remaining) {
+        (_, RemainingVcpus::Present) => VcpuExitDuty::LeaveToSiblings,
+        (VcpuExitDoor::CpuOff | VcpuExitDoor::VmStopping, RemainingVcpus::None) => {
+            VcpuExitDuty::FinishVmStop
+        }
+    }
 }
 
 fn poll_primary_vcpu_devices_with(runtime: &VmRuntimeHandle, poll_devices: impl FnOnce()) -> bool {
@@ -1337,6 +1422,38 @@ fn poll_vm_dma_devices(vm: &VMRef) {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn last_vcpu_leaving_through_cpu_off_finishes_the_vm_stop() {
+        // A guest that powers its final CPU down (StarryOS does this when init
+        // exits) leaves `vcpu_run` through the `CPU_OFF` door instead of the
+        // `Stopping` door. No task remains afterwards to observe `Stopping`,
+        // so this door has to complete the stop as well; otherwise the VM is
+        // wedged in `Stopping`, where `vm start` is refused and `vm reset`
+        // times out, and only a whole-board reset recovers it.
+        assert_eq!(
+            vcpu_exit_duty(VcpuExitDoor::CpuOff, RemainingVcpus::None),
+            VcpuExitDuty::FinishVmStop
+        );
+    }
+
+    #[test]
+    fn last_vcpu_observing_the_stopping_state_finishes_the_vm_stop() {
+        assert_eq!(
+            vcpu_exit_duty(VcpuExitDoor::VmStopping, RemainingVcpus::None),
+            VcpuExitDuty::FinishVmStop
+        );
+    }
+
+    #[test]
+    fn vcpu_leaving_while_siblings_run_does_not_touch_the_vm_lifecycle() {
+        for door in [VcpuExitDoor::CpuOff, VcpuExitDoor::VmStopping] {
+            assert_eq!(
+                vcpu_exit_duty(door, RemainingVcpus::Present),
+                VcpuExitDuty::LeaveToSiblings
+            );
+        }
+    }
 
     #[test]
     fn vcpu_waits_for_runtime_registration_before_entering_guest() {

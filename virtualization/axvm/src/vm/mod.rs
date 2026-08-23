@@ -1467,8 +1467,12 @@ impl AxVM {
         self.machine.lock().request_stop_with(reason, |_, _| Ok(()))
     }
 
-    pub(crate) fn finish_stop(&self) -> AxVmResult {
-        self.machine.lock().finish_stop()
+    /// Completes the stop on behalf of the last vCPU leaving its run loop.
+    ///
+    /// Used by both vCPU exit doors, including the PSCI `CPU_OFF` one, where
+    /// the VM may still be `Running` because nothing requested a stop.
+    pub(crate) fn finish_stop_from_last_vcpu(&self, reason: StopReason) -> AxVmResult {
+        self.machine.lock().finish_stop_from_last_vcpu(reason)
     }
 
     fn wait_until_stopped(&self) -> AxVmResult {

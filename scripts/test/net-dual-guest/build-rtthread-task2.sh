@@ -3,6 +3,8 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 source_dir="$repo_root/scripts/test/net-dual-guest/rtthread-task2"
+# shellcheck source=scripts/test/net-dual-guest/rtthread-guest-config.sh
+source "$repo_root/scripts/test/net-dual-guest/rtthread-guest-config.sh"
 out_dir="${OUT_DIR:-$repo_root/tmp/net-dual-guest/rtthread-task2}"
 rtthread_commit="6ea682795bdbac59d3700b21e159ccaa3f7632cb"
 rtthread_cache="${RTTHREAD_BASE:-$repo_root/tmp/net-dual-guest/rt-thread-upstream}"
@@ -45,9 +47,7 @@ if [[ ! -d "$rtthread_cache/.git" ]]; then
     mkdir -p "$(dirname "$rtthread_cache")"
     git clone https://github.com/RT-Thread/rt-thread.git "$rtthread_cache"
 fi
-if ! git -C "$rtthread_cache" cat-file -e "$rtthread_commit^{commit}" 2>/dev/null; then
-    git -C "$rtthread_cache" fetch origin "$rtthread_commit"
-fi
+ensure_rtthread_commit_is_materialized "$rtthread_cache" "$rtthread_commit"
 
 mkdir -p "$out_dir"
 build_source="$(mktemp -d "$out_dir/rt-thread-build.XXXXXX")"
@@ -59,6 +59,8 @@ trap cleanup EXIT
 git clone --quiet --shared --no-checkout "$rtthread_cache" "$build_source"
 git -C "$build_source" checkout --quiet --detach "$rtthread_commit"
 git -C "$build_source" apply "$source_dir/rtthread.config.patch"
+assert_guest_config_has_no_gicv3_its \
+    "$build_source/bsp/qemu-virt64-aarch64/.config"
 cp "$source_dir/main.c" \
     "$build_source/bsp/qemu-virt64-aarch64/applications/main.c"
 if [[ "$task1_quiet" == 1 ]]; then

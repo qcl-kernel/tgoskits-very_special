@@ -1,0 +1,5 @@
+a547c0d9d95c0cc170f8f14a18bb23e92dc07198ff49c3d6f3d871c97033912e  task1/axvisor-task123-zephyr-rr.fit
+4a0b6c8405b7a9837a1bc6d78908e36684609fda63fee707cd5ce05e107b30ee  task1/axvisor-task123-zephyr-fp-rr.fit
+0f1bf193cf79c0efa80e251c864c7bcd50ff2bde386f7e3657e2e8242cc3748c  task2/axvisor-task123-zephyr-fp-rr.fit
+ca4deabe8a1b9958c3dcffd469844b00096da3be97f77f30ff4304ba66ac2fb8  task3/fixed/axvisor-task123-zephyr-fp-rr.fit
+7ce175c987197b866dc828c62beeb62af19bce265bd8a94efe180b830ae10bde  task3/rknn/axvisor-task123-zephyr-fp-rr.fit

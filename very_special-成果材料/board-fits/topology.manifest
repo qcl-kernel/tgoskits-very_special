@@ -1,0 +1,12 @@
+board=ATK-DLRK3588
+soc=RK3588
+topology=communication-share
+starry_vcpu0_role=ai-rknn-npu
+starry_vcpu0_pcpu=0x200
+starry_vcpu1_role=communication
+starry_vcpu1_pcpu=0x100
+zephyr_vcpu0_role=periodic-control
+zephyr_vcpu0_pcpu=0x100
+npu_owner=starryos-only
+zephyr_priority=90
+starry_priority=89

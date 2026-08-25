@@ -2,6 +2,42 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "Competition: Run Task 1",
+      "type": "process",
+      "command": "${workspaceFolder}/scripts/competition/task123.sh",
+      "args": ["suite", "task1"],
+      "options": {"cwd": "${workspaceFolder}"},
+      "problemMatcher": [],
+      "presentation": {"panel": "dedicated", "reveal": "always"}
+    },
+    {
+      "label": "Competition: Run Task 2",
+      "type": "process",
+      "command": "${workspaceFolder}/scripts/competition/task123.sh",
+      "args": ["suite", "task2"],
+      "options": {"cwd": "${workspaceFolder}"},
+      "problemMatcher": [],
+      "presentation": {"panel": "dedicated", "reveal": "always"}
+    },
+    {
+      "label": "Competition: Run Task 3",
+      "type": "process",
+      "command": "${workspaceFolder}/scripts/competition/task123.sh",
+      "args": ["suite", "task3"],
+      "options": {"cwd": "${workspaceFolder}"},
+      "problemMatcher": [],
+      "presentation": {"panel": "dedicated", "reveal": "always"}
+    },
+    {
+      "label": "Competition: Run Full Validation",
+      "type": "process",
+      "command": "${workspaceFolder}/scripts/competition/task123.sh",
+      "args": ["suite", "full"],
+      "options": {"cwd": "${workspaceFolder}"},
+      "problemMatcher": [],
+      "presentation": {"panel": "dedicated", "reveal": "always"}
+    },
+    {
       "label": "TGOS: Build ArceOS debug image",
       "hide": true,
       "type": "process",

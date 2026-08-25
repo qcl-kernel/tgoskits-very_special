@@ -18,8 +18,11 @@ import serial
 GUEST_PROMPT = rb"root@starry:[^\r\n]*#"
 HOST_PROMPT = rb"axvisor:/\$"
 INFERENCE_COMPLETE = rb"TASK3_INFER [^\r\n]*model=yolo11n\.ncnn"
+PAYLOAD_PRESSURE_PROGRESS = rb"TASK1_PRESSURE_PROGRESS [^\r\n]*alive=1\b"
+COMMUNICATION_STATUS_RECEIVED = rb"TASK3_STATUS_RECEIVED [^\r\n]*\brequest=[0-9]+\b"
 PERIODIC_DUMP_COMMAND = b"d"
 POST_SAMPLING_INFERENCE_TIMEOUT_SECONDS = 30
+POST_SAMPLING_COMMUNICATION_TIMEOUT_SECONDS = 30
 # RT-Thread formats and writes every retained row after sampling. Budget for a
 # deliberately conservative rate below the ~118 rows/s observed on RK3588 so
 # serial export cannot consume the sampling timeout.
@@ -39,10 +42,15 @@ class RunConfig:
     period_ms: int
     completion_grace_seconds: int
     artifacts: tuple[Path, ...]
+    load_mode: str = "yolo"
+    workload_start: str = "guest-shell"
     periodic_guest: str = "rtthread"
+    dump_chunk_rows: int = 256
 
     @property
     def model_mode(self) -> str:
+        if self.load_mode == "idle":
+            return "idle"
         return "model-loop" if self.runtime_seconds > 0 else "model-only"
 
     @property
@@ -148,27 +156,26 @@ def main() -> int:
             f"expected_inferences={config.expected_inferences} "
             f"expected_samples={config.expected_samples} period_ms={config.period_ms}"
         )
-        prepare_starry_guest(console)
-        start_model_workload(console, config.model_mode)
-        start_periodic_probe(console)
+        if config.workload_start == "payload-init":
+            prepare_payload_started_workload(console, config.load_mode)
+            start_periodic_probe(console, host_ready=True)
+        else:
+            prepare_starry_guest(console)
+            if config.load_mode == "yolo":
+                start_model_workload(console, config.model_mode)
+            start_periodic_probe(console)
 
         measurement_started = time.monotonic()
-        console.expect(
-            rb"PERIODIC LATENCY SAMPLING COMPLETE samples="
-            + str(config.expected_samples).encode()
-            + rb"\b",
-            config.periodic_timeout_seconds,
-        )
+        wait_for_sampling_complete(console, config)
         measurement_seconds = time.monotonic() - measurement_started
         console.note(f"periodic_elapsed_seconds={measurement_seconds:.3f}")
-        if measurement_seconds < config.runtime_seconds:
-            raise RuntimeError(
-                "periodic measurement completed before the requested runtime: "
-                f"{measurement_seconds:.3f}s < {config.runtime_seconds}s"
-            )
 
         collect_host_diagnostics(console)
-        collect_model_results(console, config)
+        if config.load_mode == "yolo":
+            if config.workload_start == "payload-init":
+                collect_payload_pressure_progress(console)
+            else:
+                collect_model_results(console, config)
         collect_periodic_results(console, config)
         console.drain(1)
     except Exception as error:
@@ -201,6 +208,42 @@ def prepare_starry_guest(console: Console) -> None:
     )
 
 
+def prepare_payload_started_workload(console: Console, load_mode: str) -> None:
+    """Leave an init-driven Starry workload and return to the AxVisor shell."""
+    console.raw(b"\r")
+    if load_mode == "yolo":
+        console.clear_match_window()
+        console.expect(
+            PAYLOAD_PRESSURE_PROGRESS,
+            POST_SAMPLING_INFERENCE_TIMEOUT_SECONDS,
+        )
+        console.expect(
+            COMMUNICATION_STATUS_RECEIVED,
+            POST_SAMPLING_COMMUNICATION_TIMEOUT_SECONDS,
+        )
+    console.detach()
+
+
+def wait_for_sampling_complete(console: Console, config: RunConfig) -> None:
+    """Require live communication during a full hybrid pressure sample."""
+    expression = (
+        rb"PERIODIC LATENCY SAMPLING COMPLETE samples="
+        + str(config.expected_samples).encode()
+        + rb"\b"
+    )
+    if (
+        config.load_mode == "yolo"
+        and config.workload_start == "payload-init"
+        and config.periodic_guest == "zephyr"
+    ):
+        expression = (
+            rb"PERIODIC LATENCY SAMPLING COMPLETE samples="
+            + str(config.expected_samples).encode()
+            + rb" controls=[1-9][0-9]* statuses=[1-9][0-9]* heartbeats=[0-9]+\b"
+        )
+    console.expect(expression, config.periodic_timeout_seconds)
+
+
 def start_model_workload(console: Console, model_mode: str) -> None:
     console.clear_match_window()
     console.line(f"/tmp/t1/bin/task2-net {model_mode}")
@@ -208,8 +251,9 @@ def start_model_workload(console: Console, model_mode: str) -> None:
     console.expect(rb"TASK3_INFER_STARTED", 30)
 
 
-def start_periodic_probe(console: Console) -> None:
-    console.detach()
+def start_periodic_probe(console: Console, *, host_ready: bool = False) -> None:
+    if not host_ready:
+        console.detach()
     console.command("vm list", HOST_PROMPT)
     console.command("vm console 2", rb"Attached VM\[2\] console", 30)
     console.clear_match_window()
@@ -243,10 +287,38 @@ def collect_model_results(console: Console, config: RunConfig) -> None:
     console.detach()
 
 
+def collect_payload_pressure_progress(console: Console) -> None:
+    """Prove that the init-driven NPU loop is still progressing after sampling."""
+    console.command("vm console 1", rb"Attached VM\[1\] console", 30)
+    console.clear_match_window()
+    console.expect(
+        PAYLOAD_PRESSURE_PROGRESS,
+        POST_SAMPLING_INFERENCE_TIMEOUT_SECONDS,
+    )
+    console.expect(
+        COMMUNICATION_STATUS_RECEIVED,
+        POST_SAMPLING_COMMUNICATION_TIMEOUT_SECONDS,
+    )
+    console.detach()
+
+
 def collect_periodic_results(console: Console, config: RunConfig) -> None:
     console.command("vm console 2", rb"Attached VM\[2\] console", 30)
     console.clear_match_window()
-    console.raw(PERIODIC_DUMP_COMMAND)
+    if config.periodic_guest == "zephyr":
+        dump_end = 0
+        while dump_end < config.expected_samples:
+            dump_end = min(
+                dump_end + config.dump_chunk_rows,
+                config.expected_samples,
+            )
+            console.raw(PERIODIC_DUMP_COMMAND)
+            console.expect(
+                rb"PERIODIC LATENCY CHUNK end=" + str(dump_end).encode() + rb"\b",
+                config.periodic_timeout_seconds,
+            )
+    else:
+        console.raw(PERIODIC_DUMP_COMMAND)
     console.expect(
         rb"PERIODIC LATENCY COMPLETE samples="
         + str(config.expected_samples).encode()
@@ -262,9 +334,16 @@ def parse_arguments() -> RunConfig:
     parser.add_argument("--baud", type=int, default=1_500_000)
     parser.add_argument("--scheduler", choices=("rr", "fp-rr"), default="rr")
     parser.add_argument("--runtime-seconds", type=int, default=0)
+    parser.add_argument("--load-mode", choices=("idle", "yolo"), default="yolo")
+    parser.add_argument(
+        "--workload-start",
+        choices=("guest-shell", "payload-init"),
+        default="guest-shell",
+    )
     parser.add_argument("--expected-inferences", type=int)
     parser.add_argument("--expected-samples", type=int, default=300)
     parser.add_argument("--period-ms", type=int, default=10)
+    parser.add_argument("--dump-chunk-rows", type=int, default=256)
     parser.add_argument(
         "--periodic-guest",
         choices=("rtthread", "zephyr"),
@@ -277,19 +356,31 @@ def parse_arguments() -> RunConfig:
 
     expected_inferences = args.expected_inferences
     if expected_inferences is None:
-        expected_inferences = 50 if args.runtime_seconds > 0 else 1
+        if args.load_mode == "idle":
+            expected_inferences = 0
+        else:
+            expected_inferences = 50 if args.runtime_seconds > 0 else 1
     positive_values = {
         "baud": args.baud,
-        "expected_inferences": expected_inferences,
         "expected_samples": args.expected_samples,
         "period_ms": args.period_ms,
+        "dump_chunk_rows": args.dump_chunk_rows,
         "completion_grace_seconds": args.completion_grace_seconds,
     }
     invalid = [name for name, value in positive_values.items() if value <= 0]
     if args.runtime_seconds < 0:
         invalid.append("runtime_seconds")
+    if expected_inferences < 0 or (args.load_mode == "yolo" and expected_inferences == 0):
+        invalid.append("expected_inferences")
     if invalid:
         parser.error(f"values must be positive (runtime may be zero): {', '.join(invalid)}")
+    nominal_runtime_ms = args.expected_samples * args.period_ms
+    requested_runtime_ms = args.runtime_seconds * 1000
+    if nominal_runtime_ms < requested_runtime_ms:
+        parser.error(
+            "expected_samples * period_ms must cover runtime_seconds: "
+            f"{nominal_runtime_ms}ms < {requested_runtime_ms}ms"
+        )
 
     missing_artifacts = [path for path in args.artifact if not path.is_file()]
     if missing_artifacts:
@@ -307,7 +398,10 @@ def parse_arguments() -> RunConfig:
         period_ms=args.period_ms,
         completion_grace_seconds=args.completion_grace_seconds,
         artifacts=tuple(args.artifact),
+        load_mode=args.load_mode,
+        workload_start=args.workload_start,
         periodic_guest=args.periodic_guest,
+        dump_chunk_rows=args.dump_chunk_rows,
     )
 
 
@@ -323,11 +417,14 @@ def write_metadata(
         f"status={status}",
         f"scheduler={config.scheduler}",
         f"model_mode={config.model_mode}",
+        f"load_mode={config.load_mode}",
+        f"workload_start={config.workload_start}",
         f"runtime_seconds={config.runtime_seconds}",
         f"expected_inferences={config.expected_inferences}",
         f"expected_samples={config.expected_samples}",
         f"period_ms={config.period_ms}",
         f"periodic_guest={config.periodic_guest}",
+        f"dump_chunk_rows={config.dump_chunk_rows}",
         f"periodic_timeout_seconds={config.periodic_timeout_seconds}",
     ]
     if elapsed_seconds is not None:

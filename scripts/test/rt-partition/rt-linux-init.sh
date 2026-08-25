@@ -3,7 +3,7 @@
 #
 # Runs inside the Linux guest initramfs. Controlled by kernel cmdline
 # placeholders replaced by run-cyclictest.sh via the `cmdline` field:
-#   rt_scenario=idle|stress-noiso|stress-dedicated|stress-rt
+#   rt_scenario=idle|stress-noiso|stress-guest-shared|stress-dedicated|stress-rt
 #   rt_cpu=N            isolated measurement vCPU (default 1)
 #   rt_load_cpu=N       housekeeping/load vCPU (default 0)
 #   rt_loops=N          cyclictest loop count (0 = endless when duration is set)
@@ -141,7 +141,7 @@ echo "RT_WAIT_BEFORE_TEST seconds=$start_delay_sec"
 load_pid=$!
 
 case "$scenario" in
-    stress-noiso)
+    stress-noiso|stress-guest-shared)
         echo "RT_STRESS_START cpu=$load_cpu workers=2 vm=1"
         /bin/busybox taskset -c "$load_cpu" /bin/stress-ng --cpu 2 --vm 1 --vm-bytes 64M &
         stress_pid=$!

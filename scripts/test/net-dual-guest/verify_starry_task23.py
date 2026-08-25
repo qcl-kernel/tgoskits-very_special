@@ -20,6 +20,12 @@ KIND_HEARTBEAT = 5
 STARRY_IP = "10.0.42.15"
 ZEPHYR_IP = "10.0.42.2"
 ANSI_RE = re.compile(r"\x1b\[[0-9;]*[A-Za-z]")
+GUEST_2_HANDOFF_RE = re.compile(
+    r"\n*\[Axvisor\] attached VM\[2\] console;[^\n]*\n"
+    r".*?"
+    r"\n\[Axvisor\] attached VM\[1\] console;[^\n]*\n",
+    re.DOTALL,
+)
 YOLO_READY_PATTERN = (
     r"TASK3_MODEL_READY model=yolo11n\.ncnn runtime=ncnn"
     r"(?:[^\n]*\n){0,16}[^\n]*mode=in-guest"
@@ -71,6 +77,20 @@ def require_patterns(log: str, patterns: tuple[str, ...]) -> list[str]:
     ]
 
 
+def task3_model_ready_record(log: str) -> str:
+    """Return the logical ready record with VM2 console handoffs removed."""
+    start = log.find("TASK3_MODEL_READY")
+    if start < 0:
+        return ""
+    ends = (
+        position
+        for marker in ("TASK3_INFER_STARTED", "TASK3_MODEL_REJECTED")
+        if (position := log.find(marker, start)) >= 0
+    )
+    end = min(ends, default=min(len(log), start + 64 * 1024))
+    return GUEST_2_HANDOFF_RE.sub("", log[start:end])
+
+
 def require_order(log: str, markers: tuple[str, ...]) -> list[str]:
     position = 0
     for marker in markers:
@@ -103,14 +123,12 @@ def matching(
     ]
 
 
-def verify_normal(frames: list[WireFrame], log: str) -> list[str]:
+def verify_task2_normal(frames: list[WireFrame], log: str) -> list[str]:
     failures = require_patterns(
         log,
         (
             r"STARRY_T2N1_PASS\b",
             r"STARRY_T2N1_STATUS_DELIVERED[^\n]*request=3\b",
-            r"TASK3_INFER model=yolo11n\.ncnn[^\n]*request=3\b",
-            r"TASK3_DETECTION model=yolo11n\.ncnn[^\n]*request=3\b",
         ),
     )
     controls = matching(frames, src=STARRY_IP, dst=ZEPHYR_IP, kind=KIND_CONTROL)
@@ -119,6 +137,20 @@ def verify_normal(frames: list[WireFrame], log: str) -> list[str]:
         failures.append(
             f"persistent loop needs at least three CONTROL/STATUS frames, got {len(controls)}/{len(statuses)}"
         )
+    return failures
+
+
+def verify_normal(frames: list[WireFrame], log: str) -> list[str]:
+    failures = verify_task2_normal(frames, log)
+    failures.extend(
+        require_patterns(
+            log,
+            (
+                r"TASK3_INFER model=yolo11n\.ncnn[^\n]*request=3\b",
+                r"TASK3_DETECTION model=yolo11n\.ncnn[^\n]*request=3\b",
+            ),
+        )
+    )
     return failures
 
 
@@ -264,7 +296,10 @@ def verify_invalid_parameter(frames: list[WireFrame], log: str) -> list[str]:
     return failures
 
 
-def verify_blackout(frames: list[WireFrame], log: str) -> list[str]:
+def verify_task2_blackout(
+    frames: list[WireFrame], log: str, recovery_mode: str = "normal"
+) -> list[str]:
+    recovery_marker = f"STARRY_T2N1_FAULT_RECOVERY_COMPLETE mode={recovery_mode}"
     failures = require_patterns(
         log,
         (
@@ -273,7 +308,7 @@ def verify_blackout(frames: list[WireFrame], log: str) -> list[str]:
             r"TASK2_SAFE state=Safe event=HeartbeatTimeout",
             r"virtnet: blackout OFF",
             r"STARRY_T2N1_RECOVERED state=Active",
-            r"STARRY_T2N1_FAULT_RECOVERY_COMPLETE mode=normal[^\n]*safe_observed=true recovered=true",
+            rf"{re.escape(recovery_marker)}[^\n]*safe_observed=true recovered=true",
             r"TASK2_CONTROL_RECEIVED[^\n]*request=",
         ),
     )
@@ -286,22 +321,16 @@ def verify_blackout(frames: list[WireFrame], log: str) -> list[str]:
                 "TASK2_SAFE state=Safe event=HeartbeatTimeout",
                 "virtnet: blackout OFF",
                 "STARRY_T2N1_RECOVERED state=Active",
-                "STARRY_T2N1_FAULT_RECOVERY_COMPLETE mode=normal",
+                recovery_marker,
             ),
         )
     )
-    recovery_marker = "STARRY_T2N1_FAULT_RECOVERY_COMPLETE mode=normal"
     recovery_position = log.find(recovery_marker)
     recovered_control_position = log.find(
         "TASK2_CONTROL_RECEIVED", recovery_position + len(recovery_marker)
     )
     if recovery_position < 0 or recovered_control_position < 0:
         failures.append("runtime log has no Zephyr CONTROL after completed recovery")
-    recovered_infer_position = log.find(
-        "TASK3_INFER model=yolo11n.ncnn", log.find("STARRY_T2N1_RECOVERED state=Active")
-    )
-    if recovered_infer_position < 0:
-        failures.append("runtime log has no real YOLO inference after blackout recovery")
     recovered_controls = matching(
         frames,
         src=STARRY_IP,
@@ -324,14 +353,33 @@ def verify_blackout(frames: list[WireFrame], log: str) -> list[str]:
     return failures
 
 
+def verify_task2_only_blackout(frames: list[WireFrame], log: str) -> list[str]:
+    return verify_task2_blackout(frames, log, recovery_mode="task2")
+
+
+def verify_blackout(frames: list[WireFrame], log: str) -> list[str]:
+    failures = verify_task2_blackout(frames, log)
+    recovered_infer_position = log.find(
+        "TASK3_INFER model=yolo11n.ncnn", log.find("STARRY_T2N1_RECOVERED state=Active")
+    )
+    if recovered_infer_position < 0:
+        failures.append("runtime log has no real YOLO inference after blackout recovery")
+    return failures
+
+
 def verify_model_rejected(frames: list[WireFrame], log: str) -> list[str]:
     failures = require_patterns(
-        log,
-        (
-            r"TASK3_MODEL_READY(?:[^\n]*\n){0,16}[^\n]*run_mode=model-rejected",
-            r"TASK3_MODEL_REJECTED[^\n]*reason=InjectedInvalidOutput",
-            r"STARRY_T2N1_SAFE source=model reason=InjectedInvalidOutput",
-        ),
+        task3_model_ready_record(log),
+        (r"TASK3_MODEL_READY(?:[^\n]*\n){0,16}[^\n]*run_mode=model-rejected",),
+    )
+    failures.extend(
+        require_patterns(
+            log,
+            (
+                r"TASK3_MODEL_REJECTED[^\n]*reason=InjectedInvalidOutput",
+                r"STARRY_T2N1_SAFE source=model reason=InjectedInvalidOutput",
+            ),
+        )
     )
     controls = matching(frames, src=STARRY_IP, dst=ZEPHYR_IP, kind=KIND_CONTROL)
     if controls:
@@ -355,10 +403,17 @@ VERIFY_SCENARIO = {
     "model-rejected": verify_model_rejected,
 }
 
+VERIFY_TASK2_SCENARIO = {
+    **VERIFY_SCENARIO,
+    "normal": verify_task2_normal,
+    "blackout": verify_task2_only_blackout,
+}
+
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--scenario", choices=tuple(VERIFY_SCENARIO), required=True)
+    parser.add_argument("--scope", choices=("integrated", "task2"), default="integrated")
     parser.add_argument("--starry-pcap", type=Path, required=True)
     parser.add_argument("--zephyr-pcap", type=Path, required=True)
     parser.add_argument("--run-log", type=Path, required=True)
@@ -374,10 +429,22 @@ def main() -> int:
         return 1
 
     failures: list[str] = []
-    failures.extend(require_patterns(log, (YOLO_READY_PATTERN,)))
-    if "embedded:fixture-replay" in log or "model=cnn" in log:
-        failures.append("runtime log contains a fixture or CNN path instead of real ncnn/YOLO")
-    if args.scenario != "model-rejected":
+    if args.scope == "integrated":
+        failures.extend(
+            require_patterns(task3_model_ready_record(log), (YOLO_READY_PATTERN,))
+        )
+        if "embedded:fixture-replay" in log or "model=cnn" in log:
+            failures.append("runtime log contains a fixture or CNN path instead of real ncnn/YOLO")
+    else:
+        failures.extend(
+            require_patterns(
+                log,
+                (r"TASK2_CONTROLLER_READY mode=(?:task2|out-of-order|invalid-parameter)",),
+            )
+        )
+        if re.search(r"TASK3_(?:MODEL|INFER|DETECTION|EXPERIMENT)", log):
+            failures.append("Task-2-only runtime log contains Task-3 model activity")
+    if args.scope == "integrated" and args.scenario != "model-rejected":
         failures.extend(
             require_patterns(
                 log,
@@ -389,10 +456,14 @@ def main() -> int:
         )
     if starry_report["task2_signature"] != zephyr_report["task2_signature"]:
         failures.append("StarryOS and Zephyr captures have different T2N1 ledgers")
-    failures.extend(VERIFY_SCENARIO[args.scenario](frames, log))
+    verifier = VERIFY_SCENARIO if args.scope == "integrated" else VERIFY_TASK2_SCENARIO
+    if args.scope == "task2" and args.scenario == "model-rejected":
+        failures.append("model-rejected is not a Task-2-only scenario")
+    else:
+        failures.extend(verifier[args.scenario](frames, log))
 
     print(
-        f"scenario={args.scenario} frames={len(frames)} "
+        f"scope={args.scope} scenario={args.scenario} frames={len(frames)} "
         f"kinds={dict(starry_report['task2_kinds'])}"
     )
     if failures:

@@ -54,6 +54,18 @@ class FakeQmpSession:
 
 
 class SerialConsoleTest(unittest.TestCase):
+    def test_send_command_paces_bytes_for_small_guest_uart_fifos(self):
+        driver = object.__new__(MODULE.ConsoleDriver)
+        driver.conn = FakeConnection()
+
+        with mock.patch.object(MODULE.time, "sleep"):
+            driver.send_command("run invalid-parameter")
+
+        self.assertEqual(
+            driver.conn.sent,
+            [bytes([byte]) for byte in b"run invalid-parameter\n"],
+        )
+
     def test_poll_reads_tracks_attachment_marker_split_across_receives(self):
         driver = object.__new__(MODULE.ConsoleDriver)
         driver.conn = ChunkedConnection(
@@ -165,7 +177,7 @@ class SerialConsoleTest(unittest.TestCase):
             driver.dump_pcap(str(Path(directory) / "switch"))
             vm1 = Path(directory) / "switch.vm1.pcap"
             vm2 = Path(directory) / "switch.vm2.pcap"
-            self.assertEqual(driver.conn.sent, [b"virtnet capture dump\n"])
+            self.assertEqual(b"".join(driver.conn.sent), b"virtnet capture dump\n")
             self.assertEqual(vm1.read_bytes()[:4], MODULE.PCAP_GLOBAL_HEADER[:4])
             self.assertEqual(vm2.read_bytes()[:4], MODULE.PCAP_GLOBAL_HEADER[:4])
             self.assertGreater(len(vm1.read_bytes()), len(MODULE.PCAP_GLOBAL_HEADER))

@@ -1,0 +1,41 @@
+{
+  "schema": 1,
+  "artifacts": [
+    {
+      "path": "dashboard-data.json",
+      "bytes": 41033,
+      "sha256": "17423545fefd0166e47802422b0cad0be2e83ad083fadb3a4180251a3ecceacc",
+      "role": "rendered-demo"
+    },
+    {
+      "path": "dashboard.html",
+      "bytes": 44726,
+      "sha256": "381884b92c62e6c62f39bf76d7e1426d0757e4646551283f1448680ec6227ad7",
+      "role": "rendered-demo"
+    },
+    {
+      "path": "dashboard.mp4",
+      "bytes": 130389,
+      "sha256": "4278c9c6f5b1235144e97c3176523e54458afca79dca65e177f3e3288cee605b",
+      "role": "rendered-demo"
+    },
+    {
+      "path": "dashboard.png",
+      "bytes": 341086,
+      "sha256": "bee2e9f1c8e915d3fa45c6cba712804d84c9dc2e8b355cfed983da3668012c98",
+      "role": "rendered-demo"
+    },
+    {
+      "path": "dashboard.svg",
+      "bytes": 1782,
+      "sha256": "1f3b280691d66f05cf1e06c132c1792f711368f27462098db279b8baca004051",
+      "role": "rendered-demo"
+    },
+    {
+      "path": "raw/fp-rr-run3.log",
+      "bytes": 130950,
+      "sha256": "fdb1ab2510e8b98d0b8bad68c8dd2ab4ba5a21a28ee3a331a43fcd091c8a1166",
+      "role": "raw-log"
+    }
+  ]
+}

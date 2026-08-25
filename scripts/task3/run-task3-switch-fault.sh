@@ -15,20 +15,33 @@ set -euo pipefail
 # Usage: run-task3-switch-fault.sh <label> [baseline|cnn|yolo]
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+source "$repo_root/scripts/lib/task123-tools.sh"
 rootfs="${STARRY_TASK23_ROOTFS:-$repo_root/tmp/axbuild/rootfs/rootfs-aarch64-alpine.img}"
 label="${1:?label required}"
 mode="${2:-yolo}"
 workdir="$repo_root/tmp/net-dual-guest"
-log="/tmp/task3-${label}.log"
-build_log="/tmp/task3-${label}-build.log"
-qemu_sock="$workdir/qmp-switch.sock"
-serial_sock="$workdir/serial-switch.sock"
-steps="/tmp/task3-${label}.steps"
+out_dir="${TASK3_OUTPUT_DIR:-$repo_root/results/task3/switch/fault-$label}"
+runtime_dir=""
+qemu_sock=""
+serial_sock=""
+capture_prefix=""
+log=""
+build_log=""
+steps=""
 run_pid=""
 
 cleanup() {
-    pkill -f "tg-xtask axvisor qemu" 2>/dev/null || true
-    pkill -f "qemu-system-[a]arch64" 2>/dev/null || true
+    if [[ -n "$run_pid" && -n "$qemu_sock" && -S "$qemu_sock" ]]; then
+        python3 "$repo_root/scripts/test/net-dual-guest/qmp_link.py" "$qemu_sock" quit \
+            >/dev/null 2>&1 || true
+    fi
+    if [[ -n "$run_pid" ]] && kill -0 "$run_pid" 2>/dev/null; then
+        kill -TERM "$run_pid" 2>/dev/null || true
+        wait "$run_pid" 2>/dev/null || true
+    fi
+    if [[ -n "$runtime_dir" && -d "$runtime_dir" ]]; then
+        remove_task123_runtime_dir "$runtime_dir"
+    fi
 }
 trap cleanup EXIT
 
@@ -52,10 +65,30 @@ if [ ! -s "$initramfs" ]; then
     exit 1
 fi
 
-cp "$initramfs" \
-    "$workdir/linux-task2/task2-linux-initramfs.cpio.gz"
-rm -f "$qemu_sock" "$serial_sock" "$log" \
-    "$workdir/switch.vm1.pcap" "$workdir/switch.vm2.pcap"
+if [[ -d "$out_dir" ]] && find "$out_dir" -mindepth 1 -print -quit | grep -q .; then
+    printf 'error: output directory is not empty: %s\n' "$out_dir" >&2
+    exit 1
+fi
+mkdir -p "$out_dir"
+out_dir="$(realpath "$out_dir")"
+log="$out_dir/run.log"
+build_log="$out_dir/build.log"
+steps="$out_dir/steps.txt"
+runtime_dir="$(create_task123_runtime_dir)"
+qemu_sock="$runtime_dir/qmp.sock"
+serial_sock="$runtime_dir/serial.sock"
+capture_prefix="$runtime_dir/capture"
+runtime_rootfs="$runtime_dir/rootfs.img"
+runtime_qemu_config="$out_dir/qemu.runtime.toml"
+runtime_linux_vm="$out_dir/vm-linux.runtime.toml"
+cp --reflink=auto --sparse=always "$rootfs" "$runtime_rootfs"
+python3 "$repo_root/scripts/test/net-dual-guest/render_qemu_runtime.py" \
+    "$repo_root/scripts/test/net-dual-guest/qemu-aarch64-p2-switch.toml" \
+    "$runtime_qemu_config" --rootfs "$runtime_rootfs" \
+    --serial-socket "$serial_sock" --qmp-socket "$qemu_sock"
+python3 "$repo_root/scripts/test/net-dual-guest/render_vm_runtime.py" \
+    "$repo_root/scripts/test/net-dual-guest/vm-aarch64-p2-switch-linux.toml" \
+    "$runtime_linux_vm" --ramdisk-path "$initramfs"
 
 cat > "$steps" <<EOF
 # Wait for the control loop inside the boot-time console multiplex.
@@ -85,17 +118,17 @@ expect 90 TASK2_RECOVERED
 # Observe resumed closed-loop cycles (>=45s of loop time).
 expect 120 elapsed_ms=(4[5-9]|[5-9][0-9]|[1-9][0-9][0-9])[0-9]{3}
 detach
-dump-pcap $workdir/switch
+dump-pcap $capture_prefix
 qmp-quit $qemu_sock
 EOF
 
 rm -f "$log"
 nohup cargo xtask axvisor qemu \
     --config scripts/test/net-dual-guest/axvisor-qemu-debug.toml \
-    --qemu-config scripts/test/net-dual-guest/qemu-aarch64-p2-switch.toml \
-    --vmconfigs scripts/test/net-dual-guest/vm-aarch64-p2-switch-linux.toml \
+    --qemu-config "$runtime_qemu_config" \
+    --vmconfigs "$runtime_linux_vm" \
     --vmconfigs scripts/test/net-dual-guest/vm-aarch64-p2-switch-rtos.toml \
-    --rootfs "$rootfs" \
+    --rootfs "$runtime_rootfs" \
     > "$build_log" 2>&1 &
 run_pid=$!
 
@@ -120,10 +153,8 @@ python3 scripts/test/net-dual-guest/serial_console.py \
     "$serial_sock" "$log" --script "$steps"
 driver_status=$?
 
-sleep 5
-pkill -f "tg-xtask axvisor qemu" 2>/dev/null || true
-pkill -f "qemu-system-[a]arch64" 2>/dev/null || true
-sleep 2
+wait "$run_pid" 2>/dev/null || true
+run_pid=""
 
 if [ "$driver_status" -ne 0 ]; then
     echo "console driver failed with status $driver_status; tail of run log:"
@@ -135,7 +166,7 @@ if [ ! -s "$log" ]; then
     echo "missing or empty fault log: $log" >&2
     exit 1
 fi
-for pcap in "$workdir"/switch.vm1.pcap "$workdir"/switch.vm2.pcap; do
+for pcap in "$capture_prefix.vm1.pcap" "$capture_prefix.vm2.pcap"; do
     if [ ! -s "$pcap" ]; then
         echo "missing or empty capture: $pcap" >&2
         exit 1
@@ -196,18 +227,13 @@ if not elapsed or max(elapsed) < 45000:
 PY
 
 python3 scripts/test/net-dual-guest/verify_pcap.py \
-    --tag '' --require-task2 "$workdir/switch.vm1.pcap" "$workdir/switch.vm2.pcap"
+    --tag '' --require-task2 "$capture_prefix.vm1.pcap" "$capture_prefix.vm2.pcap"
 
 echo "run $label mode=$mode (fault) finished; log=$log build_log=$build_log"
-ls -la "$workdir"/switch.vm*.pcap
 
 # Archive the evidence under results/task3/switch/fault-<label>/.
-out_dir="$repo_root/results/task3/switch/fault-$label"
-mkdir -p "$out_dir"
-cp "$log" "$out_dir/run.log" 2>/dev/null || true
-cp "$build_log" "$out_dir/build.log" 2>/dev/null || true
-cp "$workdir/switch.vm1.pcap" "$out_dir/linux.pcap"
-cp "$workdir/switch.vm2.pcap" "$out_dir/rtos.pcap"
+mv "$capture_prefix.vm1.pcap" "$out_dir/linux.pcap"
+mv "$capture_prefix.vm2.pcap" "$out_dir/rtos.pcap"
 zephyr_manifest="$workdir/zephyr-task2/manifest.toml"
 sha256_or_none() {
     if [ -f "$1" ]; then
@@ -232,4 +258,5 @@ sha256_or_none() {
         printf 'zephyr_manifest_sha256 = "%s"\n' "$(sha256sum "$zephyr_manifest" | awk '{print $1}')"
     fi
 } > "$out_dir/manifest.toml"
+write_task123_source_identity "$repo_root" "$out_dir"
 echo "archived evidence under $out_dir"

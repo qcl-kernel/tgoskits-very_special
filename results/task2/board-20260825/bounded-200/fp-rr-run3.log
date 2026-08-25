@@ -1,0 +1,2359 @@
+
+
+
+[Axvisor] detached VM[1] console
+Welcome to AxVisor Shell!
+Type 'help' to see available commands
+Use UP/DOWN arrows to navigate command history
+Console shortcuts:
+  Ctrl+X, then h  return to the Axvisor shell
+  Ctrl+X, then [  attach the previous running guest
+  Ctrl+X, then ]  attach the next running guest
+
+[2Kaxvisor:/$ DDR 3488111f83 cym 24/04/12-12:49:26,fwver: v1.17
+LPDDR4X, 1560MHz
+channel[0] BW=16 Col=10 Bk=8 CS0 Row=16 CS1 Row=16 CS=2 Die BW=16 Size=2048MB
+channel[1] BW=16 Col=10 Bk=8 CS0 Row=16 CS1 Row=16 CS=2 Die BW=16 Size=2048MB
+channel[2] BW=16 Col=10 Bk=8 CS0 Row=16 CS1 Row=16 CS=2 Die BW=16 Size=2048MB
+channel[3] BW=16 Col=10 Bk=8 CS0 Row=16 CS1 Row=16 CS=2 Die BW=16 Size=2048MB
+Manufacturer ID:0x1
+CH0 RX Vref:31.8%, TX Vref:19.8%,19.8%DQ rds:
+h3 l0, h1 l0, h3 l0, h1 l0, h7 l0, h3 l0, h1 l0, h3 l0, 
+h7 l0, h6 l0, h3 l0, h7 l0, h3 l0, h2 l0, h1 l0, h2 l0, 
+
+CH1 RX Vref:30.5%, TX Vref:21.8%,19.8%DQ rds:
+h7 l0, h0 l0, h6 l0, h5 l0, h0 l0, h1 l0, h4 l0, h1 l0, 
+h3 l0, h4 l0, h5 l0, h0 l0, h4 l0, h5 l0, h4 l0, h7 l0, 
+
+CH2 RX Vref:31.0%, TX Vref:21.8%,20.8%DQ rds:
+h0 l0, h0 l0, h0 l0, h6 l0, h2 l0, h0 l0, h7 l0, h4 l0, 
+h6 l0, h1 l0, h5 l0, h6 l0, h1 l0, h1 l0, h0 l0, h3 l0, 
+
+CH3 RX Vref:33.0%, TX Vref:21.8%,19.8%DQ rds:
+h6 l0, h7 l0, h4 l0, h5 l0, h0 l0, h2 l0, h6 l0, h4 l0, 
+h7 l0, h5 l0, h7 l0, h7 l0, h6 l0, h6 l0, h1 l0, h6 l0, 
+
+stride=0x2, ddr_config=0x4
+hash ch_mask0-1 0x20 0x40, bank_mask0-3 0xa00 0x1400 0x2800 0x0, rank_mask0 0x401000
+change to F1: 528MHz
+change to F2: 1068MHz
+change to F3: 1560MHz
+change to F0: 1560MHz
+out
+U-Boot SPL board init
+U-Boot SPL 2017.09-ge4e124926e-230922 #lxh (Sep 25 2023 - 10:58:38), fwver: v1.13
+unknown raw ID 0 0 0
+unrecognized JEDEC id bytes: 00, 00, 00
+Trying to boot from MMC2
+MMC: no card present
+mmc_init: -123, time 0
+spl: mmc init failed with error: -123
+Trying to boot from MMC1
+SPL: A/B-slot: _a, successful: 0, tries-remain: 7
+Trying fit image at 0x4000 sector
+## Verified-boot: 0
+## Checking atf-1 0x00040000 ... sha256(64122e141b...) + OK
+## Checking uboot 0x00200000 ... sha256(6a44ff16cd...) + OK
+## Checking fdt 0x00341b18 ... sha256(8ecccd16d2...) + OK
+## Checking atf-2 0xff100000 ... sha256(ce8968e34f...) + OK
+## Checking atf-3 0x000f0000 ... sha256(ce48b69fdd...) + OK
+## Checking optee 0x08400000 ... sha256(b866e4e4a1...) + OK
+Jumping to U-Boot(0x00200000) via ARM Trusted Firmware(0x00040000)
+Total: 84.728/258.632 ms
+
+INFO:    Preloader serial: 2
+NOTICE:  BL31: v2.3():v2.3-765-g588059758:derrick.huang, fwver: v1.46
+NOTICE:  BL31: Built : 18:13:16, Apr 29 2024
+INFO:    spec: 0x1
+INFO:    code: 0x88
+INFO:    ext 32k is not valid
+INFO:    ddr: stride-en 4CH
+INFO:    GICv3 without legacy support detected.
+INFO:    ARM GICv3 driver initialized in EL3
+INFO:    valid_cpu_msk=0xff bcore0_rst = 0x0, bcore1_rst = 0x0
+INFO:    l3 cache partition cfg-0
+INFO:    system boots from cpu-hwid-0
+INFO:    bypass memory repair
+INFO:    idle_st=0x21fff, pd_st=0x11fff9, repair_st=0xfff70001
+INFO:    dfs DDR fsp_params[0].freq_mhz= 1560MHz
+INFO:    dfs DDR fsp_params[1].freq_mhz= 528MHz
+INFO:    dfs DDR fsp_params[2].freq_mhz= 1068MHz
+INFO:    dfs DDR fsp_params[3].freq_mhz= 1560MHz
+INFO:    BL31: Initialising Exception Handling Framework
+INFO:    BL31: Initializing runtime services
+INFO:    BL31: Initializing BL32
+I/TC: 
+I/TC: OP-TEE version: 3.13.0-791-g185dc3c92 #hisping.lin (gcc version 10.2.1 20201103 (GNU Toolchain for the A-profile Architecture 10.2-2020.11 (arm-10.16))) #2 Tue Apr 16 11:16:18 CST 2024 aarch64, fwver: v1.16 
+I/TC: OP-TEE memory: TEEOS 0x200000 TA 0xc00000 SHM 0x200000
+I/TC: Primary CPU initializing
+I/TC: Primary CPU switching to normal world boot
+INFO:    BL31: Preparing for EL3 exit to normal world
+INFO:    Entry point address = 0x200000
+INFO:    SPSR = 0x3c9
+
+
+U-Boot 2017.09-g0a4dd03 #dengtao (Jan 16 2025 - 11:37:55 +0800)
+
+Model: Rockchip RK3588 Evaluation Board
+MPIDR: 0x81000000
+PreSerial: 2, raw, 0xfeb50000
+DRAM:  8 GiB
+Sysmem: init
+Relocation Offset: eda1c000
+Relocation fdt: eb9fa7e0 - eb9fecc8
+CR: M/C/I
+Using default environment
+
+Hotkey: ctrl+c
+optee api revision: 2.0
+mmc@fe2c0000: 1, mmc@fe2e0000: 0
+Bootdev(atags): mmc 0
+MMC0: HS400 Enhanced Strobe, 200Mhz
+PartType: EFI
+TEEC: Waring: Could not find security partition
+DM: v2
+boot mode: normal
+RESC: 'boot', blk@0x00019463
+resource: sha256+
+FIT: no signed, no conf required
+   - dev=saradc, channel=7, dtb_adc=2748, read=2891, found=0
+   - dev=saradc, channel=7, dtb_adc=1410, read=2891, found=0
+   - dev=saradc, channel=7, dtb_adc=0, read=2891, found=0
+DTB: rk-kernel.dtb
+HASH(c): OK
+I2c0 speed: 100000Hz
+vsel-gpios- not found!
+en-gpios- not found!
+vdd_cpu_big0_s0 675000 uV
+vsel-gpios- not found!
+en-gpios- not found!
+vdd_cpu_big1_s0 675000 uV
+I2c1 speed: 100000Hz
+vsel-gpios- not found!
+en-gpios- not found!
+vdd_npu_s0 800000 uV
+spi2: RK806: 2
+ON=0x40, OFF=0x00
+vdd_gpu_s0 750000 uV
+vdd_cpu_lit_s0 750000 uV
+vdd_log_s0 750000 uV
+vdd_vdenc_s0 init 750000 uV
+vdd_ddr_s0 850000 uV
+Device 'gpio@fd8a0000': seq 0 is in use by 'gpio@fd8a0000'
+get vp0 plane mask:0x5, primary id:2, cursor_plane:-1, from dts
+get vp1 plane mask:0xa, primary id:3, cursor_plane:-1, from dts
+get vp2 plane mask:0x140, primary id:8, cursor_plane:-1, from dts
+get vp3 plane mask:0x280, primary id:9, cursor_plane:-1, from dts
+Could not find baseparameter partition
+Model: ATK-DLRK3588 Board
+MPIDR: 0x81000000
+Rockchip UBOOT DRM driver version: v1.0.1
+vp0 have layer nr:2[0 2 ], primary plane: 2
+vp1 have layer nr:2[1 3 ], primary plane: 3
+vp2 have layer nr:2[6 8 ], primary plane: 8
+vp3 have layer nr:2[7 9 ], primary plane: 9
+Using display timing dts
+dsi@fde20000:  detailed mode clock 119000 kHz, flags[a]
+    H: 1080 1090 1096 1128
+    V: 1920 1940 1946 1956
+bus_format: 100e
+VOP update mode to: 1080x1920p54, type: MIPI0 for VP3
+VP3 set crtc_clock to 119000KHz
+VOP VP3 enable Esmart3[654x270->654x270@213x825] fmt[2] addr[0xedf2c000]
+final DSI-Link bandwidth: 793333 Kbps x 4
+hdmi@fde80000 disconnected
+hdmi@fdea0000 disconnected
+CLK: (sync kernel. arm: enter 1008000 KHz, init 1008000 KHz, kernel 0N/A)
+  b0pll 24000 KHz
+  b1pll 24000 KHz
+  lpll 24000 KHz
+  v0pll 714000 KHz
+  aupll 786431 KHz
+  cpll 1500000 KHz
+  gpll 1188000 KHz
+  npll 850000 KHz
+  ppll 1100000 KHz
+  aclk_center_root 702000 KHz
+  pclk_center_root 100000 KHz
+  hclk_center_root 396000 KHz
+  aclk_center_low_root 500000 KHz
+  aclk_top_root 750000 KHz
+  pclk_top_root 100000 KHz
+  aclk_low_top_root 396000 KHz
+Net:   eth0: ethernet@fe1b0000, eth1: ethernet@fe1c0000
+Hit key to stop autoboot('CTRL+C'):  0  0
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> fastboot usb 0
+Enter fastboot...OK
+request 00000000ebe5c580 was not queued to ep1in-bulk
+Starting download of 28224232 bytes
+request 00000000ebe5c580 was not queued to ep1in-bulk
+..........................................................................
+..........................................................................
+...................................................................request 00000000ebe5c580 was not queued to ep1in-bulk
+
+downloading of 28224232 bytes finished
+=> fdt addr 0x00c00800
+=> fdt get addr fdtsrc /images/fdt-1 data
+=> fdt get size fdtlen /images/fdt-1 data
+=> fdt get value fdtdst /images/fdt-1 load
+=> fdt get addr kernelsrc /images/kernel-1 data
+=> fdt get size kernellen /images/kernel-1 data
+=> fdt get value kerneldst /images/kernel-1 load
+=> printenv fdtsrc fdtlen fdtdst kernelsrc kernellen kerneldst
+fdtsrc=0x00000000026a4a5c
+fdtlen=0x00046646
+fdtdst=0x08300000
+kernelsrc=0x0000000000c00914
+kernellen=0x01AA4040
+kerneldst=0x00400000
+=> cp.b ${fdtsrc} ${fdtdst} ${fdtlen}
+=> cp.b ${kernelsrc} ${kerneldst} ${kernellen}
+=> fdt addr ${fdtdst}
+=> fdt header
+magic:			0xd00dfeed
+totalsize:		0x46646 (288326)
+off_dt_struct:		0x48
+off_dt_strings:		0x40a28
+off_mem_rsvmap:		0x28
+version:		17
+last_comp_version:	16
+boot_cpuid_phys:	0x0
+size_dt_strings:	0x5c1e
+size_dt_struct:		0x409e0
+number mem_rsv:		0x1
+
+=> booti ${kerneldst} - ${fdtdst}
+Fdt Ramdisk skip relocation
+## Flattened Device Tree blob at 0x08300000
+   Booting using the fdt blob at 0x08300000
+   reserving fdt memory region: addr=8300000 size=47000
+   Using Device Tree in place at 0000000008300000, end 0000000008349645
+WARNING: could not set reg FDT_ERR_BADOFFSET.
+## reserved-memory:
+  axvisor-guest@40000000: addr=40000000 size=40000000
+  cma: addr=10000000 size=8000000
+  drm-logo@00000000: addr=edf00000 size=106000
+  ramoops@110000: addr=110000 size=f0000
+Adding bank: 0x00200000 - 0x08400000 (size: 0x08200000)
+Adding bank: 0x09400000 - 0xf0000000 (size: 0xe6c00000)
+Adding bank: 0x100000000 - 0x200000000 (size: 0x100000000)
+Adding bank: 0x2f0000000 - 0x300000000 (size: 0x10000000)
+Total: 5020.666/5357.591 ms
+
+Starting kernel ...
+
+storagemedia=emmc androidboot.storagemedia=emmc androidboot.mode=normal  rw rootwait androidboot.verifiedbootstate=orange earlycon=uart8250,mmio32,0xfeb50000 console=ttyFIQ0 irqchip.gicv3_pseudo_nmi=0 root=PARTLABEL=rootfs
+VM Load @PA:0x400000
+VM Load Offset: 0xffff000080400000
+Memory Map:
+  Rsv    0x00000000110000 - 0x00000000200000 (960 KiB)
+  Free   0x00000000200000 - 0x00000000400000 (2 MiB)
+  KImg   0x00000000400000 - 0x00000002000000 (28 MiB)
+  Free   0x00000002000000 - 0x00000008300000 (99 MiB)
+  Rsv    0x00000008300000 - 0x00000008347000 (284 KiB)
+  Free   0x00000008347000 - 0x00000008400000 (740 KiB)
+  Free   0x00000009400000 - 0x00000010000000 (108 MiB)
+  Rsv    0x00000010000000 - 0x00000018000000 (128 MiB)
+  Free   0x00000018000000 - 0x00000040000000 (640 MiB)
+  Rsv    0x00000040000000 - 0x00000080000000 (1 GiB)
+  Free   0x00000080000000 - 0x000000edf00000 (1.72 GiB)
+  Rsv    0x000000edf00000 - 0x000000ee006000 (1.02 MiB)
+  Free   0x000000ee006000 - 0x000000f0000000 (31.98 MiB)
+  Free   0x00000100000000 - 0x00000200000000 (4 GiB)
+  Free   0x000002f0000000 - 0x00000300000000 (256 MiB)
+Initialize RAM allocator: 0x2000000..0x8300000
+Reserving CPU-local areas
+CPU-local area stride: 0x45000 bytes
+Total CPU-local allocation: 0x228000 bytes (8 CPUs)
+Flushed RAM used range to memory map: 0x2000000..0x2047000, current: 0x2047000
+Flushed RAM used range to memory map: 0x2047000..0x226f000, current: 0x226f000
+CPU-local areas allocated at 0x2047000 - 0x226f000
+EL: 2
+Mapping early memory regions...
+Ram                 : [0x0000000000200000, 0x0000000008400000) -> [0x0000000000200000, 0x0000000008400000) (130 MiB)
+Ram                 : [0x0000000009400000, 0x00000000f0000000) -> [0x0000000009400000, 0x00000000f0000000) (3.61 GiB)
+Ram                 : [0x0000000100000000, 0x0000000200000000) -> [0x0000000100000000, 0x0000000200000000) (4 GiB)
+Ram                 : [0x00000002f0000000, 0x0000000300000000) -> [0x00000002f0000000, 0x0000000300000000) (256 MiB)
+KImage              : [0x0000ffff80000000, 0x0000ffff81c00000) -> [0x0000000000400000, 0x0000000002000000) (28 MiB)
+PerCpu              : [0x0000ff0002047000, 0x0000ff000226f000) -> [0x0000000002047000, 0x000000000226f000) (2.16 MiB)
+Debug serial        : [0x00000000feb50000, 0x00000000feb51000) -> [0x00000000feb50000, 0x00000000feb51000) (4 KiB)
+Boot page table at physical address: PA:0x226f000
+Setting up table registers...
+MMU Entry point at physical address: 0x613974
+Trap vector at 0xffff80215000
+Memory Map:
+  Rsv    0x00000000110000 - 0x00000000200000 (960 KiB)
+  Free   0x00000000200000 - 0x00000000400000 (2 MiB)
+  KImg   0x00000000400000 - 0x00000002000000 (28 MiB)
+  Rsv    0x00000002000000 - 0x00000002047000 (284 KiB)
+  PerCPU 0x00000002047000 - 0x0000000226f000 (2.16 MiB)
+  Rsv    0x0000000226f000 - 0x0000000227b000 (48 KiB)
+  Free   0x0000000227b000 - 0x00000008300000 (96.52 MiB)
+  Rsv    0x00000008300000 - 0x00000008347000 (284 KiB)
+  Free   0x00000008347000 - 0x00000008400000 (740 KiB)
+  Free   0x00000009400000 - 0x00000010000000 (108 MiB)
+  Rsv    0x00000010000000 - 0x00000018000000 (128 MiB)
+  Free   0x00000018000000 - 0x00000040000000 (640 MiB)
+  Rsv    0x00000040000000 - 0x00000080000000 (1 GiB)
+  Free   0x00000080000000 - 0x000000edf00000 (1.72 GiB)
+  Rsv    0x000000edf00000 - 0x000000ee006000 (1.02 MiB)
+  Free   0x000000ee006000 - 0x000000f0000000 (31.98 MiB)
+  MMIO   0x000000feb50000 - 0x000000feb51000 (4 KiB)
+  Free   0x00000100000000 - 0x00000200000000 (4 GiB)
+  Free   0x000002f0000000 - 0x00000300000000 (256 MiB)
+Jumping to main entry point at 0xffff801f56c8 with SP 0x0000ff000208c000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = aarch64
+platform = ATK-DLRK3588 Board
+target = aarch64-unknown-none-softfloat
+build_mode = 
+log_level = info
+backtrace = false
+smp = 8
+
+[37max_runtime:254] [32mLogging is enabled.[m
+[m[37max_runtime:255] [32mPrimary CPU 0 started, arg = 0x2000000.[m
+[m[37max_runtime:257] [32mFound physcial memory regions:[m
+[m[37max_runtime:259] [32m  [PA:0x110000, PA:0x200000) reserved (READ | WRITE | EXECUTE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0x200000, PA:0x400000) free memory (READ | WRITE | FREE)[m
+[m[37max_runtime:259] [32m  [PA:0x400000, PA:0x2000000) reserved (READ | WRITE | EXECUTE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0x2000000, PA:0x2047000) reserved (READ | WRITE | EXECUTE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0x2047000, PA:0x226f000) reserved (READ | WRITE | EXECUTE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0x226f000, PA:0x227b000) reserved (READ | WRITE | EXECUTE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0x227b000, PA:0x8300000) free memory (READ | WRITE | FREE)[m
+[m[37max_runtime:259] [32m  [PA:0x8300000, PA:0x8347000) reserved (READ | WRITE | EXECUTE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0x8347000, PA:0x8400000) free memory (READ | WRITE | FREE)[m
+[m[37max_runtime:259] [32m  [PA:0x9400000, PA:0x10000000) free memory (READ | WRITE | FREE)[m
+[m[37max_runtime:259] [32m  [PA:0x10000000, PA:0x18000000) reserved (READ | WRITE | EXECUTE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0x18000000, PA:0x40000000) free memory (READ | WRITE | FREE)[m
+[m[37max_runtime:259] [32m  [PA:0x40000000, PA:0x80000000) reserved (READ | WRITE | EXECUTE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0x80000000, PA:0xedf00000) free memory (READ | WRITE | FREE)[m
+[m[37max_runtime:259] [32m  [PA:0xedf00000, PA:0xee006000) reserved (READ | WRITE | EXECUTE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0xee006000, PA:0xf0000000) free memory (READ | WRITE | FREE)[m
+[m[37max_runtime:259] [32m  [PA:0xfeb50000, PA:0xfeb51000) mmio (READ | WRITE | DEVICE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0x100000000, PA:0x200000000) free memory (READ | WRITE | FREE)[m
+[m[37max_runtime:259] [32m  [PA:0x2f0000000, PA:0x300000000) free memory (READ | WRITE | FREE)[m
+[m[37max_runtime:419] [32mInitialize global memory allocator...[m
+[m[37max_runtime:420] [32m  use buddy-slab-allocator allocator.[m
+[m[37max_alloc::buddy_slab:158] [32mInitialize global memory allocator, start_vaddr: 0x100000000, size: 0x100000000[m
+[m[37max_alloc::buddy_slab:424] [32mglobal allocator initialized[m
+[m[37max_alloc::buddy_slab:168] [32mAdd memory region, start_vaddr: 0x200000, size: 0x200000[m
+[m[37mbuddy_slab_allocator::global:151] [32mGlobalAllocator: skip region 0x200000+0x200000, no allocator-visible memory after 2097152 alignment[m
+[m[37max_alloc::buddy_slab:168] [32mAdd memory region, start_vaddr: 0x227b000, size: 0x6085000[m
+[m[37max_alloc::buddy_slab:168] [32mAdd memory region, start_vaddr: 0x8347000, size: 0xb9000[m
+[m[37mbuddy_slab_allocator::global:151] [32mGlobalAllocator: skip region 0x8347000+0xb9000, no allocator-visible memory after 2097152 alignment[m
+[m[37max_alloc::buddy_slab:168] [32mAdd memory region, start_vaddr: 0x9400000, size: 0x6c00000[m
+[m[37max_alloc::buddy_slab:168] [32mAdd memory region, start_vaddr: 0x18000000, size: 0x28000000[m
+[m[37max_alloc::buddy_slab:168] [32mAdd memory region, start_vaddr: 0x80000000, size: 0x6df00000[m
+[m[37max_alloc::buddy_slab:168] [32mAdd memory region, start_vaddr: 0xee006000, size: 0x1ffa000[m
+[m[37max_alloc::buddy_slab:168] [32mAdd memory region, start_vaddr: 0x2f0000000, size: 0x10000000[m
+[m[37max_runtime:294] [32mkernel aspace: [VA:0x0, VA:0xffffffffffffffff)[m
+[m[37max_mm:107] [32mInitialize virtual memory management...[m
+[m[37max_runtime:306] [32mInitialize platform devices...[m
+[m[37msomeboot::arch::power:23] [32mPower management method : SMC[m
+[m[37msomehal::driver:5] [32mInitializing rdrive with FDT at 0x2000000[m
+[m[37max_driver::soc::rockchip::pinctrl:301] [32mRockchip RK3588 pinctrl registered successfully[m
+[m[37msomehal::arch::gic::v3:274] [32mGICv3 CPU 0 EOI mode: two_step=true[m
+[m[37max_task::api:249] [32mInitialize scheduling...[m
+[m[37max_task::api:257] [32m  use Fixed-priority round-robin scheduler.[m
+[m[37max_runtime:337] [32mInitialize interrupt handlers...[m
+[m[37max_runtime::devices:2] [32mProbe platform devices...[m
+[m[37max_driver::serial::ns16550:49] [32mProbing NS16550 serial device: serial@feb60000[m
+[m[37max_driver::serial::ns16550:92] [32mNS16550 serial@0xfeb60000 registered successfully[m
+[m[37max_driver::serial::rockchip_fiq:35] [32mRockchip FIQ debugger takes disabled UART alias serial2 at /serial@feb50000[m
+�[37max_driver::serial::rockchip_fiq:44] [32mRockchip FIQ debugger UART@0xfeb50000 registered successfully, serial-id=2, baudrate=1500000, irq-mode=true[m
+[m[37max_driver::soc::rockchip::cru::rk3588:60] [32mRK3588 CRU reg: addr=0xfd7c0000, size=0x5c000, rockchip,grf=<0x7a>[m
+[m[37mrockchip_soc::variants::rk3588::cru:123] [32mCRU@fd7c0000: Initializing and verifying clock configuration...[m
+[m[37mrockchip_soc::variants::rk3588::cru:174] [33m⚠ CRU@fd7c0000: ACLK_BUS_ROOT div mismatch! u-boot: 3, current: 4[m
+[m[37mrockchip_soc::variants::rk3588::cru:248] [32m✓ CRU@fd7c0000: Clock configuration verified[m
+[m[37max_driver::soc::rockchip::cru::rk3588:79] [32mRK3588 CRU clock/reset registered successfully[m
+[m[37max_driver::soc::rockchip::pm:78] [32mRockchip power-domain provider registered successfully[m
+[m[37max_driver::block::rockchip::clock:12] [32m[mmc@fe2e0000] enabled SDHCI clock Some("core") (0x13a)[m
+[m[37max_driver::block::rockchip::clock:12] [32m[mmc@fe2e0000] enabled SDHCI clock Some("bus") (0x138)[m
+[m[37max_driver::block::rockchip::clock:12] [32m[mmc@fe2e0000] enabled SDHCI clock Some("axi") (0x139)[m
+[m[37max_driver::block::rockchip::clock:12] [32m[mmc@fe2e0000] enabled SDHCI clock Some("block") (0x13b)[m
+[m[37max_driver::block::rockchip::clock:12] [32m[mmc@fe2e0000] enabled SDHCI clock Some("timer") (0x13c)[m
+[m[37max_driver::block::rockchip::sdhci_rk3588:176] [32mrockchip-sdhci probe: node=mmc@fe2e0000, addr=0xfe2e0000, size=0x10000[m
+[m[37max_driver::block::rockchip::sdhci_rk3588:191] [32mrockchip-sdhci: using external CRU clock[m
+[m[37max_driver::block::rockchip::sdhci_rk3588:212] [32mrockchip-sdhci: defer protocol initialization controller=rockchip-sdhci:/mmc@fe2e0000 media=MMC preference=MmcFirst[m
+[m[37max_driver::block::rockchip::sdhci_rk3588:222] [32mrockchip-sdhci block device registered irq=None[m
+[m[37max_runtime::serial:895] [32mserial runtime NS16550 UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 622, cells: [0, 334, 4] }))), polling=false[m
+[m[37max_runtime::serial:895] [32mserial runtime Rockchip FIQ Debugger UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 622, cells: [0, 333, 4] }))), polling=false[m
+[m[ 10.519616 0:2 [37max_runtime:359] [32mruntime console active: serial1, ttyS2[m
+[m[ 10.519851 0:6 [37msdmmc_protocol::sdio::init::state_machine:102] [32msdio: submit bus op ResetAll[m
+[m[ 10.519942 0:6 [37max_fs_ng::block::runtime::hctx:177] [32mblock hctx 0 bound to CPU 0 with hardware depth 1[m
+[m[ 10.520013 0:6 [37max_fs_ng::block::runtime::lifecycle::device:333] [32mblock device rockchip-sdhci:/mmc@fe2e0000 IRQ source 0 (IrqId { domain: IrqDomainId(7), hwirq: HwIrq(237) }) fixed to CPU 0 for queue mask 0x1[m
+[m[ 10.520340 0:7 [37max_driver::block::rockchip::sdhci_rk3588:266] [32mrockchip-sdhci: RK3588 DWCMSHC vendor reset area1=0x500[m
+[m[ 10.520473 0:7 [37msdmmc_protocol::sdio::init::state_machine:102] [32msdio: submit bus op PowerOn[m
+[m[ 10.530619 0:7 [37msdmmc_protocol::sdio::init::state_machine:102] [32msdio: submit bus op SwitchVoltage(V330)[m
+[m[ 10.535312 0:7 [37msdmmc_protocol::sdio::init::state_machine:63] [32msdio: submit bus op SetBusWidth(Bit1)[m
+[m[ 10.535474 0:7 [37msdmmc_protocol::sdio::init::state_machine:63] [32msdio: submit bus op SetClock(Identification)[m
+[m[ 10.535733 0:7 [37max_driver::block::rockchip::sdhci_rk3588:121] [32mrockchip-sdhci: core clock set to 375000 Hz[m
+[m[ 10.578158 0:7 [37msdmmc_protocol::sdio::init::state_machine::identify:264] [32msdio: detected Mmc ocr=0xc0ff8080[m
+[m[ 10.579695 0:7 [37msdmmc_protocol::sdio::init::state_machine::identify:340] [32msdio: CSD capacity_blocks=None[m
+[m[ 10.591838 0:7 [37msdmmc_protocol::sdio::init::state_machine::mmc:38] [32msdio: EXT_CSD sector_count=122159104[m
+[m[ 10.594385 0:7 [37max_driver::block::rockchip::sdhci_rk3588:121] [32mrockchip-sdhci: core clock set to 50000000 Hz[m
+[m[ 10.594791 0:7 [37msdmmc_protocol::sdio::init::state_machine::mmc:314] [32msdio: MMC speed selected HighSpeed bus_width=Bit8[m
+[m[ 10.595028 0:7 [37msdmmc_protocol::sdio::init::state_machine::mmc:340] [32msdio: enabled 1024 KiB volatile write cache[m
+[m[ 10.595188 0:7 [37msdmmc_protocol::sdio::init::state_machine:237] [32msdio: init done kind=Mmc sd_v2=false high_capacity=true rca=0x1 ocr=0xc0ff8080 host_bus_width=Bit8 ext_csd_bus_width=Some(Sdr1) ext_csd_timing=Some(Compat)[m
+[m[ 10.595216 0:7 [37msdmmc_protocol::rdif::queue:172] [32msdmmc block init complete: kind=Mmc high_capacity=true rca=1 capacity_blocks=122159104 cache_enabled=true[m
+[m[ 10.624114 0:2 [37max_fs_ng::root:348] [32m    partition 1 name=Some("uboot") fs=None lba 16384..24576[m
+[m[ 10.624810 0:2 [37max_fs_ng::root:348] [32m    partition 2 name=Some("misc") fs=None lba 24576..32768[m
+[m[ 10.625360 0:2 [37max_fs_ng::root:348] [32m    partition 3 name=Some("boot") fs=None lba 32768..163840[m
+[m[ 10.625882 0:2 [37max_fs_ng::root:348] [32m    partition 4 name=Some("recovery") fs=None lba 163840..425984[m
+[m[ 10.626366 0:2 [37max_fs_ng::root:348] [32m    partition 5 name=Some("backup") fs=None lba 425984..491520[m
+[m[ 10.626706 0:2 [37max_fs_ng::root:348] [32m    partition 6 name=Some("rootfs") fs=Some(Ext4) lba 491520..29851648[m
+[m[ 10.627016 0:2 [37max_fs_ng::root:348] [32m    partition 7 name=Some("oem") fs=Some(Ext4) lba 29851648..30113792[m
+[m[ 10.627321 0:2 [37max_fs_ng::root:348] [32m    partition 8 name=Some("userdata") fs=Some(Ext4) lba 30113792..122159071[m
+[m[ 10.627350 0:2 [37max_fs_ng::root:364] [32m  block device 0 (rockchip-sdhci:/mmc@fe2e0000) has Gpt partition table with 8 partitions[m
+[m[ 10.627412 0:2 [37max_fs_ng::root:462] [32m  matched root by PARTLABEL on disk0 partition 6 (rootfs, fs=ext4, lba 491520..29851648)[m
+[m[ 10.627444 0:2 [37max_fs_ng:109] [32mInitialize filesystem subsystem...[m
+[m[ 10.627456 0:2 [37max_fs_ng:110] [32m  selected root device: disk0 partition 6 (rootfs, fs=ext4, lba 491520..29851648)[m
+[m[ 10.628262 0:2 [37mrsext4::crc32c::arm64:54] [33mID_AA64ISAR0_EL1[19:16]: 0x1[m
+[m[ 10.628276 0:2 [37mrsext4::crc32c::arm64:57] [33mHardware CRC32C support detected.[m
+[m[ 10.643213 0:2 [37mrsext4::ext4::mount:331] [32m/lost+found exists (superblock hint inode=11)[m
+[m[ 10.644292 0:2 [37mrsext4::ext4::mount:466] [32mExt4 filesystem mounted[m
+[m[ 10.644314 0:2 [37mrsext4::ext4::mount:467] [32m  - block size: 4096 bytes[m
+[m[ 10.644326 0:2 [37mrsext4::ext4::mount:468] [32m  - total blocks: 3670016[m
+[m[ 10.644338 0:2 [37mrsext4::ext4::mount:469] [32m  - free blocks: 3298217[m
+[m[ 10.644350 0:2 [37mrsext4::ext4::mount:470] [32m  - total inodes: 847616[m
+[m[ 10.644362 0:2 [37mrsext4::ext4::mount:471] [32m  - free inodes: 833535[m
+[m[ 10.644374 0:2 [37mrsext4::ext4::sync:13] [32mSyncing filesystem...[m
+[m[ 10.650509 0:2 [37mrsext4::ext4::mount:550] I/TC: Secondary CPU 1 initializing
+I/TC: Secondary CPU 1 switching to normal world boot
+I/TC: Secondary CPU 2 initializing
+I/TC: Secondary CPU 2 switching to normal world boot
+I/TC: Secondary CPU 3 initializing
+I/TC: Secondary CPU 3 switching to normal world boot
+I/TC: Secondary CPU 4 initializing
+I/TC: Secondary CPU 4 switching to normal world boot
+I/TC: Secondary CPU 5 initializing
+I/TC: Secondary CPU 5 switching to normal world boot
+I/TC: Secondary CPU 6 initializing
+I/TC: Secondary CPU 6 switching to normal world boot
+I/TC: Secondary CPU 7 initializing
+I/TC: Secondary CPU 7 switching to normal world boot
+[32mExt4 filesystem mounted[m
+[m[ 10.656184 1 [37msomehal::arch::gic::v3:274] [32mGICv3 CPU 1 EOI mode: two_step=true[m
+[m
+       d8888            888     888  d8b
+      d88888            888     888  Y8P
+     d88P888            888     888
+    d88P 888  888  888  Y88b   d88P  888  .d8888b    .d88b.   888d888
+   d88P  888  `Y8bd8P'   Y88b d88P   888  88K       d88""88b  888P"
+  d88P   888    X88K      Y88o88P    888  "Y8888b.  888  888  888
+ d8888888888  .d8""8b.     Y888P     888       X88  Y88..88P  888
+d88P     888  888  888      Y8P      888   88888P'   "Y88P"   888
+
+by AxVisor Team
+
+[Axvisor] dropped 168 host log records (32534 source bytes)
+[ 10.658524 2 [37msomehal::arch::gic::v3:274] [32mGICv3 CPU 2 EOI mode: two_step=true[m
+[m
+[ 10.660840 3 [37msomehal::arch::gic::v3:274] [32mGICv3 CPU 3 EOI mode: two_step=true[m
+[m
+[ 10.663155 4 [37msomehal::arch::gic::v3:274] [32mGICv3 CPU 4 EOI mode: two_step=true[m
+[m
+[ 10.665468 5 [37msomehal::arch::gic::v3:274] [32mGICv3 CPU 5 EOI mode: two_step=true[m
+[m
+[ 10.667780 6 [37msomehal::arch::gic::v3:274] [32mGICv3 CPU 6 EOI mode: two_step=true[m
+[m
+[ 10.670091 7 [37msomehal::arch::gic::v3:274] [32mGICv3 CPU 7 EOI mode: two_step=true[m
+[m
+[ 10.650560 0:2 [37max_fs_ng:122] [32m  filesystem type: "ext4"[m
+[m
+[ 10.656209 1 [37max_runtime::mp:84] [32mSecondary CPU 1 started.[m
+[m
+[ 10.658543 2 [37max_runtime::mp:84] [32mSecondary CPU 2 started.[m
+[m
+[ 10.660859 3 [37max_runtime::mp:84] [32mSecondary CPU 3 started.[m
+[m
+[ 10.663170 4 [37max_runtime::mp:84] [32mSecondary CPU 4 started.[m
+[m
+[ 10.665482 5 [37max_runtime::mp:84] [32mSecondary CPU 5 started.[m
+[m
+[ 10.667794 6 [37max_runtime::mp:84] [32mSecondary CPU 6 started.[m
+[m
+[ 10.670105 7 [37max_runtime::mp:84] [32mSecondary CPU 7 started.[m
+[m
+[ 10.652665 0:2 [37mrsext4::blockgroup_description::desc:109] [31mGroup descriptor checksum mismatch: group=0 stored=0x0000 expected=0x0589 desc_size=64 block_bitmap=8196 inode_bitmap=24580 inode_table=40964 free_blocks=57348 free_inodes=0 used_dirs=8196 itable_unused=0 flags=0x1 block_bitmap_csum=0x0 inode_bitmap_csum=0x0[m
+[m
+[ 10.656307 1:8 [37max_runtime::mp:123] [32mSecondary CPU 1 init OK.[m
+[m
+[ 10.658634 2:10 [37max_runtime::mp:123] [32mSecondary CPU 2 init OK.[m
+[m
+[ 10.660948 3:12 [37max_runtime::mp:123] [32mSecondary CPU 3 init OK.[m
+[m
+[ 10.663232 4:14 [37max_runtime::mp:123] [32mSecondary CPU 4 init OK.[m
+[m
+[ 10.665544 5:16 [37max_runtime::mp:123] [32mSecondary CPU 5 init OK.[m
+[m
+[ 10.667854 6:18 [37max_runtime::mp:123] [32mSecondary CPU 6 init OK.[m
+[m
+[ 10.670166 7:20 [37max_runtime::mp:123] [32mSecondary CPU 7 init OK.[m
+[m
+[ 10.652694 0:2 [37mrsext4::ext4::mount:554] [31mMount failed: EUCLEAN: Structure needs cleaning[m
+[m
+[ 10.835824 1:25 [37maxvm::host::arceos:348] [32mCore 1 is initializing hardware virtualization support...[m
+[m
+[ 10.835847 2:26 [37maxvm::host::arceos:348] [32mCore 2 is initializing hardware virtualization support...[m
+[m
+[ 10.835874 3:27 [37maxvm::host::arceos:348] [32mCore 3 is initializing hardware virtualization support...[m
+[m
+[ 10.835906 4:29 [37maxvm::host::arceos:348] [32mCore 4 is initializing hardware virtualization support...[m
+[m
+[ 10.835939 5:31 [37maxvm::host::arceos:348] [32mCore 5 is initializing hardware virtualization support...[m
+[m
+[ 10.835967 6:34 [37maxvm::host::arceos:348] [32mCore 6 is initializing hardware virtualization support...[m
+[m
+[ 10.836011 7:36 [37maxvm::host::arceos:348] [32mCore 7 is initializing hardware virtualization support...[m
+[m
+[ 10.652709 0:2 [37max_fs_ng::fs::ext4::rsext4::fs:127] [33mext4 journal replay failed with EUCLEAN; retrying read-only without journal replay[m
+[m
+[ 10.835839 1:25 [37maxvm::timer:519] [32mInitializing AxVM timer wheel...[m
+[m
+[ 10.835861 2:26 [37maxvm::timer:519] [32mInitializing AxVM timer wheel...[m
+[m
+[ 10.835888 3:27 [37maxvm::timer:519] [32mInitializing AxVM timer wheel...[m
+[m
+[ 10.835916 4:29 [37maxvm::timer:519] [32mInitializing AxVM timer wheel...[m
+[m
+[ 10.835949 5:31 [37maxvm::timer:519] [32mInitializing AxVM timer wheel...[m
+[m
+[ 10.835977 6:34 [37maxvm::timer:519] [32mInitializing AxVM timer wheel...[m
+[m
+[ 10.836021 7:36 [37maxvm::timer:519] [32mInitializing AxVM timer wheel...[m
+[m
+[ 10.652742 0:2 [37mrsext4::blockgroup_description::desc:109] [31mGroup descriptor checksum mismatch: group=0 stored=0x0000 expected=0x0589 desc_size=64 block_bitmap=8196 inode_bitmap=24580 inode_table=40964 free_blocks=57348 free_inodes=0 used_dirs=8196 itable_unused=0 flags=0x1 block_bitmap_csum=0x0 inode_bitmap_csum=0x0[m
+[m
+[ 10.835907 1:25 [37maxvm::host::arceos:352] [32mHardware virtualization support enabled on core 1 (2/8)[m
+[m
+[ 10.835932 2:26 [37maxvm::host::arceos:352] [32mHardware virtualization support enabled on core 2 (3/8)[m
+[m
+[ 10.835955 3:27 [37maxvm::host::arceos:352] [32mHardware virtualization support enabled on core 3 (4/8)[m
+[m
+[ 10.835962 4:29 [37maxvm::host::arceos:352] [32mHardware virtualization support enabled on core 4 (5/8)[m
+[m
+[ 10.836014 5:31 [37maxvm::host::arceos:352] [32mHardware virtualization support enabled on core 5 (6/8)[m
+[m
+[ 10.836027 6:34 [37maxvm::host::arceos:352] [32mHardware virtualization support enabled on core 6 (7/8)[m
+[m
+[ 10.836059 7:36 [37maxvm::host::arceos:352] [32mHardware virtualization support enabled on core 7 (8/8)[m
+[m
+[ 10.652761 0:2 [37mrsext4::ext4::mount:554] [31mMount failed: EUCLEAN: Structure needs cleaning[m
+[m
+[ 10.652782 0:2 [37max_fs_ng::root:622] [33m  failed to initialize filesystem for partition disk0 partition 7 (oem, fs=ext4, lba 29851648..30113792): Io[m
+[m
+[ 10.653656 0:2 [37mrsext4::blockgroup_description::desc:109] [31mGroup descriptor checksum mismatch: group=0 stored=0x0a8d expected=0x16fe desc_size=64 block_bitmap=262145 inode_bitmap=262161 inode_table=262177 free_blocks=3808 free_inodes=1088 used_dirs=0 itable_unused=1088 flags=0x5 block_bitmap_csum=0x4c1cbc8f inode_bitmap_csum=0xe0e99c72[m
+[m
+[ 10.653684 0:2 [37mrsext4::ext4::mount:554] [31mMount failed: EUCLEAN: Structure needs cleaning[m
+[m
+[ 10.653698 0:2 [37max_fs_ng::fs::ext4::rsext4::fs:127] [33mext4 journal replay failed with EUCLEAN; retrying read-only without journal replay[m
+[m
+[ 10.653730 0:2 [37mrsext4::blockgroup_description::desc:109] [31mGroup descriptor checksum mismatch: group=0 stored=0x0a8d expected=0x16fe desc_size=64 block_bitmap=262145 inode_bitmap=262161 inode_table=262177 free_blocks=3808 free_inodes=1088 used_dirs=0 itable_unused=1088 flags=0x5 block_bitmap_csum=0x4c1cbc8f inode_bitmap_csum=0xe0e99c72[m
+[m
+[ 10.653749 0:2 [37mrsext4::ext4::mount:554] [31mMount failed: EUCLEAN: Structure needs cleaning[m
+[m
+[ 10.653768 0:2 [37max_fs_ng::root:622] [33m  failed to initialize filesystem for partition disk0 partition 8 (userdata, fs=ext4, lba 30113792..122159071): Io[m
+[m
+[ 10.670106 0:2 [37max_runtime:399] [32mPrimary CPU 0 init OK.[m
+[m
+[ 10.670403 0:2 [37max_fs_ng::block::runtime::lifecycle::device:409] [32mblock device rockchip-sdhci:/mmc@fe2e0000 online with 1 hctxs across 8 CPUs[m
+[m
+[ 10.670571 0:2 [37maxvisor:130] [32mStarting virtualization...[m
+[m
+[ 10.670583 0:2 [37maxvm::host::arceos:330] [32mEnabling hardware virtualization support on all cores...[m
+[m
+[ 10.670597 0:2 [37maxvm::host::arceos:336] [32mCore 0 is initializing hardware virtualization support...[m
+[m
+[ 10.670609 0:2 [37maxvm::timer:519] [32mInitializing AxVM timer wheel...[m
+[m
+[ 10.835766 0:2 [37maxvm::host::arceos:338] [32mHardware virtualization support enabled on core 0[m
+[m
+[ 10.836006 0:2 [37maxvm::host::arceos:365] [32mWaiting for all cores to enable hardware virtualization...[m
+[m
+[ 10.837395 0:2 [37maxvm::host::arceos:376] [32mAll cores have enabled hardware virtualization support.[m
+[m
+[ 10.837514 0:2 [37maxvisor::manager:161] [32mNOT find dir: /guest/vm_default in filesystem[m
+[m
+[ 13.532468 1:41 [37maxvm::runtime::vcpus:1121] [32mVM[2] VCpu[0] waiting for running[m
+[m
+[ 13.532316 2:39 [37maxvm::runtime::vcpus:1121] [32mVM[1] VCpu[0] waiting for running[m
+[m
+[ 13.531745 0:2 [37maxvm::host::arceos:193] [32mReleased 1 host filesystem block IRQ registration(s) during shutdown[m
+[m
+[ 13.532488 1:41 [37maxvm::runtime::vcpus:1159] [32mVM[2] VCpu[0] running on CPU1...[m
+[m
+[ 13.532337 2:39 [37maxvm::runtime::vcpus:1159] [32mVM[1] VCpu[0] running on CPU2...[m
+[m
+[ 13.531767 0:2 [37maxvisor::manager:135] [32mHost filesystem cleanly unmounted before guest passthrough devices start[m
+[m
+[ 13.531785 0:2 [37maxvm::runtime:84] [32mVMM starting, booting VMs...[m
+[m
+[ 13.531803 0:2 [37maxvm::vm:1777] [32mStarting VM[1][m
+[m
+[ 13.531821 0:2 [37maxvm::runtime::vcpus:1047] [32mSpawning task for VM[1] VCpu[0][m
+[m
+[ 13.531863 0:2 [37maxvm::runtime::vcpus:1066] [32mVCpu task Task(39, "VM[1]-VCpu[0]") created priority=89 cpumask: [2, ][m
+[m
+[ 13.532213 0:2 [37maxvm::arch::aarch64::gic::physical:61] [32mregistered assigned AArch64 SPI route host_intid=142 guest_intid=142[m
+[m
+[ 13.532229 0:2 [37maxvm::arch::aarch64::gic::physical:61] [32mregistered assigned AArch64 SPI route host_intid=143 guest_intid=143[m
+[m
+[ 13.532242 0:2 [37maxvm::arch::aarch64::gic::physical:61] [32mregistered assigned AArch64 SPI route host_intid=144 guest_intid=144[m
+[m
+[ 13.532255 0:2 [37maxvm::arch::aarch64::gic::physical:61] [32mregistered assigned AArch64 SPI route host_intid=237 guest_intid=237[m
+[m
+[ 13.532311 0:2 [37maxvm::runtime:92] [32mVM[1] boot success[m
+[m
+[ 13.532324 0:2 [37maxvm::vm:1777] [32mStarting VM[2][m
+[m
+[ 13.532340 0:2 [37maxvm::runtime::vcpus:1047] [32mSpawning task for VM[2] VCpu[0][m
+[m
+[ 13.532378 0:2 [37maxvm::runtime::vcpus:1066] [32mVCpu task Task(41, "VM[2]-VCpu[0]") created priority=90 cpumask: [1, ][m
+[m
+[ 13.532460 0:2 [37maxvm::runtime:92] [32mVM[2] boot success[m
+[m
+[ 13.532537 0:2 [37maxvisor:172] [32m[OK] Default guest initialized[m
+[m
+[ 13.532551 0:2 [37maxvisor:177] [32mshell task on CPU0[m
+[m
+[VM 1] console=ttyS2
+[VM 1] VM Load @PA:0x40000000
+[VM 1] VM Load Offset: 0xc0000000
+[VM 2] *** Booting Zephyr OS build dccb09599635bdff17633fa7e9dab014b91dce90 ***
+[VM 2] TASK2_MAIN_START
+[VM 2] TASK2_SOCKET_CREATE
+[VM 2] TASK2_SOCKET_CREATED fd=0
+[VM 2] TASK2_NET_CONFIGURED interface=virtio-net ip=10.0.42.2/24
+[VM 2] TASK2_READY role=managed local=10.0.42.2:4242 peer=10.0.42.15:4242
+[VM 2] PERIODIC LATENCY READY frequency_hz=24000000 period_ms=10 samples=300
+[VM 1] Memory Map:
+[VM 1]   KImg   0x00000040000000 - 0x00000041000000 (16 MiB)
+[VM 1]   Free   0x00000041000000 - 0x0000007c000000 (944 MiB)
+[VM 1]   Rsv    0x0000007c000000 - 0x0000007c804000 (8.02 MiB)
+[VM 1]   Free   0x0000007c804000 - 0x00000080000000 (55.98 MiB)
+[VM 1] Initialize RAM allocator: 0x41000000..0x7c000000
+[VM 1] Reserving CPU-local areas
+[VM 1] CPU-local area stride: 0x41000 bytes
+[VM 1] Total CPU-local allocation: 0x82000 bytes (2 CPUs)
+[VM 1] Flushed RAM used range to memory map: 0x41000000..0x41003000, current: 0x41003000
+[VM 1] Flushed RAM used range to memory map: 0x41003000..0x41085000, current: 0x41085000
+[VM 1] CPU-local areas allocated at 0x41003000 - 0x41085000
+[VM 1] EL: 1
+[VM 1] Mapping early memory regions...
+[VM 1] Ram                 : [0xffff000040000000, 0xffff000080000000) -> [0x0000000040000000, 0x0000000080000000) (1 GiB)
+[VM 1] KImage              : [0xffffffff80000000, 0xffffffff81000000) -> [0x0000000040000000, 0x0000000041000000) (16 MiB)
+[VM 1] PerCpu              : [0xffffff0041003000, 0xffffff0041085000) -> [0x0000000041003000, 0x0000000041085000) (520 KiB)
+[VM 1] Debug serial        : [0xffff0000feb50000, 0xffff0000feb51000) -> [0x00000000feb50000, 0x00000000feb51000) (4 KiB)
+[VM 1] Boot page table at physical address: PA:0x41085000
+[VM 1] Setting up table registers...
+[VM 1] MMU Entry point at physical address: 0x4034c518
+[VM 1] Trap vector at 0xffffffff80351800
+[VM 1] Memory Map:
+[VM 1]   KImg   0x00000040000000 - 0x00000041000000 (16 MiB)
+[VM 1]   Rsv    0x00000041000000 - 0x00000041003000 (12 KiB)
+[VM 1]   PerCPU 0x00000041003000 - 0x00000041085000 (520 KiB)
+[VM 1]   Rsv    0x00000041085000 - 0x0000004108e000 (36 KiB)
+[VM 1]   Free   0x0000004108e000 - 0x0000007c000000 (943.45 MiB)
+[VM 1]   Rsv    0x0000007c000000 - 0x0000007c804000 (8.02 MiB)
+[VM 1]   Free   0x0000007c804000 - 0x00000080000000 (55.98 MiB)
+[VM 1]   MMIO   0x000000feb50000 - 0x000000feb51000 (4 KiB)
+[VM 1] Jumping to main entry point at 0xffffffff803317e0 with SP 0xffffff0041044000
+[VM 1] 
+[VM 1]        d8888                            .d88888b.   .d8888b.
+[VM 1]       d88888                           d88P" "Y88b d88P  Y88b
+[VM 1]      d88P888                           888     888 Y88b.
+[VM 1]     d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+[VM 1]    d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+[VM 1]   d88P   888 888     888      88888888 888     888       "888
+[VM 1]  d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+[VM 1] d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+[VM 1] 
+[VM 1] arch = aarch64
+[VM 1] platform = ATK-DLRK3588 Board
+[VM 1] target = aarch64-unknown-none-softfloat
+[VM 1] build_mode = 
+[VM 1] log_level = warn
+[VM 1] backtrace = false
+[VM 1] smp = 2
+[VM 1] 
+[ 13.818694 2:39 [37maxvm::configured::devices::virtio_net:685] [33mvirtio-net drops an ingress frame: NotReady[m
+[m
+[VM 1] [37max_driver::soc::scmi:54] [33m[scmi] SCMI shmem phandle 69 cannot be resolved by rdrive; using RK3588 shmem fallback 0x10f000+0x100[m
+[VM 1] [m[37mrockchip_soc::variants::rk3588::cru:174] [33m⚠ CRU@ffff0000fd7c0000: ACLK_BUS_ROOT div mismatch! u-boot: 3, current: 4[m
+[VM 1] [mBoot at 1970-01-01 00:00:02.069277291 UTC
+[VM 1] 
+[VM 1] [37mrsext4::crc32c::arm64:54] [33mID_AA64ISAR0_EL1[19:16]: 0x1[m
+[VM 1] [m[37mrsext4::crc32c::arm64:57] [33mHardware CRC32C support detected.[m
+[VM 1] [m[37mrsext4::blockgroup_description::desc:109] [31mGroup descriptor checksum mismatch: group=0 stored=0x0000 expected=0x0589 desc_size=64 block_bitmap=8196 inode_bitmap=24580 inode_table=40964 free_blocks=57348 free_inodes=0 used_dirs=8196 itable_unused=0 flags=0x1 block_bitmap_csum=0x0 inode_bitmap_csum=0x0[m
+[VM 1] [m[37mrsext4::ext4::mount:554] [31mMount failed: EUCLEAN: Structure needs cleaning[m
+[VM 1] [m[37max_fs_ng::fs::ext4::rsext4::fs:127] [33mext4 journal replay failed with EUCLEAN; retrying read-only without journal replay[m
+[VM 1] [m[37mrsext4::blockgroup_description::desc:109] [31mGroup descriptor checksum mismatch: group=0 stored=0x0000 expected=0x0589 desc_size=64 block_bitmap=8196 inode_bitmap=24580 inode_table=40964 free_blocks=57348 free_inodes=0 used_dirs=8196 itable_unused=0 flags=0x1 block_bitmap_csum=0x0 inode_bitmap_csum=0x0[m
+[VM 1] [m[37mrsext4::ext4::mount:554] [31mMount failed: EUCLEAN: Structure needs cleaning[m
+[VM 1] [m[37max_fs_ng::root:622] [33m  failed to initialize filesystem for partition disk0 partition 7 (oem, fs=ext4, lba 29851648..30113792): Io[m
+[VM 1] [m[37mrsext4::blockgroup_description::desc:109] [31mGroup descriptor checksum mismatch: group=0 stored=0x0a8d expected=0x16fe desc_size=64 block_bitmap=262145 inode_bitmap=262161 inode_table=262177 free_blocks=3808 free_inodes=1088 used_dirs=0 itable_unused=1088 flags=0x5 block_bitmap_csum=0x4c1cbc8f inode_bitmap_csum=0xe0e99c72[m
+[VM 1] [m[37mrsext4::ext4::mount:554] [31mMount failed: EUCLEAN: Structure needs cleaning[m
+[VM 1] [m[37max_fs_ng::fs::ext4::rsext4::fs:127] [33mext4 journal replay failed with EUCLEAN; retrying read-only without journal replay[m
+[VM 1] [m[37mrsext4::blockgroup_description::desc:109] [31mGroup descriptor checksum mismatch: group=0 stored=0x0a8d expected=0x16fe desc_size=64 block_bitmap=262145 inode_bitmap=262161 inode_table=262177 free_blocks=3808 free_inodes=1088 used_dirs=0 itable_unused=1088 flags=0x5 block_bitmap_csum=0x4c1cbc8f inode_bitmap_csum=0xe0e99c72[m
+[VM 1] [m[37mrsext4::ext4::mount:554] [31mMount failed: EUCLEAN: Structure needs cleaning[m
+[VM 1] [m[37max_fs_ng::root:622] [33m  failed to initialize filesystem for partition disk0 partition 8 (userdata, fs=ext4, lba 30113792..122159071): Io[m
+[VM 1] [m[37max_net:979] [33mDHCP bootstrap timed out[m
+[ 16.362489 2:39 [37maxvm::runtime::hvc:280] [32mVM[1] PSCI_CPU_ON target=0x1 entry=0x4034ba8c context=0x41044e00[m
+[m
+[ 16.362536 2:39 [37maxvm::runtime::vcpus:1047] [32mSpawning task for VM[1] VCpu[1][m
+[m
+[ 16.362579 2:39 [37maxvm::runtime::vcpus:1066] [32mVCpu task Task(44, "VM[1]-VCpu[1]") created priority=89 cpumask: [1, ][m
+[m
+[ 16.362633 1:44 [37maxvm::runtime::vcpus:1121] [32mVM[1] VCpu[1] waiting for running[m
+[m
+[ 16.362677 1:44 [37maxvm::runtime::vcpus:1159] [32mVM[1] VCpu[1] running on CPU1...[m
+[m
+[VM 1] [mInitialized 6 tracepoints
+[VM 1] kmod subsystem initialized
+[VM 1] [37mstarry_kernel::pseudofs::dev::tty::serial:190] [33m/dev/console has no serial TTY binding[m
+[VM 1] [m[37mstarry_kernel::entry:99] [33mFailed to bind console tty: NoSuchDevice[m
+[VM 1] [mTASK2_BENCHMARK_PAYLOAD_READY cpu=1
+[VM 1] TASK2_READY role=controller local=10.0.42.15:4242 peer=10.0.42.2:4242
+[VM 1] TASK2_BENCHMARK_BEGIN transactions=200 protocol=T2N1 mode=stop-and-wait
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1 request=1 seq=1 value=0
+[VM 2] TASK2_CONTROL_RECEIVED seq=1 request=1
+[VM 2] TASK3_CONTROL_APPLIED request=1 value=0
+[VM 2] TASK3_PLANT_STATE before=300 after=170 dist=0
+[VM 2] TASK2_STATUS_SENT seq=1
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=2248
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=2450
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=2652
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=2854
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=3056
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=3258
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=3460
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=3662
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=3864
+[VM 1] TASK2_ACK seq=1
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=132 request=1 sample=1 rtt_ms=131 state=Active value=170
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=132 request=2 seq=2 value=260
+[VM 2] TASK2_ACK seq=1
+[VM 2] TASK2_CONTROL_RECEIVED seq=2 request=2
+[VM 2] TASK3_CONTROL_APPLIED request=2 value=260
+[VM 2] TASK3_PLANT_STATE before=170 after=183 dist=0
+[VM 2] TASK2_STATUS_SENT seq=2
+[VM 1] TASK2_ACK seq=2
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=161 request=2 sample=2 rtt_ms=29 state=Active value=183
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=161 request=3 seq=3 value=234
+[VM 2] TASK2_ACK seq=2
+[VM 2] TASK2_CONTROL_RECEIVED seq=3 request=3
+[VM 2] TASK3_CONTROL_APPLIED request=3 value=234
+[VM 2] TASK3_PLANT_STATE before=183 after=181 dist=0
+[VM 2] TASK2_STATUS_SENT seq=3
+[VM 1] TASK2_ACK seq=3
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=191 request=3 sample=3 rtt_ms=30 state=Active value=181
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=191 request=4 seq=4 value=238
+[VM 2] TASK2_ACK seq=3
+[VM 2] TASK2_CONTROL_RECEIVED seq=4 request=4
+[VM 2] TASK3_CONTROL_APPLIED request=4 value=238
+[VM 2] TASK3_PLANT_STATE before=181 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=4
+[VM 1] TASK2_ACK seq=4
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=221 request=4 sample=4 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=221 request=5 seq=5 value=236
+[VM 2] TASK2_ACK seq=4
+[VM 2] TASK2_CONTROL_RECEIVED seq=5 request=5
+[VM 2] TASK3_CONTROL_APPLIED request=5 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=5
+[VM 1] TASK2_ACK seq=5
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=250 request=5 sample=5 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=250 request=6 seq=6 value=236
+[VM 2] TASK2_ACK seq=5
+[VM 2] TASK2_CONTROL_RECEIVED seq=6 request=6
+[VM 2] TASK3_CONTROL_APPLIED request=6 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=6
+[VM 1] TASK2_ACK seq=6
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=280 request=6 sample=6 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=280 request=7 seq=7 value=236
+[VM 2] TASK2_ACK seq=6
+[VM 2] TASK2_CONTROL_RECEIVED seq=7 request=7
+[VM 2] TASK3_CONTROL_APPLIED request=7 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=7
+[VM 1] TASK2_ACK seq=7
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=311 request=7 sample=7 rtt_ms=31 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=311 request=8 seq=8 value=236
+[VM 2] TASK2_ACK seq=7
+[VM 2] TASK2_CONTROL_RECEIVED seq=8 request=8
+[VM 2] TASK3_CONTROL_APPLIED request=8 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=8
+[VM 1] TASK2_ACK seq=8
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=340 request=8 sample=8 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=340 request=9 seq=9 value=236
+[VM 2] TASK2_ACK seq=8
+[VM 2] TASK2_CONTROL_RECEIVED seq=9 request=9
+[VM 2] TASK3_CONTROL_APPLIED request=9 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=9
+[VM 1] TASK2_ACK seq=9
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=369 request=9 sample=9 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=369 request=10 seq=10 value=236
+[VM 2] TASK2_ACK seq=9
+[VM 2] TASK2_CONTROL_RECEIVED seq=10 request=10
+[VM 2] TASK3_CONTROL_APPLIED request=10 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=10
+[VM 1] TASK2_ACK seq=10
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=399 request=10 sample=10 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=399 request=11 seq=11 value=236
+[VM 2] TASK2_ACK seq=10
+[VM 2] TASK2_CONTROL_RECEIVED seq=11 request=11
+[VM 2] TASK3_CONTROL_APPLIED request=11 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=11
+[VM 1] TASK2_ACK seq=11
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=440 request=11 sample=11 rtt_ms=41 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=440 request=12 seq=12 value=236
+[VM 2] TASK2_ACK seq=11
+[VM 2] TASK2_CONTROL_RECEIVED seq=12 request=12
+[VM 2] TASK3_CONTROL_APPLIED request=12 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=12
+[VM 1] TASK2_ACK seq=12
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=470 request=12 sample=12 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=470 request=13 seq=13 value=236
+[VM 2] TASK2_ACK seq=12
+[VM 2] TASK2_CONTROL_RECEIVED seq=13 request=13
+[VM 2] TASK3_CONTROL_APPLIED request=13 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=13
+[VM 1] TASK2_ACK seq=13
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=500 request=13 sample=13 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=500 request=14 seq=14 value=236
+[VM 2] TASK2_ACK seq=13
+[VM 2] TASK2_CONTROL_RECEIVED seq=14 request=14
+[VM 2] TASK3_CONTROL_APPLIED request=14 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=14
+[VM 1] TASK2_ACK seq=14
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=529 request=14 sample=14 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=529 request=15 seq=15 value=236
+[VM 2] TASK2_ACK seq=14
+[VM 2] TASK2_CONTROL_RECEIVED seq=15 request=15
+[VM 2] TASK3_CONTROL_APPLIED request=15 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=15
+[VM 1] TASK2_ACK seq=15
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=558 request=15 sample=15 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=558 request=16 seq=16 value=236
+[VM 1] TASK2_ACK seq=16
+[VM 2] TASK2_ACK seq=15
+[VM 2] TASK2_CONTROL_RECEIVED seq=16 request=16
+[VM 2] TASK3_CONTROL_APPLIED request=16 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=16
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=587 request=16 sample=16 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=587 request=17 seq=17 value=236
+[VM 2] TASK2_ACK seq=16
+[VM 2] TASK2_CONTROL_RECEIVED seq=17 request=17
+[VM 2] TASK3_CONTROL_APPLIED request=17 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=17
+[VM 1] TASK2_ACK seq=17
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=617 request=17 sample=17 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=617 request=18 seq=18 value=236
+[VM 2] TASK2_ACK seq=17
+[VM 2] TASK2_CONTROL_RECEIVED seq=18 request=18
+[VM 2] TASK3_CONTROL_APPLIED request=18 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=18
+[VM 1] TASK2_ACK seq=18
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=646 request=18 sample=18 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=646 request=19 seq=19 value=236
+[VM 2] TASK2_ACK seq=18
+[VM 2] TASK2_CONTROL_RECEIVED seq=19 request=19
+[VM 2] TASK3_CONTROL_APPLIED request=19 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=19
+[VM 1] TASK2_ACK seq=19
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=685 request=19 sample=19 rtt_ms=39 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=685 request=20 seq=20 value=236
+[VM 2] TASK2_ACK seq=19
+[VM 2] TASK2_CONTROL_RECEIVED seq=20 request=20
+[VM 2] TASK3_CONTROL_APPLIED request=20 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=20
+[VM 1] TASK2_ACK seq=20
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=715 request=20 sample=20 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=715 request=21 seq=21 value=236
+[VM 2] TASK2_ACK seq=20
+[VM 2] TASK2_CONTROL_RECEIVED seq=21 request=21
+[VM 2] TASK3_CONTROL_APPLIED request=21 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=21
+[VM 1] TASK2_ACK seq=21
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=744 request=21 sample=21 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=744 request=22 seq=22 value=236
+[VM 2] TASK2_ACK seq=21
+[VM 2] TASK2_CONTROL_RECEIVED seq=22 request=22
+[VM 2] TASK3_CONTROL_APPLIED request=22 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=22
+[VM 1] TASK2_ACK seq=22
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=774 request=22 sample=22 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=774 request=23 seq=23 value=236
+[VM 2] TASK2_ACK seq=22
+[VM 2] TASK2_CONTROL_RECEIVED seq=23 request=23
+[VM 2] TASK3_CONTROL_APPLIED request=23 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=23
+[VM 1] TASK2_ACK seq=23
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=803 request=23 sample=23 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=803 request=24 seq=24 value=236
+[VM 2] TASK2_ACK seq=23
+[VM 2] TASK2_CONTROL_RECEIVED seq=24 request=24
+[VM 2] TASK3_CONTROL_APPLIED request=24 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=24
+[VM 1] TASK2_ACK seq=24
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=832 request=24 sample=24 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=832 request=25 seq=25 value=236
+[VM 2] TASK2_ACK seq=24
+[VM 2] TASK2_CONTROL_RECEIVED seq=25 request=25
+[VM 2] TASK3_CONTROL_APPLIED request=25 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=25
+[VM 1] TASK2_ACK seq=25
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=862 request=25 sample=25 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=862 request=26 seq=26 value=236
+[VM 2] TASK2_ACK seq=25
+[VM 2] TASK2_CONTROL_RECEIVED seq=26 request=26
+[VM 2] TASK3_CONTROL_APPLIED request=26 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=26
+[VM 1] TASK2_ACK seq=26
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=891 request=26 sample=26 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=891 request=27 seq=27 value=236
+[VM 1] TASK2_ACK seq=27
+[VM 2] TASK2_ACK seq=26
+[VM 2] TASK2_CONTROL_RECEIVED seq=27 request=27
+[VM 2] TASK3_CONTROL_APPLIED request=27 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=27
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=920 request=27 sample=27 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=920 request=28 seq=28 value=236
+[VM 2] TASK2_ACK seq=27
+[VM 2] TASK2_CONTROL_RECEIVED seq=28 request=28
+[VM 2] TASK3_CONTROL_APPLIED request=28 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=28
+[VM 1] TASK2_ACK seq=28
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=959 request=28 sample=28 rtt_ms=39 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=959 request=29 seq=29 value=236
+[VM 1] TASK2_ACK seq=29
+[VM 2] TASK2_ACK seq=28
+[VM 2] TASK2_CONTROL_RECEIVED seq=29 request=29
+[VM 2] TASK3_CONTROL_APPLIED request=29 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=29
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=988 request=29 sample=29 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=988 request=30 seq=30 value=236
+[VM 2] TASK2_ACK seq=29
+[VM 2] TASK2_CONTROL_RECEIVED seq=30 request=30
+[VM 2] TASK3_CONTROL_APPLIED request=30 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=30
+[VM 1] TASK2_ACK seq=30
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1017 request=30 sample=30 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1017 request=31 seq=31 value=236
+[VM 2] TASK2_ACK seq=30
+[VM 2] TASK2_CONTROL_RECEIVED seq=31 request=31
+[VM 2] TASK3_CONTROL_APPLIED request=31 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=31
+[VM 1] TASK2_ACK seq=31
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1047 request=31 sample=31 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1047 request=32 seq=32 value=236
+[VM 2] TASK2_ACK seq=31
+[VM 2] TASK2_CONTROL_RECEIVED seq=32 request=32
+[VM 2] TASK3_CONTROL_APPLIED request=32 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=32
+[VM 1] TASK2_ACK seq=32
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1076 request=32 sample=32 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1076 request=33 seq=33 value=236
+[VM 2] TASK2_ACK seq=32
+[VM 2] TASK2_CONTROL_RECEIVED seq=33 request=33
+[VM 2] TASK3_CONTROL_APPLIED request=33 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=33
+[VM 1] TASK2_ACK seq=33
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1106 request=33 sample=33 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1106 request=34 seq=34 value=236
+[VM 2] TASK2_ACK seq=33
+[VM 2] TASK2_CONTROL_RECEIVED seq=34 request=34
+[VM 2] TASK3_CONTROL_APPLIED request=34 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=34
+[VM 1] TASK2_ACK seq=34
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1135 request=34 sample=34 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1135 request=35 seq=35 value=236
+[VM 2] TASK2_ACK seq=34
+[VM 2] TASK2_CONTROL_RECEIVED seq=35 request=35
+[VM 2] TASK3_CONTROL_APPLIED request=35 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=35
+[VM 1] TASK2_ACK seq=35
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1174 request=35 sample=35 rtt_ms=39 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1174 request=36 seq=36 value=236
+[VM 2] TASK2_ACK seq=35
+[VM 2] TASK2_CONTROL_RECEIVED seq=36 request=36
+[VM 2] TASK3_CONTROL_APPLIED request=36 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=36
+[VM 1] TASK2_ACK seq=36
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1204 request=36 sample=36 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1204 request=37 seq=37 value=236
+[VM 2] TASK2_ACK seq=36
+[VM 2] TASK2_CONTROL_RECEIVED seq=37 request=37
+[VM 2] TASK3_CONTROL_APPLIED request=37 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=37
+[VM 1] TASK2_ACK seq=37
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1243 request=37 sample=37 rtt_ms=39 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1243 request=38 seq=38 value=236
+[VM 1] TASK2_ACK seq=38
+[VM 2] TASK2_ACK seq=37
+[VM 2] TASK2_CONTROL_RECEIVED seq=38 request=38
+[VM 2] TASK3_CONTROL_APPLIED request=38 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=38
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1273 request=38 sample=38 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1273 request=39 seq=39 value=236
+[VM 1] TASK2_ACK seq=39
+[VM 2] TASK2_ACK seq=38
+[VM 2] TASK2_CONTROL_RECEIVED seq=39 request=39
+[VM 2] TASK3_CONTROL_APPLIED request=39 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=39
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1302 request=39 sample=39 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1302 request=40 seq=40 value=236
+[VM 2] TASK2_ACK seq=39
+[VM 2] TASK2_CONTROL_RECEIVED seq=40 request=40
+[VM 2] TASK3_CONTROL_APPLIED request=40 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=40
+[VM 1] TASK2_ACK seq=40
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1331 request=40 sample=40 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1331 request=41 seq=41 value=236
+[VM 2] TASK2_ACK seq=40
+[VM 2] TASK2_CONTROL_RECEIVED seq=41 request=41
+[VM 2] TASK3_CONTROL_APPLIED request=41 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=41
+[VM 1] TASK2_ACK seq=41
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1371 request=41 sample=41 rtt_ms=40 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1371 request=42 seq=42 value=236
+[VM 2] TASK2_ACK seq=41
+[VM 2] TASK2_CONTROL_RECEIVED seq=42 request=42
+[VM 2] TASK3_CONTROL_APPLIED request=42 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=42
+[VM 1] TASK2_ACK seq=42
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1401 request=42 sample=42 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1401 request=43 seq=43 value=236
+[VM 2] TASK2_ACK seq=42
+[VM 2] TASK2_CONTROL_RECEIVED seq=43 request=43
+[VM 2] TASK3_CONTROL_APPLIED request=43 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=43
+[VM 1] TASK2_ACK seq=43
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1432 request=43 sample=43 rtt_ms=31 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1432 request=44 seq=44 value=236
+[VM 2] TASK2_ACK seq=43
+[VM 2] TASK2_CONTROL_RECEIVED seq=44 request=44
+[VM 2] TASK3_CONTROL_APPLIED request=44 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=44
+[VM 1] TASK2_ACK seq=44
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1462 request=44 sample=44 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1462 request=45 seq=45 value=236
+[VM 2] TASK2_ACK seq=44
+[VM 2] TASK2_CONTROL_RECEIVED seq=45 request=45
+[VM 2] TASK3_CONTROL_APPLIED request=45 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=45
+[VM 1] TASK2_ACK seq=45
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1491 request=45 sample=45 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1491 request=46 seq=46 value=236
+[VM 2] TASK2_ACK seq=45
+[VM 2] TASK2_CONTROL_RECEIVED seq=46 request=46
+[VM 2] TASK3_CONTROL_APPLIED request=46 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=46
+[VM 1] TASK2_ACK seq=46
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1521 request=46 sample=46 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1521 request=47 seq=47 value=236
+[VM 2] TASK2_ACK seq=46
+[VM 2] TASK2_CONTROL_RECEIVED seq=47 request=47
+[VM 2] TASK3_CONTROL_APPLIED request=47 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=47
+[VM 1] TASK2_ACK seq=47
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1551 request=47 sample=47 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1551 request=48 seq=48 value=236
+[VM 2] TASK2_ACK seq=47
+[VM 2] TASK2_CONTROL_RECEIVED seq=48 request=48
+[VM 2] TASK3_CONTROL_APPLIED request=48 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=48
+[VM 1] TASK2_ACK seq=48
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1581 request=48 sample=48 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1581 request=49 seq=49 value=236
+[VM 2] TASK2_ACK seq=48
+[VM 2] TASK2_CONTROL_RECEIVED seq=49 request=49
+[VM 2] TASK3_CONTROL_APPLIED request=49 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=49
+[VM 1] TASK2_ACK seq=49
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1620 request=49 sample=49 rtt_ms=39 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1620 request=50 seq=50 value=236
+[VM 2] TASK2_ACK seq=49
+[VM 2] TASK2_CONTROL_RECEIVED seq=50 request=50
+[VM 2] TASK3_CONTROL_APPLIED request=50 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=50
+[VM 1] TASK2_ACK seq=50
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1650 request=50 sample=50 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1650 request=51 seq=51 value=236
+[VM 1] TASK2_ACK seq=51
+[VM 2] TASK2_ACK seq=50
+[VM 2] TASK2_CONTROL_RECEIVED seq=51 request=51
+[VM 2] TASK3_CONTROL_APPLIED request=51 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=51
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1679 request=51 sample=51 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1679 request=52 seq=52 value=236
+[VM 2] TASK2_ACK seq=51
+[VM 2] TASK2_CONTROL_RECEIVED seq=52 request=52
+[VM 2] TASK3_CONTROL_APPLIED request=52 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=52
+[VM 1] TASK2_ACK seq=52
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1708 request=52 sample=52 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1708 request=53 seq=53 value=236
+[VM 2] TASK2_ACK seq=52
+[VM 2] TASK2_CONTROL_RECEIVED seq=53 request=53
+[VM 2] TASK3_CONTROL_APPLIED request=53 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=53
+[VM 1] TASK2_ACK seq=53
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1737 request=53 sample=53 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1737 request=54 seq=54 value=236
+[VM 2] TASK2_ACK seq=53
+[VM 2] TASK2_CONTROL_RECEIVED seq=54 request=54
+[VM 2] TASK3_CONTROL_APPLIED request=54 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=54
+[VM 1] TASK2_ACK seq=54
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1776 request=54 sample=54 rtt_ms=39 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1776 request=55 seq=55 value=236
+[VM 2] TASK2_ACK seq=54
+[VM 2] TASK2_CONTROL_RECEIVED seq=55 request=55
+[VM 2] TASK3_CONTROL_APPLIED request=55 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=55
+[VM 1] TASK2_ACK seq=55
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1806 request=55 sample=55 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1806 request=56 seq=56 value=236
+[VM 2] TASK2_ACK seq=55
+[VM 2] TASK2_CONTROL_RECEIVED seq=56 request=56
+[VM 2] TASK3_CONTROL_APPLIED request=56 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=56
+[VM 1] TASK2_ACK seq=56
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1836 request=56 sample=56 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1836 request=57 seq=57 value=236
+[VM 1] TASK2_ACK seq=57
+[VM 2] TASK2_ACK seq=56
+[VM 2] TASK2_CONTROL_RECEIVED seq=57 request=57
+[VM 2] TASK3_CONTROL_APPLIED request=57 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=57
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1865 request=57 sample=57 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1865 request=58 seq=58 value=236
+[VM 1] TASK2_ACK seq=58
+[VM 2] TASK2_ACK seq=57
+[VM 2] TASK2_CONTROL_RECEIVED seq=58 request=58
+[VM 2] TASK3_CONTROL_APPLIED request=58 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=58
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1894 request=58 sample=58 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1894 request=59 seq=59 value=236
+[VM 2] TASK2_ACK seq=58
+[VM 2] TASK2_CONTROL_RECEIVED seq=59 request=59
+[VM 2] TASK3_CONTROL_APPLIED request=59 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=59
+[VM 1] TASK2_ACK seq=59
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1923 request=59 sample=59 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1923 request=60 seq=60 value=236
+[VM 2] TASK2_ACK seq=59
+[VM 2] TASK2_CONTROL_RECEIVED seq=60 request=60
+[VM 2] TASK3_CONTROL_APPLIED request=60 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=60
+[VM 1] TASK2_ACK seq=60
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1953 request=60 sample=60 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1953 request=61 seq=61 value=236
+[VM 1] TASK2_ACK seq=61
+[VM 2] TASK2_ACK seq=60
+[VM 2] TASK2_CONTROL_RECEIVED seq=61 request=61
+[VM 2] TASK3_CONTROL_APPLIED request=61 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=61
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=1992 request=61 sample=61 rtt_ms=39 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=1992 request=62 seq=62 value=236
+[VM 2] TASK2_ACK seq=61
+[VM 2] TASK2_CONTROL_RECEIVED seq=62 request=62
+[VM 2] TASK3_CONTROL_APPLIED request=62 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=62
+[VM 1] TASK2_ACK seq=62
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2022 request=62 sample=62 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2022 request=63 seq=63 value=236
+[VM 2] TASK2_ACK seq=62
+[VM 2] TASK2_CONTROL_RECEIVED seq=63 request=63
+[VM 2] TASK3_CONTROL_APPLIED request=63 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=63
+[VM 1] TASK2_ACK seq=63
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2052 request=63 sample=63 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2052 request=64 seq=64 value=236
+[VM 2] TASK2_ACK seq=63
+[VM 2] TASK2_CONTROL_RECEIVED seq=64 request=64
+[VM 2] TASK3_CONTROL_APPLIED request=64 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=64
+[VM 1] TASK2_ACK seq=64
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2081 request=64 sample=64 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2081 request=65 seq=65 value=236
+[VM 2] TASK2_ACK seq=64
+[VM 2] TASK2_CONTROL_RECEIVED seq=65 request=65
+[VM 2] TASK3_CONTROL_APPLIED request=65 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=65
+[VM 1] TASK2_ACK seq=65
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2121 request=65 sample=65 rtt_ms=40 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2121 request=66 seq=66 value=236
+[VM 2] TASK2_ACK seq=65
+[VM 2] TASK2_CONTROL_RECEIVED seq=66 request=66
+[VM 2] TASK3_CONTROL_APPLIED request=66 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=66
+[VM 1] TASK2_ACK seq=66
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2151 request=66 sample=66 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2151 request=67 seq=67 value=236
+[VM 2] TASK2_ACK seq=66
+[VM 2] TASK2_CONTROL_RECEIVED seq=67 request=67
+[VM 2] TASK3_CONTROL_APPLIED request=67 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=67
+[VM 1] TASK2_ACK seq=67
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2181 request=67 sample=67 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2181 request=68 seq=68 value=236
+[VM 2] TASK2_ACK seq=67
+[VM 2] TASK2_CONTROL_RECEIVED seq=68 request=68
+[VM 2] TASK3_CONTROL_APPLIED request=68 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=68
+[VM 1] TASK2_ACK seq=68
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2222 request=68 sample=68 rtt_ms=41 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2222 request=69 seq=69 value=236
+[VM 2] TASK2_ACK seq=68
+[VM 2] TASK2_CONTROL_RECEIVED seq=69 request=69
+[VM 2] TASK3_CONTROL_APPLIED request=69 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=69
+[VM 1] TASK2_ACK seq=69
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2252 request=69 sample=69 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2252 request=70 seq=70 value=236
+[VM 2] TASK2_ACK seq=69
+[VM 2] TASK2_CONTROL_RECEIVED seq=70 request=70
+[VM 2] TASK3_CONTROL_APPLIED request=70 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=70
+[VM 1] TASK2_ACK seq=70
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2282 request=70 sample=70 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2282 request=71 seq=71 value=236
+[VM 1] TASK2_ACK seq=71
+[VM 2] TASK2_ACK seq=70
+[VM 2] TASK2_CONTROL_RECEIVED seq=71 request=71
+[VM 2] TASK3_CONTROL_APPLIED request=71 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=71
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2311 request=71 sample=71 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2311 request=72 seq=72 value=236
+[VM 2] TASK2_ACK seq=71
+[VM 2] TASK2_CONTROL_RECEIVED seq=72 request=72
+[VM 2] TASK3_CONTROL_APPLIED request=72 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=72
+[VM 1] TASK2_ACK seq=72
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2340 request=72 sample=72 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2340 request=73 seq=73 value=236
+[VM 2] TASK2_ACK seq=72
+[VM 2] TASK2_CONTROL_RECEIVED seq=73 request=73
+[VM 2] TASK3_CONTROL_APPLIED request=73 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=73
+[VM 1] TASK2_ACK seq=73
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2379 request=73 sample=73 rtt_ms=39 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2379 request=74 seq=74 value=236
+[VM 2] TASK2_ACK seq=73
+[VM 2] TASK2_CONTROL_RECEIVED seq=74 request=74
+[VM 2] TASK3_CONTROL_APPLIED request=74 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=74
+[VM 1] TASK2_ACK seq=74
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2409 request=74 sample=74 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2409 request=75 seq=75 value=236
+[VM 2] TASK2_ACK seq=74
+[VM 2] TASK2_CONTROL_RECEIVED seq=75 request=75
+[VM 2] TASK3_CONTROL_APPLIED request=75 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=75
+[VM 1] TASK2_ACK seq=75
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2438 request=75 sample=75 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2438 request=76 seq=76 value=236
+[VM 1] TASK2_ACK seq=76
+[VM 2] TASK2_ACK seq=75
+[VM 2] TASK2_CONTROL_RECEIVED seq=76 request=76
+[VM 2] TASK3_CONTROL_APPLIED request=76 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=76
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2467 request=76 sample=76 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2467 request=77 seq=77 value=236
+[VM 1] TASK2_ACK seq=77
+[VM 2] TASK2_ACK seq=76
+[VM 2] TASK2_CONTROL_RECEIVED seq=77 request=77
+[VM 2] TASK3_CONTROL_APPLIED request=77 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=77
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2496 request=77 sample=77 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2496 request=78 seq=78 value=236
+[VM 1] TASK2_ACK seq=78
+[VM 2] TASK2_ACK seq=77
+[VM 2] TASK2_CONTROL_RECEIVED seq=78 request=78
+[VM 2] TASK3_CONTROL_APPLIED request=78 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=78
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2525 request=78 sample=78 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2525 request=79 seq=79 value=236
+[VM 1] TASK2_ACK seq=79
+[VM 2] TASK2_ACK seq=78
+[VM 2] TASK2_CONTROL_RECEIVED seq=79 request=79
+[VM 2] TASK3_CONTROL_APPLIED request=79 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=79
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2554 request=79 sample=79 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2554 request=80 seq=80 value=236
+[VM 1] TASK2_ACK seq=80
+[VM 2] TASK2_ACK seq=79
+[VM 2] TASK2_CONTROL_RECEIVED seq=80 request=80
+[VM 2] TASK3_CONTROL_APPLIED request=80 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=80
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2583 request=80 sample=80 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2583 request=81 seq=81 value=236
+[VM 1] TASK2_ACK seq=81
+[VM 2] TASK2_ACK seq=80
+[VM 2] TASK2_CONTROL_RECEIVED seq=81 request=81
+[VM 2] TASK3_CONTROL_APPLIED request=81 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=81
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2612 request=81 sample=81 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2612 request=82 seq=82 value=236
+[VM 2] TASK2_ACK seq=81
+[VM 2] TASK2_CONTROL_RECEIVED seq=82 request=82
+[VM 2] TASK3_CONTROL_APPLIED request=82 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=82
+[VM 1] TASK2_ACK seq=82
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2642 request=82 sample=82 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2642 request=83 seq=83 value=236
+[VM 2] TASK2_ACK seq=82
+[VM 2] TASK2_CONTROL_RECEIVED seq=83 request=83
+[VM 2] TASK3_CONTROL_APPLIED request=83 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=83
+[VM 1] TASK2_ACK seq=83
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2671 request=83 sample=83 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2671 request=84 seq=84 value=236
+[VM 2] TASK2_ACK seq=83
+[VM 2] TASK2_CONTROL_RECEIVED seq=84 request=84
+[VM 2] TASK3_CONTROL_APPLIED request=84 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=84
+[VM 1] TASK2_ACK seq=84
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2710 request=84 sample=84 rtt_ms=39 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2710 request=85 seq=85 value=236
+[VM 2] TASK2_ACK seq=84
+[VM 2] TASK2_CONTROL_RECEIVED seq=85 request=85
+[VM 2] TASK3_CONTROL_APPLIED request=85 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=85
+[VM 1] TASK2_ACK seq=85
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2740 request=85 sample=85 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2740 request=86 seq=86 value=236
+[VM 2] TASK2_ACK seq=85
+[VM 2] TASK2_CONTROL_RECEIVED seq=86 request=86
+[VM 2] TASK3_CONTROL_APPLIED request=86 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=86
+[VM 1] TASK2_ACK seq=86
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2779 request=86 sample=86 rtt_ms=39 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2779 request=87 seq=87 value=236
+[VM 2] TASK2_ACK seq=86
+[VM 2] TASK2_CONTROL_RECEIVED seq=87 request=87
+[VM 2] TASK3_CONTROL_APPLIED request=87 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=87
+[VM 1] TASK2_ACK seq=87
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2809 request=87 sample=87 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2809 request=88 seq=88 value=236
+[VM 2] TASK2_ACK seq=87
+[VM 2] TASK2_CONTROL_RECEIVED seq=88 request=88
+[VM 2] TASK3_CONTROL_APPLIED request=88 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=88
+[VM 1] TASK2_ACK seq=88
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2848 request=88 sample=88 rtt_ms=39 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2848 request=89 seq=89 value=236
+[VM 2] TASK2_ACK seq=88
+[VM 2] TASK2_CONTROL_RECEIVED seq=89 request=89
+[VM 2] TASK3_CONTROL_APPLIED request=89 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=89
+[VM 1] TASK2_ACK seq=89
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2878 request=89 sample=89 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2878 request=90 seq=90 value=236
+[VM 1] TASK2_ACK seq=90
+[VM 2] TASK2_ACK seq=89
+[VM 2] TASK2_CONTROL_RECEIVED seq=90 request=90
+[VM 2] TASK3_CONTROL_APPLIED request=90 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=90
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2907 request=90 sample=90 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2907 request=91 seq=91 value=236
+[VM 2] TASK2_ACK seq=90
+[VM 2] TASK2_CONTROL_RECEIVED seq=91 request=91
+[VM 2] TASK3_CONTROL_APPLIED request=91 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=91
+[VM 1] TASK2_ACK seq=91
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2937 request=91 sample=91 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2937 request=92 seq=92 value=236
+[VM 1] TASK2_ACK seq=92
+[VM 2] TASK2_ACK seq=91
+[VM 2] TASK2_CONTROL_RECEIVED seq=92 request=92
+[VM 2] TASK3_CONTROL_APPLIED request=92 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=92
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2966 request=92 sample=92 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2966 request=93 seq=93 value=236
+[VM 2] TASK2_ACK seq=92
+[VM 2] TASK2_CONTROL_RECEIVED seq=93 request=93
+[VM 2] TASK3_CONTROL_APPLIED request=93 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=93
+[VM 1] TASK2_ACK seq=93
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=2995 request=93 sample=93 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=2995 request=94 seq=94 value=236
+[VM 2] TASK2_ACK seq=93
+[VM 2] TASK2_CONTROL_RECEIVED seq=94 request=94
+[VM 2] TASK3_CONTROL_APPLIED request=94 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=94
+[VM 1] TASK2_ACK seq=94
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3025 request=94 sample=94 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3025 request=95 seq=95 value=236
+[VM 2] TASK2_ACK seq=94
+[VM 2] TASK2_CONTROL_RECEIVED seq=95 request=95
+[VM 2] TASK3_CONTROL_APPLIED request=95 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=95
+[VM 1] TASK2_ACK seq=95
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3054 request=95 sample=95 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3054 request=96 seq=96 value=236
+[VM 2] TASK2_ACK seq=95
+[VM 2] TASK2_CONTROL_RECEIVED seq=96 request=96
+[VM 2] TASK3_CONTROL_APPLIED request=96 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=96
+[VM 1] TASK2_ACK seq=96
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3084 request=96 sample=96 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3084 request=97 seq=97 value=236
+[VM 2] TASK2_ACK seq=96
+[VM 2] TASK2_CONTROL_RECEIVED seq=97 request=97
+[VM 2] TASK3_CONTROL_APPLIED request=97 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=97
+[VM 1] TASK2_ACK seq=97
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3124 request=97 sample=97 rtt_ms=40 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3124 request=98 seq=98 value=236
+[VM 2] TASK2_ACK seq=97
+[VM 2] TASK2_CONTROL_RECEIVED seq=98 request=98
+[VM 2] TASK3_CONTROL_APPLIED request=98 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=98
+[VM 1] TASK2_ACK seq=98
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3154 request=98 sample=98 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3154 request=99 seq=99 value=236
+[VM 2] TASK2_ACK seq=98
+[VM 2] TASK2_CONTROL_RECEIVED seq=99 request=99
+[VM 2] TASK3_CONTROL_APPLIED request=99 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=99
+[VM 1] TASK2_ACK seq=99
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3184 request=99 sample=99 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3184 request=100 seq=100 value=236
+[VM 1] TASK2_ACK seq=100
+[VM 2] TASK2_ACK seq=99
+[VM 2] TASK2_CONTROL_RECEIVED seq=100 request=100
+[VM 2] TASK3_CONTROL_APPLIED request=100 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=100
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3214 request=100 sample=100 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3214 request=101 seq=101 value=236
+[VM 2] TASK2_ACK seq=100
+[VM 2] TASK2_CONTROL_RECEIVED seq=101 request=101
+[VM 2] TASK3_CONTROL_APPLIED request=101 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=101
+[VM 1] TASK2_ACK seq=101
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3244 request=101 sample=101 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3244 request=102 seq=102 value=236
+[VM 1] TASK2_ACK seq=102
+[VM 2] TASK2_ACK seq=101
+[VM 2] TASK2_CONTROL_RECEIVED seq=102 request=102
+[VM 2] TASK3_CONTROL_APPLIED request=102 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=102
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3273 request=102 sample=102 rtt_ms=29 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3273 request=103 seq=103 value=236
+[VM 2] TASK2_ACK seq=102
+[VM 2] TASK2_CONTROL_RECEIVED seq=103 request=103
+[VM 2] TASK3_CONTROL_APPLIED request=103 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=103
+[VM 1] TASK2_ACK seq=103
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3303 request=103 sample=103 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3303 request=104 seq=104 value=236
+[VM 1] TASK2_ACK seq=104
+[VM 2] TASK2_ACK seq=103
+[VM 2] TASK2_CONTROL_RECEIVED seq=104 request=104
+[VM 2] TASK3_CONTROL_APPLIED request=104 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=104
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3333 request=104 sample=104 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3333 request=105 seq=105 value=236
+[VM 1] TASK2_ACK seq=105
+[VM 2] TASK2_ACK seq=104
+[VM 2] TASK2_CONTROL_RECEIVED seq=105 request=105
+[VM 2] TASK3_CONTROL_APPLIED request=105 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=105
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3363 request=105 sample=105 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3363 request=106 seq=106 value=236
+[VM 2] TASK2_ACK seq=105
+[VM 2] TASK2_CONTROL_RECEIVED seq=106 request=106
+[VM 2] TASK3_CONTROL_APPLIED request=106 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=106
+[VM 1] TASK2_ACK seq=106
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3393 request=106 sample=106 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3393 request=107 seq=107 value=236
+[VM 2] TASK2_ACK seq=106
+[VM 2] TASK2_CONTROL_RECEIVED seq=107 request=107
+[VM 2] TASK3_CONTROL_APPLIED request=107 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=107
+[VM 1] TASK2_ACK seq=107
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3423 request=107 sample=107 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3423 request=108 seq=108 value=236
+[VM 1] TASK2_ACK seq=108
+[VM 2] TASK2_ACK seq=107
+[VM 2] TASK2_CONTROL_RECEIVED seq=108 request=108
+[VM 2] TASK3_CONTROL_APPLIED request=108 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=108
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3453 request=108 sample=108 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3453 request=109 seq=109 value=236
+[VM 2] TASK2_ACK seq=108
+[VM 2] TASK2_CONTROL_RECEIVED seq=109 request=109
+[VM 2] TASK3_CONTROL_APPLIED request=109 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=109
+[VM 1] TASK2_ACK seq=109
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3483 request=109 sample=109 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3483 request=110 seq=110 value=236
+[VM 2] TASK2_ACK seq=109
+[VM 2] TASK2_CONTROL_RECEIVED seq=110 request=110
+[VM 2] TASK3_CONTROL_APPLIED request=110 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=110
+[VM 1] TASK2_ACK seq=110
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3513 request=110 sample=110 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3513 request=111 seq=111 value=236
+[VM 2] TASK2_ACK seq=110
+[VM 2] TASK2_CONTROL_RECEIVED seq=111 request=111
+[VM 2] TASK3_CONTROL_APPLIED request=111 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=111
+[VM 1] TASK2_ACK seq=111
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3543 request=111 sample=111 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3543 request=112 seq=112 value=236
+[VM 2] TASK2_ACK seq=111
+[VM 2] TASK2_CONTROL_RECEIVED seq=112 request=112
+[VM 2] TASK3_CONTROL_APPLIED request=112 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=112
+[VM 1] TASK2_ACK seq=112
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3583 request=112 sample=112 rtt_ms=40 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3583 request=113 seq=113 value=236
+[VM 2] TASK2_ACK seq=112
+[VM 2] TASK2_CONTROL_RECEIVED seq=113 request=113
+[VM 2] TASK3_CONTROL_APPLIED request=113 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=113
+[VM 1] TASK2_ACK seq=113
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3614 request=113 sample=113 rtt_ms=31 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3614 request=114 seq=114 value=236
+[VM 2] TASK2_ACK seq=113
+[VM 2] TASK2_CONTROL_RECEIVED seq=114 request=114
+[VM 2] TASK3_CONTROL_APPLIED request=114 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=114
+[VM 1] TASK2_ACK seq=114
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3644 request=114 sample=114 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3644 request=115 seq=115 value=236
+[VM 2] TASK2_ACK seq=114
+[VM 2] TASK2_CONTROL_RECEIVED seq=115 request=115
+[VM 2] TASK3_CONTROL_APPLIED request=115 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=115
+[VM 1] TASK2_ACK seq=115
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3674 request=115 sample=115 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3674 request=116 seq=116 value=236
+[VM 2] TASK2_ACK seq=115
+[VM 2] TASK2_CONTROL_RECEIVED seq=116 request=116
+[VM 2] TASK3_CONTROL_APPLIED request=116 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=116
+[VM 1] TASK2_ACK seq=116
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3704 request=116 sample=116 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3704 request=117 seq=117 value=236
+[VM 2] TASK2_ACK seq=116
+[VM 2] TASK2_CONTROL_RECEIVED seq=117 request=117
+[VM 2] TASK3_CONTROL_APPLIED request=117 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=117
+[VM 1] TASK2_ACK seq=117
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3734 request=117 sample=117 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3734 request=118 seq=118 value=236
+[VM 2] TASK2_ACK seq=117
+[VM 2] TASK2_CONTROL_RECEIVED seq=118 request=118
+[VM 2] TASK3_CONTROL_APPLIED request=118 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=118
+[VM 1] TASK2_ACK seq=118
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3764 request=118 sample=118 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3764 request=119 seq=119 value=236
+[VM 1] TASK2_ACK seq=119
+[VM 2] TASK2_ACK seq=118
+[VM 2] TASK2_CONTROL_RECEIVED seq=119 request=119
+[VM 2] TASK3_CONTROL_APPLIED request=119 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=119
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3794 request=119 sample=119 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3794 request=120 seq=120 value=236
+[VM 2] TASK2_ACK seq=119
+[VM 2] TASK2_CONTROL_RECEIVED seq=120 request=120
+[VM 2] TASK3_CONTROL_APPLIED request=120 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=120
+[VM 1] TASK2_ACK seq=120
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3824 request=120 sample=120 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3824 request=121 seq=121 value=236
+[VM 2] TASK2_ACK seq=120
+[VM 2] TASK2_CONTROL_RECEIVED seq=121 request=121
+[VM 2] TASK3_CONTROL_APPLIED request=121 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=121
+[VM 1] TASK2_ACK seq=121
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3854 request=121 sample=121 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3854 request=122 seq=122 value=236
+[VM 2] TASK2_ACK seq=121
+[VM 2] TASK2_CONTROL_RECEIVED seq=122 request=122
+[VM 2] TASK3_CONTROL_APPLIED request=122 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=122
+[VM 1] TASK2_ACK seq=122
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3884 request=122 sample=122 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3884 request=123 seq=123 value=236
+[VM 2] TASK2_ACK seq=122
+[VM 2] TASK2_CONTROL_RECEIVED seq=123 request=123
+[VM 2] TASK3_CONTROL_APPLIED request=123 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=123
+[VM 1] TASK2_ACK seq=123
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3914 request=123 sample=123 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3914 request=124 seq=124 value=236
+[VM 1] TASK2_ACK seq=124
+[VM 2] TASK2_ACK seq=123
+[VM 2] TASK2_CONTROL_RECEIVED seq=124 request=124
+[VM 2] TASK3_CONTROL_APPLIED request=124 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=124
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3944 request=124 sample=124 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3944 request=125 seq=125 value=236
+[VM 2] TASK2_ACK seq=124
+[VM 2] TASK2_CONTROL_RECEIVED seq=125 request=125
+[VM 2] TASK3_CONTROL_APPLIED request=125 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=125
+[VM 1] TASK2_ACK seq=125
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=3974 request=125 sample=125 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=3974 request=126 seq=126 value=236
+[VM 1] TASK2_ACK seq=126
+[VM 2] TASK2_ACK seq=125
+[VM 2] TASK2_CONTROL_RECEIVED seq=126 request=126
+[VM 2] TASK3_CONTROL_APPLIED request=126 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=126
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4004 request=126 sample=126 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4004 request=127 seq=127 value=236
+[VM 2] TASK2_ACK seq=126
+[VM 2] TASK2_CONTROL_RECEIVED seq=127 request=127
+[VM 2] TASK3_CONTROL_APPLIED request=127 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=182 dist=0
+[VM 2] TASK2_STATUS_SENT seq=127
+[VM 1] TASK2_ACK seq=127
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4034 request=127 sample=127 rtt_ms=30 state=Active value=182
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4034 request=128 seq=128 value=236
+[VM 2] TASK2_ACK seq=127
+[VM 2] TASK3_DISTURBANCE change=150 at_ms=8016
+[VM 2] TASK2_CONTROL_RECEIVED seq=128 request=128
+[VM 2] TASK3_CONTROL_APPLIED request=128 value=236
+[VM 2] TASK3_PLANT_STATE before=182 after=332 dist=150
+[VM 2] TASK2_STATUS_SENT seq=128
+[VM 1] TASK2_ACK seq=128
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4078 request=128 sample=128 rtt_ms=44 state=Active value=332
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4078 request=129 seq=129 value=0
+[VM 2] TASK2_ACK seq=128
+[VM 2] TASK2_CONTROL_RECEIVED seq=129 request=129
+[VM 2] TASK3_CONTROL_APPLIED request=129 value=0
+[VM 2] TASK3_PLANT_STATE before=332 after=338 dist=150
+[VM 2] TASK2_STATUS_SENT seq=129
+[VM 1] TASK2_ACK seq=129
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4108 request=129 sample=129 rtt_ms=30 state=Active value=338
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4108 request=130 seq=130 value=0
+[VM 1] TASK2_ACK seq=130
+[VM 2] TASK2_ACK seq=129
+[VM 2] TASK2_CONTROL_RECEIVED seq=130 request=130
+[VM 2] TASK3_CONTROL_APPLIED request=130 value=0
+[VM 2] TASK3_PLANT_STATE before=338 after=342 dist=150
+[VM 2] TASK2_STATUS_SENT seq=130
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4137 request=130 sample=130 rtt_ms=29 state=Active value=342
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4137 request=131 seq=131 value=0
+[VM 2] TASK2_ACK seq=130
+[VM 2] TASK2_CONTROL_RECEIVED seq=131 request=131
+[VM 2] TASK3_CONTROL_APPLIED request=131 value=0
+[VM 2] TASK3_PLANT_STATE before=342 after=344 dist=150
+[VM 2] TASK2_STATUS_SENT seq=131
+[VM 1] TASK2_ACK seq=131
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4168 request=131 sample=131 rtt_ms=31 state=Active value=344
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4168 request=132 seq=132 value=0
+[VM 2] TASK2_ACK seq=131
+[VM 2] TASK2_CONTROL_RECEIVED seq=132 request=132
+[VM 2] TASK3_CONTROL_APPLIED request=132 value=0
+[VM 2] TASK3_PLANT_STATE before=344 after=345 dist=150
+[VM 2] TASK2_STATUS_SENT seq=132
+[VM 1] TASK2_ACK seq=132
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4198 request=132 sample=132 rtt_ms=30 state=Active value=345
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4198 request=133 seq=133 value=0
+[VM 2] TASK2_ACK seq=132
+[VM 2] TASK2_CONTROL_RECEIVED seq=133 request=133
+[VM 2] TASK3_CONTROL_APPLIED request=133 value=0
+[VM 2] TASK3_PLANT_STATE before=345 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=133
+[VM 1] TASK2_ACK seq=133
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4228 request=133 sample=133 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4228 request=134 seq=134 value=0
+[VM 2] TASK2_ACK seq=133
+[VM 2] TASK2_CONTROL_RECEIVED seq=134 request=134
+[VM 2] TASK3_CONTROL_APPLIED request=134 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=134
+[VM 1] TASK2_ACK seq=134
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4257 request=134 sample=134 rtt_ms=29 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4257 request=135 seq=135 value=0
+[VM 2] TASK2_ACK seq=134
+[VM 2] TASK2_CONTROL_RECEIVED seq=135 request=135
+[VM 2] TASK3_CONTROL_APPLIED request=135 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=135
+[VM 1] TASK2_ACK seq=135
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4287 request=135 sample=135 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4287 request=136 seq=136 value=0
+[VM 2] TASK2_ACK seq=135
+[VM 2] TASK2_CONTROL_RECEIVED seq=136 request=136
+[VM 2] TASK3_CONTROL_APPLIED request=136 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=136
+[VM 1] TASK2_ACK seq=136
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4317 request=136 sample=136 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4317 request=137 seq=137 value=0
+[VM 2] TASK2_ACK seq=136
+[VM 2] TASK2_CONTROL_RECEIVED seq=137 request=137
+[VM 2] TASK3_CONTROL_APPLIED request=137 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=137
+[VM 1] TASK2_ACK seq=137
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4347 request=137 sample=137 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4347 request=138 seq=138 value=0
+[VM 2] TASK2_ACK seq=137
+[VM 2] TASK2_CONTROL_RECEIVED seq=138 request=138
+[VM 2] TASK3_CONTROL_APPLIED request=138 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=138
+[VM 1] TASK2_ACK seq=138
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4377 request=138 sample=138 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4377 request=139 seq=139 value=0
+[VM 1] TASK2_ACK seq=139
+[VM 2] TASK2_ACK seq=138
+[VM 2] TASK2_CONTROL_RECEIVED seq=139 request=139
+[VM 2] TASK3_CONTROL_APPLIED request=139 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=139
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4406 request=139 sample=139 rtt_ms=29 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4406 request=140 seq=140 value=0
+[VM 2] TASK2_ACK seq=139
+[VM 2] TASK2_CONTROL_RECEIVED seq=140 request=140
+[VM 2] TASK3_CONTROL_APPLIED request=140 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=140
+[VM 1] TASK2_ACK seq=140
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4447 request=140 sample=140 rtt_ms=41 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4447 request=141 seq=141 value=0
+[VM 2] TASK2_ACK seq=140
+[VM 2] TASK2_CONTROL_RECEIVED seq=141 request=141
+[VM 2] TASK3_CONTROL_APPLIED request=141 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=141
+[VM 1] TASK2_ACK seq=141
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4476 request=141 sample=141 rtt_ms=29 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4476 request=142 seq=142 value=0
+[VM 2] TASK2_ACK seq=141
+[VM 2] TASK2_CONTROL_RECEIVED seq=142 request=142
+[VM 2] TASK3_CONTROL_APPLIED request=142 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=142
+[VM 1] TASK2_ACK seq=142
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4507 request=142 sample=142 rtt_ms=31 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4507 request=143 seq=143 value=0
+[VM 2] TASK2_ACK seq=142
+[VM 2] TASK2_CONTROL_RECEIVED seq=143 request=143
+[VM 2] TASK3_CONTROL_APPLIED request=143 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=143
+[VM 1] TASK2_ACK seq=143
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4537 request=143 sample=143 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4537 request=144 seq=144 value=0
+[VM 2] TASK2_ACK seq=143
+[VM 2] TASK2_CONTROL_RECEIVED seq=144 request=144
+[VM 2] TASK3_CONTROL_APPLIED request=144 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=144
+[VM 1] TASK2_ACK seq=144
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4567 request=144 sample=144 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4567 request=145 seq=145 value=0
+[VM 2] TASK2_ACK seq=144
+[VM 2] TASK2_CONTROL_RECEIVED seq=145 request=145
+[VM 2] TASK3_CONTROL_APPLIED request=145 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=145
+[VM 1] TASK2_ACK seq=145
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4597 request=145 sample=145 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4597 request=146 seq=146 value=0
+[VM 2] TASK2_ACK seq=145
+[VM 2] TASK2_CONTROL_RECEIVED seq=146 request=146
+[VM 2] TASK3_CONTROL_APPLIED request=146 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=146
+[VM 1] TASK2_ACK seq=146
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4627 request=146 sample=146 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4627 request=147 seq=147 value=0
+[VM 2] TASK2_ACK seq=146
+[VM 2] TASK2_CONTROL_RECEIVED seq=147 request=147
+[VM 2] TASK3_CONTROL_APPLIED request=147 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=147
+[VM 1] TASK2_ACK seq=147
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4657 request=147 sample=147 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4657 request=148 seq=148 value=0
+[VM 2] TASK2_ACK seq=147
+[VM 2] TASK2_CONTROL_RECEIVED seq=148 request=148
+[VM 2] TASK3_CONTROL_APPLIED request=148 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=148
+[VM 1] TASK2_ACK seq=148
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4687 request=148 sample=148 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4687 request=149 seq=149 value=0
+[VM 2] TASK2_ACK seq=148
+[VM 2] TASK2_CONTROL_RECEIVED seq=149 request=149
+[VM 2] TASK3_CONTROL_APPLIED request=149 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=149
+[VM 1] TASK2_ACK seq=149
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4717 request=149 sample=149 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4717 request=150 seq=150 value=0
+[VM 1] TASK2_ACK seq=150
+[VM 2] TASK2_ACK seq=149
+[VM 2] TASK2_CONTROL_RECEIVED seq=150 request=150
+[VM 2] TASK3_CONTROL_APPLIED request=150 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=150
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4747 request=150 sample=150 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4747 request=151 seq=151 value=0
+[VM 2] TASK2_ACK seq=150
+[VM 2] TASK2_CONTROL_RECEIVED seq=151 request=151
+[VM 2] TASK3_CONTROL_APPLIED request=151 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=151
+[VM 1] TASK2_ACK seq=151
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4777 request=151 sample=151 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4777 request=152 seq=152 value=0
+[VM 2] TASK2_ACK seq=151
+[VM 2] TASK2_CONTROL_RECEIVED seq=152 request=152
+[VM 2] TASK3_CONTROL_APPLIED request=152 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=152
+[VM 1] TASK2_ACK seq=152
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4807 request=152 sample=152 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4807 request=153 seq=153 value=0
+[VM 2] TASK2_ACK seq=152
+[VM 2] TASK2_CONTROL_RECEIVED seq=153 request=153
+[VM 2] TASK3_CONTROL_APPLIED request=153 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=153
+[VM 1] TASK2_ACK seq=153
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4837 request=153 sample=153 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4837 request=154 seq=154 value=0
+[VM 2] TASK2_ACK seq=153
+[VM 2] TASK2_CONTROL_RECEIVED seq=154 request=154
+[VM 2] TASK3_CONTROL_APPLIED request=154 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=154
+[VM 1] TASK2_ACK seq=154
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4867 request=154 sample=154 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4867 request=155 seq=155 value=0
+[VM 1] TASK2_ACK seq=155
+[VM 2] TASK2_ACK seq=154
+[VM 2] TASK2_CONTROL_RECEIVED seq=155 request=155
+[VM 2] TASK3_CONTROL_APPLIED request=155 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=155
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4896 request=155 sample=155 rtt_ms=29 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4896 request=156 seq=156 value=0
+[VM 2] TASK2_ACK seq=155
+[VM 2] TASK2_CONTROL_RECEIVED seq=156 request=156
+[VM 2] TASK3_CONTROL_APPLIED request=156 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=156
+[VM 1] TASK2_ACK seq=156
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4927 request=156 sample=156 rtt_ms=31 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4927 request=157 seq=157 value=0
+[VM 2] TASK2_ACK seq=156
+[VM 2] TASK2_CONTROL_RECEIVED seq=157 request=157
+[VM 2] TASK3_CONTROL_APPLIED request=157 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=157
+[VM 1] TASK2_ACK seq=157
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4957 request=157 sample=157 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4957 request=158 seq=158 value=0
+[VM 2] TASK2_ACK seq=157
+[VM 2] TASK2_CONTROL_RECEIVED seq=158 request=158
+[VM 2] TASK3_CONTROL_APPLIED request=158 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=158
+[VM 1] TASK2_ACK seq=158
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=4987 request=158 sample=158 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=4987 request=159 seq=159 value=0
+[VM 2] TASK2_ACK seq=158
+[VM 2] TASK2_CONTROL_RECEIVED seq=159 request=159
+[VM 2] TASK3_CONTROL_APPLIED request=159 value=0
+[VM 2] TASK3_PLANT_STATE before=346 after=346 dist=150
+[VM 2] TASK2_STATUS_SENT seq=159
+[VM 1] TASK2_ACK seq=159
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5017 request=159 sample=159 rtt_ms=30 state=Active value=346
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5017 request=160 seq=160 value=908
+[VM 2] TASK2_ACK seq=159
+[VM 2] TASK2_CONTROL_RECEIVED seq=160 request=160
+[VM 2] TASK3_CONTROL_APPLIED request=160 value=908
+[VM 2] TASK3_PLANT_STATE before=346 after=663 dist=150
+[VM 2] TASK2_STATUS_SENT seq=160
+[VM 1] TASK2_ACK seq=160
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5047 request=160 sample=160 rtt_ms=30 state=Active value=663
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5047 request=161 seq=161 value=274
+[VM 2] TASK2_ACK seq=160
+[VM 2] TASK2_CONTROL_RECEIVED seq=161 request=161
+[VM 2] TASK3_CONTROL_APPLIED request=161 value=274
+[VM 2] TASK3_PLANT_STATE before=663 after=610 dist=150
+[VM 2] TASK2_STATUS_SENT seq=161
+[VM 1] TASK2_ACK seq=161
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5077 request=161 sample=161 rtt_ms=30 state=Active value=610
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5077 request=162 seq=162 value=380
+[VM 2] TASK2_ACK seq=161
+[VM 2] TASK2_CONTROL_RECEIVED seq=162 request=162
+[VM 2] TASK3_CONTROL_APPLIED request=162 value=380
+[VM 2] TASK3_PLANT_STATE before=610 after=621 dist=150
+[VM 2] TASK2_STATUS_SENT seq=162
+[VM 1] TASK2_ACK seq=162
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5107 request=162 sample=162 rtt_ms=30 state=Active value=621
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5107 request=163 seq=163 value=358
+[VM 2] TASK2_ACK seq=162
+[VM 2] TASK2_CONTROL_RECEIVED seq=163 request=163
+[VM 2] TASK3_CONTROL_APPLIED request=163 value=358
+[VM 2] TASK3_PLANT_STATE before=621 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=163
+[VM 1] TASK2_ACK seq=163
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5137 request=163 sample=163 rtt_ms=30 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5137 request=164 seq=164 value=364
+[VM 2] TASK2_ACK seq=163
+[VM 2] TASK2_CONTROL_RECEIVED seq=164 request=164
+[VM 2] TASK3_CONTROL_APPLIED request=164 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=164
+[VM 1] TASK2_ACK seq=164
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5167 request=164 sample=164 rtt_ms=30 state=Active value=620
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5167 request=165 seq=165 value=360
+[VM 2] TASK2_ACK seq=164
+[VM 2] TASK2_CONTROL_RECEIVED seq=165 request=165
+[VM 2] TASK3_CONTROL_APPLIED request=165 value=360
+[VM 2] TASK3_PLANT_STATE before=620 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=165
+[VM 1] TASK2_ACK seq=165
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5198 request=165 sample=165 rtt_ms=31 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5198 request=166 seq=166 value=364
+[VM 2] TASK2_ACK seq=165
+[VM 2] TASK2_CONTROL_RECEIVED seq=166 request=166
+[VM 2] TASK3_CONTROL_APPLIED request=166 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=166
+[VM 1] TASK2_ACK seq=166
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5227 request=166 sample=166 rtt_ms=29 state=Active value=620
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5227 request=167 seq=167 value=360
+[VM 2] TASK2_ACK seq=166
+[VM 2] TASK2_CONTROL_RECEIVED seq=167 request=167
+[VM 2] TASK3_CONTROL_APPLIED request=167 value=360
+[VM 2] TASK3_PLANT_STATE before=620 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=167
+[VM 1] TASK2_ACK seq=167
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5257 request=167 sample=167 rtt_ms=30 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5257 request=168 seq=168 value=364
+[VM 2] TASK2_ACK seq=167
+[VM 2] TASK2_CONTROL_RECEIVED seq=168 request=168
+[VM 2] TASK3_CONTROL_APPLIED request=168 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=168
+[VM 1] TASK2_ACK seq=168
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5287 request=168 sample=168 rtt_ms=30 state=Active value=620
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5287 request=169 seq=169 value=360
+[VM 2] TASK2_ACK seq=168
+[VM 2] TASK2_CONTROL_RECEIVED seq=169 request=169
+[VM 2] TASK3_CONTROL_APPLIED request=169 value=360
+[VM 2] TASK3_PLANT_STATE before=620 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=169
+[VM 1] TASK2_ACK seq=169
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5317 request=169 sample=169 rtt_ms=30 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5317 request=170 seq=170 value=364
+[VM 2] TASK2_ACK seq=169
+[VM 2] TASK2_CONTROL_RECEIVED seq=170 request=170
+[VM 2] TASK3_CONTROL_APPLIED request=170 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=170
+[VM 1] TASK2_ACK seq=170
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5347 request=170 sample=170 rtt_ms=30 state=Active value=620
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5347 request=171 seq=171 value=360
+[VM 2] TASK2_ACK seq=170
+[VM 2] TASK2_CONTROL_RECEIVED seq=171 request=171
+[VM 2] TASK3_CONTROL_APPLIED request=171 value=360
+[VM 2] TASK3_PLANT_STATE before=620 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=171
+[VM 1] TASK2_ACK seq=171
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5377 request=171 sample=171 rtt_ms=30 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5377 request=172 seq=172 value=364
+[VM 2] TASK2_ACK seq=171
+[VM 2] TASK2_CONTROL_RECEIVED seq=172 request=172
+[VM 2] TASK3_CONTROL_APPLIED request=172 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=172
+[VM 1] TASK2_ACK seq=172
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5407 request=172 sample=172 rtt_ms=30 state=Active value=620
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5407 request=173 seq=173 value=360
+[VM 2] TASK2_ACK seq=172
+[VM 2] TASK2_CONTROL_RECEIVED seq=173 request=173
+[VM 2] TASK3_CONTROL_APPLIED request=173 value=360
+[VM 2] TASK3_PLANT_STATE before=620 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=173
+[VM 1] TASK2_ACK seq=173
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5437 request=173 sample=173 rtt_ms=30 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5437 request=174 seq=174 value=364
+[VM 2] TASK2_ACK seq=173
+[VM 2] TASK2_CONTROL_RECEIVED seq=174 request=174
+[VM 2] TASK3_CONTROL_APPLIED request=174 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=174
+[VM 1] TASK2_ACK seq=174
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5478 request=174 sample=174 rtt_ms=41 state=Active value=620
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5478 request=175 seq=175 value=360
+[VM 2] TASK2_ACK seq=174
+[VM 2] TASK2_CONTROL_RECEIVED seq=175 request=175
+[VM 2] TASK3_CONTROL_APPLIED request=175 value=360
+[VM 2] TASK3_PLANT_STATE before=620 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=175
+[VM 1] TASK2_ACK seq=175
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5508 request=175 sample=175 rtt_ms=30 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5508 request=176 seq=176 value=364
+[VM 2] TASK2_ACK seq=175
+[VM 2] TASK2_CONTROL_RECEIVED seq=176 request=176
+[VM 2] TASK3_CONTROL_APPLIED request=176 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=176
+[VM 1] TASK2_ACK seq=176
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5539 request=176 sample=176 rtt_ms=31 state=Active value=620
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5539 request=177 seq=177 value=360
+[VM 2] TASK2_ACK seq=176
+[VM 2] TASK2_CONTROL_RECEIVED seq=177 request=177
+[VM 2] TASK3_CONTROL_APPLIED request=177 value=360
+[VM 2] TASK3_PLANT_STATE before=620 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=177
+[VM 1] TASK2_ACK seq=177
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5569 request=177 sample=177 rtt_ms=30 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5569 request=178 seq=178 value=364
+[VM 2] TASK2_ACK seq=177
+[VM 2] TASK2_CONTROL_RECEIVED seq=178 request=178
+[VM 2] TASK3_CONTROL_APPLIED request=178 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=178
+[VM 1] TASK2_ACK seq=178
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5599 request=178 sample=178 rtt_ms=30 state=Active value=620
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5599 request=179 seq=179 value=360
+[VM 2] TASK2_ACK seq=178
+[VM 2] TASK2_CONTROL_RECEIVED seq=179 request=179
+[VM 2] TASK3_CONTROL_APPLIED request=179 value=360
+[VM 2] TASK3_PLANT_STATE before=620 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=179
+[VM 1] TASK2_ACK seq=179
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5629 request=179 sample=179 rtt_ms=30 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5629 request=180 seq=180 value=364
+[VM 2] TASK2_ACK seq=179
+[VM 2] TASK2_CONTROL_RECEIVED seq=180 request=180
+[VM 2] TASK3_CONTROL_APPLIED request=180 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=180
+[VM 1] TASK2_ACK seq=180
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5669 request=180 sample=180 rtt_ms=40 state=Active value=620
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5669 request=181 seq=181 value=360
+[VM 2] TASK2_ACK seq=180
+[VM 2] TASK2_CONTROL_RECEIVED seq=181 request=181
+[VM 2] TASK3_CONTROL_APPLIED request=181 value=360
+[VM 2] TASK3_PLANT_STATE before=620 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=181
+[VM 1] TASK2_ACK seq=181
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5699 request=181 sample=181 rtt_ms=30 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5699 request=182 seq=182 value=364
+[VM 2] TASK2_ACK seq=181
+[VM 2] TASK2_CONTROL_RECEIVED seq=182 request=182
+[VM 2] TASK3_CONTROL_APPLIED request=182 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=182
+[VM 1] TASK2_ACK seq=182
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5740 request=182 sample=182 rtt_ms=41 state=Active value=620
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5740 request=183 seq=183 value=360
+[VM 1] TASK2_ACK seq=183
+[VM 2] TASK2_ACK seq=182
+[VM 2] TASK2_CONTROL_RECEIVED seq=183 request=183
+[VM 2] TASK3_CONTROL_APPLIED request=183 value=360
+[VM 2] TASK3_PLANT_STATE before=620 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=183
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5770 request=183 sample=183 rtt_ms=30 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5770 request=184 seq=184 value=364
+[VM 2] TASK2_ACK seq=183
+[VM 2] TASK2_CONTROL_RECEIVED seq=184 request=184
+[VM 2] TASK3_CONTROL_APPLIED request=184 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=184
+[VM 1] TASK2_ACK seq=184
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5799 request=184 sample=184 rtt_ms=29 state=Active value=620
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5799 request=185 seq=185 value=360
+[VM 2] TASK2_ACK seq=184
+[VM 2] TASK2_CONTROL_RECEIVED seq=185 request=185
+[VM 2] TASK3_CONTROL_APPLIED request=185 value=360
+[VM 2] TASK3_PLANT_STATE before=620 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=185
+[VM 1] TASK2_ACK seq=185
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5830 request=185 sample=185 rtt_ms=31 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5830 request=186 seq=186 value=364
+[VM 2] TASK2_ACK seq=185
+[VM 2] TASK2_CONTROL_RECEIVED seq=186 request=186
+[VM 2] TASK3_CONTROL_APPLIED request=186 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=186
+[VM 1] TASK2_ACK seq=186
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5859 request=186 sample=186 rtt_ms=29 state=Active value=620
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5859 request=187 seq=187 value=360
+[VM 2] TASK2_ACK seq=186
+[VM 2] TASK2_CONTROL_RECEIVED seq=187 request=187
+[VM 2] TASK3_CONTROL_APPLIED request=187 value=360
+[VM 2] TASK3_PLANT_STATE before=620 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=187
+[VM 1] TASK2_ACK seq=187
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5890 request=187 sample=187 rtt_ms=31 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5890 request=188 seq=188 value=364
+[VM 2] TASK2_ACK seq=187
+[VM 2] TASK2_CONTROL_RECEIVED seq=188 request=188
+[VM 2] TASK3_CONTROL_APPLIED request=188 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=188
+[VM 1] TASK2_ACK seq=188
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5919 request=188 sample=188 rtt_ms=29 state=Active value=620
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5919 request=189 seq=189 value=360
+[VM 2] TASK2_ACK seq=188
+[VM 2] TASK2_CONTROL_RECEIVED seq=189 request=189
+[VM 2] TASK3_CONTROL_APPLIED request=189 value=360
+[VM 2] TASK3_PLANT_STATE before=620 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=189
+[VM 1] TASK2_ACK seq=189
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5952 request=189 sample=189 rtt_ms=33 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5952 request=190 seq=190 value=364
+[VM 2] TASK2_ACK seq=189
+[VM 2] TASK2_CONTROL_RECEIVED seq=190 request=190
+[VM 2] TASK3_CONTROL_APPLIED request=190 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=190
+[VM 1] TASK2_ACK seq=190
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=5983 request=190 sample=190 rtt_ms=31 state=Active value=620
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=5983 request=191 seq=191 value=360
+[VM 2] TASK2_ACK seq=190
+[VM 2] TASK2_CONTROL_RECEIVED seq=191 request=191
+[VM 2] TASK3_CONTROL_APPLIED request=191 value=360
+[VM 2] TASK3_PLANT_STATE before=620 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=191
+[VM 1] TASK2_ACK seq=191
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=6013 request=191 sample=191 rtt_ms=30 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=6013 request=192 seq=192 value=364
+[VM 2] TASK2_ACK seq=191
+[VM 2] TASK2_CONTROL_RECEIVED seq=192 request=192
+[VM 2] TASK3_CONTROL_APPLIED request=192 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=192
+[VM 1] TASK2_ACK seq=192
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=6054 request=192 sample=192 rtt_ms=41 state=Active value=620
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=6054 request=193 seq=193 value=360
+[VM 2] TASK2_ACK seq=192
+[VM 2] TASK2_CONTROL_RECEIVED seq=193 request=193
+[VM 2] TASK3_CONTROL_APPLIED request=193 value=360
+[VM 2] TASK3_PLANT_STATE before=620 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=193
+[VM 1] TASK2_ACK seq=193
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=6083 request=193 sample=193 rtt_ms=29 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=6083 request=194 seq=194 value=364
+[VM 2] TASK2_ACK seq=193
+[VM 2] TASK2_CONTROL_RECEIVED seq=194 request=194
+[VM 2] TASK3_CONTROL_APPLIED request=194 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=194
+[VM 1] TASK2_ACK seq=194
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=6113 request=194 sample=194 rtt_ms=30 state=Active value=620
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=6113 request=195 seq=195 value=360
+[VM 2] TASK2_ACK seq=194
+[VM 2] TASK2_CONTROL_RECEIVED seq=195 request=195
+[VM 2] TASK3_CONTROL_APPLIED request=195 value=360
+[VM 2] TASK3_PLANT_STATE before=620 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=195
+[VM 1] TASK2_ACK seq=195
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=6143 request=195 sample=195 rtt_ms=30 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=6143 request=196 seq=196 value=364
+[VM 2] TASK2_ACK seq=195
+[VM 2] TASK2_CONTROL_RECEIVED seq=196 request=196
+[VM 2] TASK3_CONTROL_APPLIED request=196 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=196
+[VM 1] TASK2_ACK seq=196
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=6173 request=196 sample=196 rtt_ms=30 state=Active value=620
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=6173 request=197 seq=197 value=360
+[VM 2] TASK2_ACK seq=196
+[VM 2] TASK2_CONTROL_RECEIVED seq=197 request=197
+[VM 2] TASK3_CONTROL_APPLIED request=197 value=360
+[VM 2] TASK3_PLANT_STATE before=620 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=197
+[VM 1] TASK2_ACK seq=197
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=6203 request=197 sample=197 rtt_ms=30 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=6203 request=198 seq=198 value=364
+[VM 1] TASK2_ACK seq=198
+[VM 2] TASK2_ACK seq=197
+[VM 2] TASK2_CONTROL_RECEIVED seq=198 request=198
+[VM 2] TASK3_CONTROL_APPLIED request=198 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=198
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=6233 request=198 sample=198 rtt_ms=30 state=Active value=620
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=6233 request=199 seq=199 value=360
+[VM 2] TASK2_ACK seq=198
+[VM 2] TASK2_CONTROL_RECEIVED seq=199 request=199
+[VM 2] TASK3_CONTROL_APPLIED request=199 value=360
+[VM 2] TASK3_PLANT_STATE before=620 after=618 dist=150
+[VM 2] TASK2_STATUS_SENT seq=199
+[VM 1] TASK2_ACK seq=199
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=6263 request=199 sample=199 rtt_ms=30 state=Active value=618
+[VM 1] TASK2_BENCHMARK_CONTROL_SENT elapsed_ms=6263 request=200 seq=200 value=364
+[VM 1] TASK2_ACK seq=200
+[VM 2] TASK2_ACK seq=199
+[VM 2] TASK2_CONTROL_RECEIVED seq=200 request=200
+[VM 2] TASK3_CONTROL_APPLIED request=200 value=364
+[VM 2] TASK3_PLANT_STATE before=618 after=620 dist=150
+[VM 2] TASK2_STATUS_SENT seq=200
+[VM 1] TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms=6293 request=200 sample=200 rtt_ms=30 state=Active value=620
+[VM 1] TASK2_BENCHMARK_COMPLETE transactions=200 statuses=200 acks=200 retransmissions=0 elapsed_ms=6293 throughput_milli_tps=31781
+[VM 1] TASK2_BENCHMARK_END transactions=200 pending=0 errors=0
+[VM 1] TASK2_BENCHMARK_PROCESS_EXIT rc=0
+[VM 2] TASK2_ACK seq=200

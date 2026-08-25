@@ -10,6 +10,7 @@ ab_model_dir="$model_dir/task3-ab"
 out_dir="${OUT_DIR:-$repo_root/tmp/net-dual-guest/linux-task2}"
 out_file="$out_dir/task2-linux-initramfs.cpio.gz"
 template="$repo_root/scripts/test/net-dual-guest/linux-init.sh"
+temporary_parent="${TMPDIR:-/tmp}"
 expected_param_sha256="d2c0adf8939dc9ce02964ce8ada104447768ffd8e3bffad8fa11e2e61e709c1f"
 expected_bin_sha256="0ae562447923999779b12b4f91f96b9ef263add8c9902d10e22e6dd6a2932c12"
 expected_input_sha256="608c8a61ff0bb43e5a8613f1f6f8aa08af74b084363610ed2b526ad925e4cb6f"
@@ -24,14 +25,16 @@ for input in "$base_initramfs" "$task2_binary" "$template"; do
     fi
 done
 mkdir -p "$out_dir"
-root_dir="$(mktemp -d /tmp/task2-initramfs-root.XXXXXX)"
+mkdir -p "$temporary_parent"
+root_dir="$(mktemp -d "$temporary_parent/task2-initramfs-root.XXXXXX")"
 trap 'rm -rf "$root_dir"' EXIT
 
 gzip -dc "$base_initramfs" | (cd "$root_dir" && cpio -idm --quiet)
 install -m 0755 "$task2_binary" "$root_dir/bin/task2-net"
 install -m 0755 "$template" "$root_dir/init"
 if [[ "${TASK3_MODEL:-}" == "yolo" ]]; then
-    "$repo_root/scripts/task3/prepare-yolo-ncnn-ab-inputs.sh" >/dev/null
+    YOLO_AB_OUT_DIR="$ab_model_dir" \
+        "$repo_root/scripts/task3/prepare-yolo-ncnn-ab-inputs.sh" >/dev/null
     for model_file in yolo11n.ncnn.param yolo11n.ncnn.bin input.ppm; do
         if [[ ! -f "$model_dir/$model_file" ]]; then
             printf 'error: YOLO ncnn asset is missing: %s\n' "$model_dir/$model_file" >&2

@@ -1,0 +1,13 @@
+args = [
+  "-nographic",
+  "-cpu", "cortex-a72",
+  "-machine", "virt,virtualization=on,gic-version=3",
+  "-smp", "2",
+  "-m", "2g",
+  "-append", "dedicated_cpus=1",
+]
+fail_regex = ["TASK2_ERROR=", "(?i)panic", "ESR_EL2"]
+success_regex = ["PERIODIC LATENCY COMPLETE samples=6000"]
+timeout = 180
+to_bin = true
+uefi = false

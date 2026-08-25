@@ -4,15 +4,22 @@
 from __future__ import annotations
 
 import argparse
+import json
 import re
 import tomllib
 from pathlib import Path
 
 
 ENTRY_PATTERN = re.compile(r"(?m)^entry_point\s*=\s*0x[0-9a-fA-F_]+\s*$")
+KERNEL_PATH_PATTERN = re.compile(r'(?m)^kernel_path\s*=\s*"[^"]+"\s*$')
 
 
-def render_vm_entry(manifest_path: Path, config_path: Path, output_path: Path) -> None:
+def render_vm_entry(
+    manifest_path: Path,
+    config_path: Path,
+    output_path: Path,
+    kernel_path: Path | None = None,
+) -> None:
     manifest_text = manifest_path.read_text()
     try:
         manifest = tomllib.loads(manifest_text)
@@ -37,6 +44,14 @@ def render_vm_entry(manifest_path: Path, config_path: Path, output_path: Path) -
         raise ValueError(
             f"expected exactly one entry_point in {config_path}, found {replacements}"
         )
+    if kernel_path is not None:
+        rendered, replacements = KERNEL_PATH_PATTERN.subn(
+            f"kernel_path = {json.dumps(str(kernel_path.resolve()))}", rendered
+        )
+        if replacements != 1:
+            raise ValueError(
+                f"expected exactly one kernel_path in {config_path}, found {replacements}"
+            )
     output_path.write_text(rendered)
 
 
@@ -45,8 +60,9 @@ def main() -> None:
     parser.add_argument("manifest", type=Path)
     parser.add_argument("config", type=Path)
     parser.add_argument("output", type=Path)
+    parser.add_argument("--kernel-path", type=Path)
     args = parser.parse_args()
-    render_vm_entry(args.manifest, args.config, args.output)
+    render_vm_entry(args.manifest, args.config, args.output, args.kernel_path)
 
 
 if __name__ == "__main__":

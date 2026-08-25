@@ -43,7 +43,7 @@ for executable in cpio file install sha256sum; do
 done
 case "$mode" in
     fixed) model_marker='continuous-scene-v1' ;;
-    rknn) model_marker='external:rknn-control-v2' ;;
+    rknn) model_marker='external:rknn-control-v3' ;;
 esac
 if ! grep -aFq "$model_marker" "$task2_binary"; then
     printf 'error: TASK2_BINARY does not contain the %s model marker: %s\n' \

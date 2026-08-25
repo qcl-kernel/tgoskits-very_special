@@ -12,7 +12,9 @@ cd "$repo_root"
 echo "TASK2_CI_GATE_START"
 cargo test -p task2-net-protocol
 cargo test -p arceos-task2-net --no-default-features
-python3 -m unittest discover -s scripts/test/net-dual-guest -p 'test_*.py'
+cargo check --manifest-path apps/starry/starryos-task2/rust/Cargo.toml
+python3 -m pytest -q scripts/test/net-dual-guest
+python3 -m pytest -q scripts/task3/test_*.py
 TASK3_CONTROL_LOOP=1 TASK3_MODEL=cnn cargo check -p arceos-task2-net --no-default-features
 TASK3_CONTROL_LOOP=1 TASK3_MODEL=yolo \
   TASK3_MODEL_PATH=/usr/share/task3-yolo \

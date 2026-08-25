@@ -6,10 +6,6 @@
 #include <zephyr/sys/atomic.h>
 #include <zephyr/sys/printk.h>
 
-#ifndef TASK2_RUNTIME_TRACE
-#define TASK2_RUNTIME_TRACE 0
-#endif
-
 K_MUTEX_DEFINE(task2_console_mutex);
 static atomic_t trace_quiet;
 
@@ -53,7 +49,6 @@ void task2_console_set_trace_quiet(bool quiet)
 
 void task2_console_trace_printf(const char *format, ...)
 {
-#if TASK2_RUNTIME_TRACE
 	va_list arguments;
 
 	if (atomic_get(&trace_quiet) != 0) {
@@ -67,7 +62,4 @@ void task2_console_trace_printf(const char *format, ...)
 		va_end(arguments);
 	}
 	task2_console_unlock();
-#else
-	ARG_UNUSED(format);
-#endif
 }

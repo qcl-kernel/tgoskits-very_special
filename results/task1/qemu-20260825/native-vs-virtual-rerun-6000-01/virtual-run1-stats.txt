@@ -1,0 +1,9 @@
+samples=6000
+mean_jitter_ns=2592502.59
+p99_jitter_ns=3569392
+p99_9_jitter_ns=4015712
+max_jitter_ns=4254944
+deadline_tolerance_ns=1000000
+deadline_misses=6000
+deadline_misses_zero_tolerance=6000
+deadline_misses_tolerance=5897

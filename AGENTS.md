@@ -1,5 +1,95 @@
 # AGENTS.md
 
+## Frozen Task 1–3 Physical-Board Architecture
+
+This section is a mandatory project invariant for the `very_special` Task 1–3
+work. Read it before planning or running any Task 1–3 experiment, and re-read
+it after conversation compaction, session resume, or any loss of context.
+Do not reconstruct the topology from memory or infer it from an output
+directory name.
+
+### The only official physical-board topology
+
+```text
+RK3588
+
+pCPU2 (0x200):
+  StarryOS vCPU0 / Guest CPU 0
+    image preprocessing
+      -> RKNN submission
+      -> RK3588 NPU inference
+      -> postprocessing and control decision
+
+pCPU1 (0x100), the scheduler-contention CPU:
+  StarryOS vCPU1 / Guest CPU 1
+    VirtIO-net, T2N1, CONTROL/STATUS/ACK communication
+  +
+  Zephyr vCPU0
+    10 ms periodic RTOS work and CONTROL/STATUS handling
+
+RK3588 NPU:
+  passthrough device owned only by StarryOS; it is an accelerator, not a pCPU
+```
+
+The binding and role invariants are:
+
+- StarryOS has two vCPUs with `phys_cpu_ids = [0x200, 0x100]`.
+- StarryOS Guest CPU 0 is the AI/RKNN CPU role and must run the pressure process
+  with `taskset -c 0`; it is backed by pCPU2.
+- StarryOS Guest CPU 1 is the communication role and must run `task2-net` with
+  `taskset -c 1`; it is backed by pCPU1.
+- The RK3588 NPU node `/npu@fdab0000` is passed through only to StarryOS.
+  Zephyr never owns or maps the NPU.
+- Zephyr has one vCPU with `phys_cpu_ids = [0x100]`, so it shares pCPU1 with
+  StarryOS communication vCPU1, not with the AI vCPU.
+- The official priority assignment is Zephyr 90 and StarryOS 89.
+- RR versus bounded FP-RR experiments may change only the AxVisor scheduler.
+  Guest binaries, payload, images, DTB, vCPU/pCPU placement, period, sample
+  count, and pressure/communication workload must otherwise remain identical.
+
+The end-to-end data path is:
+
+```text
+image
+  -> StarryOS vCPU0 on pCPU2
+  -> RK3588 NPU
+  -> StarryOS vCPU0 postprocessing/decision
+  -> StarryOS vCPU1 on pCPU1 sends T2N1 CONTROL
+  -> Zephyr on pCPU1 handles the control work
+  -> ACK/STATUS returns to StarryOS vCPU1
+```
+
+### What is and is not official evidence
+
+- All official Task 1 pressure A/B, Task 2 board runs, Task 3 board runs, demos,
+  screenshots, and final videos must use the frozen topology above.
+- An `ai-share` topology that places StarryOS vCPU0 and Zephyr on the same pCPU
+  is not the project architecture and must not be used in official statistics,
+  completion claims, reports, or demos. Run it only if the user explicitly asks
+  for a separately labelled ablation experiment.
+- Native Zephyr and no-contention QEMU runs are deliberate baselines and may
+  omit StarryOS/NPU or the physical-board topology. Label them as baselines;
+  never mix them into the official physical-board RR/FP-RR matrix.
+- Earlier diagnostic runs remain internal evidence only. The current official
+  communication-share result is the RR/FP-RR 3+3 matrix under
+  `results/task1/board-20260825/`.
+
+Before accepting a physical-board run as official evidence, verify all of:
+
+1. The StarryOS and Zephyr `phys_cpu_ids` match the frozen mappings above.
+2. The workload script binds RKNN to Guest CPU 0 and communication to Guest CPU 1.
+3. The NPU is passed only to StarryOS.
+4. Run metadata hashes match the intended official FIT artifacts.
+5. RKNN pressure and T2N1 communication remain live through the sampling window.
+6. No alternate topology or historical-version log is mixed into the summary.
+
+Canonical implementation references:
+
+- `scripts/board/task123-zephyr/starry.toml.in`
+- `scripts/board/task123-zephyr/zephyr.toml.in`
+- `scripts/board/task1-starry-rknn-pressure-init.sh`
+- `results/task1/board-20260825/` (locate the formal matrix configuration under `artifacts/configs/`)
+
 ## Project Skills
 
 - `update-std-tests`: project-local skill at `.claude/skills/update-std-tests/SKILL.md`

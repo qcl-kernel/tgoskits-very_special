@@ -1,0 +1,15 @@
+{
+  "acks": 200,
+  "elapsed_ms": 6241,
+  "error_rate": 0.0,
+  "max_rtt_ms": 130,
+  "mean_rtt_ms": 31.2,
+  "p50_rtt_ms": 30.0,
+  "p95_rtt_ms": 40,
+  "p99_rtt_ms": 41,
+  "retransmission_rate": 0.0,
+  "retransmissions": 0,
+  "statuses": 200,
+  "throughput_tps": 32.046,
+  "transactions": 200
+}

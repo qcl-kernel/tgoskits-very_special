@@ -8,3 +8,7 @@ target_compile_definitions(app PRIVATE RT_START_GATED=1 RT_DUMP_GATED=1)
 if(DEFINED RT_SAMPLE_COUNT)
   target_compile_definitions(app PRIVATE RT_SAMPLE_COUNT=${RT_SAMPLE_COUNT})
 endif()
+
+if(DEFINED RT_DUMP_CHUNK_ROWS)
+  target_compile_definitions(app PRIVATE RT_DUMP_CHUNK_ROWS=${RT_DUMP_CHUNK_ROWS})
+endif()

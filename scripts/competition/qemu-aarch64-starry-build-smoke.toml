@@ -18,7 +18,7 @@ args = [
 uefi = false
 to_bin = true
 shell_prefix = "root@starry:"
-shell_init_cmd = "sh /usr/bin/t2n1-run.sh"
+shell_init_cmd = "sh /usr/bin/t2n1-run.sh model-only"
 # This preparation run proves that the freshly built in-Guest ncnn endpoint
 # loads the pinned model and performs inference.  Task 2 networking is tested
 # by the separate dual-Guest scenarios, not by this PCI-only preparation VM.

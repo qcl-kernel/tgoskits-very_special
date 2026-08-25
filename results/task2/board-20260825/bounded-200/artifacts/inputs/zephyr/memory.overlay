@@ -1,0 +1,4 @@
+/* Generated; keep Zephyr physical, virtual and DMA addresses identical. */
+&sram0 {
+	reg = <0x0 0xa0000000 0x0 0x08000000>;
+};

@@ -1,0 +1,13 @@
+0b3f9c4b31550746a43868694682572d11af0bb8bc6f1684d3d00ab9a13a124e  ./TASK3-FRESH-FIXED-VS-RKNN-SUMMARY.md
+758747a8897dbde3b55cf235d7660a9a84d29ce8b39901de15fcc3c0e7c5c8c4  ./fixed-fp-rr-run1.log
+343ddb3177eff0d0a7a28f22334a7426fba7d8a7cb61cfa1293ec884c8d14223  ./fixed-fp-rr-run2.log
+0f50a1462f572c819319e092b6f051aa2adb1ec67700d96414e221f91e413a26  ./fixed-fp-rr-run3.log
+1486ce5279c4b908f76a7fc73dc4d31612296dba6a665a8844dbc19d5a557952  ./report-run1/REPORT.md
+91acb734c65bef97d463327f60990d169d951d9170d8ce66238507a838dccf93  ./report-run1/metrics.json
+10e1c0af69943eb526cd55be51a020b3e6a3150d56ecc87fa6356cb364868a9f  ./report-run2/REPORT.md
+ebfc1fb5bef81669290c85afeb77603136aed9c518f397eb659691a9e717ca9f  ./report-run2/metrics.json
+e1c206b9b709c9180ef0d4c2fa481dc76ac761ade87120dddfe7f55ba1b29b75  ./report-run3/REPORT.md
+97833902e78e4b1250b8110330a20f026ffe089aebc17562947992e0789d70f6  ./report-run3/metrics.json
+40af9a56b513ea6c4b4600b3fba66aed919cfe128920881a902b30d1c39f1feb  ./rknn-fp-rr-run1.log
+5edc717edd83b44c2d4c4fdd39f4dca5af7b8442f390a2fcca474d2bb19b41ff  ./rknn-fp-rr-run2.log
+9830eccc3096bc2887f972bf5727bd9bbf12e4b2e2d7374e6f3a1a8e726fc2d6  ./rknn-fp-rr-run3.log

@@ -5,6 +5,7 @@ set -euo pipefail
 # Guest pcaps, console evidence, exact commands, manifests, and hashes.
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+source "$repo_root/scripts/lib/task123-tools.sh"
 scenario="${1:?usage: run-starry-task23-scenario.sh SCENARIO OUTPUT_DIR}"
 output_dir="${2:?usage: run-starry-task23-scenario.sh SCENARIO OUTPUT_DIR}"
 host_config="${STARRY_TASK23_HOST_CONFIG:-scripts/test/net-dual-guest/axvisor-qemu-debug.toml}"
@@ -13,18 +14,18 @@ starry_vm_config="${STARRY_TASK23_STARRY_VM_CONFIG:-scripts/test/net-dual-guest/
 rtos_vm_config="${STARRY_TASK23_RTOS_VM_CONFIG:-${STARRY_TASK23_ZEPHYR_VM_CONFIG:-scripts/test/net-dual-guest/vm-aarch64-p2-switch-rtos.toml}}"
 rtos_name="${STARRY_TASK23_RTOS_NAME:-zephyr}"
 rtos_image="${STARRY_TASK23_RTOS_IMAGE:-${rtos_name}-task2.bin}"
-runtime_tag="${STARRY_TASK23_RUNTIME_TAG:-starry-zephyr-msix1-capture}"
 rtos_source_dir="${STARRY_TASK23_RTOS_SOURCE_DIR:-}"
 collect_rt_stat="${STARRY_TASK23_COLLECT_RT_STAT:-0}"
 serial_socket_timeout="${STARRY_TASK23_SERIAL_SOCKET_TIMEOUT:-300}"
+task_scope="${STARRY_TASK23_SCOPE:-integrated}"
 runtime_dir="$repo_root/tmp/net-dual-guest"
-socket_dir="/tmp/tgoskits-task123"
-qemu_sock="$socket_dir/qmp-${runtime_tag}.sock"
-serial_sock="$socket_dir/serial-${runtime_tag}.sock"
-capture_prefix="$runtime_dir/starry-task23-current"
-steps="$output_dir/steps.txt"
-run_log="$output_dir/run.log"
-build_log="$output_dir/build.log"
+socket_dir=""
+qemu_sock=""
+serial_sock=""
+capture_prefix=""
+steps=""
+run_log=""
+build_log=""
 run_pid=""
 runtime_rootfs=""
 
@@ -32,11 +33,10 @@ case "$rtos_name" in
     zephyr|rtthread) ;;
     *) printf 'error: unsupported RTOS name: %s\n' "$rtos_name" >&2; exit 2 ;;
 esac
-if [[ ! "$runtime_tag" =~ ^[a-zA-Z0-9._-]+$ ]]; then
-    printf 'error: invalid runtime tag: %s\n' "$runtime_tag" >&2
-    exit 2
-fi
-
+case "$task_scope" in
+    integrated|task2) ;;
+    *) printf 'error: STARRY_TASK23_SCOPE must be integrated or task2\n' >&2; exit 2 ;;
+esac
 case "$collect_rt_stat" in
     0|1) ;;
     *)
@@ -89,16 +89,33 @@ case "$scenario" in
         ;;
 esac
 
-case "$scenario" in
-    normal|drop-ack|retry-exhausted|blackout) run_mode="normal" ;;
-    *) run_mode="$scenario" ;;
-esac
+if [[ "$task_scope" == task2 ]]; then
+    case "$scenario" in
+        normal|drop-ack|retry-exhausted|blackout) run_mode="task2" ;;
+        out-of-order) run_mode="task2-out-of-order" ;;
+        invalid-parameter) run_mode="task2-invalid-parameter" ;;
+        model-rejected)
+            printf 'error: model-rejected is not a Task-2-only scenario\n' >&2
+            exit 2
+            ;;
+    esac
+else
+    case "$scenario" in
+        normal|drop-ack|retry-exhausted|blackout) run_mode="normal" ;;
+        *) run_mode="$scenario" ;;
+    esac
+fi
 
 if [[ -d "$output_dir" ]] && find "$output_dir" -mindepth 1 -print -quit | grep -q .; then
     printf 'error: output directory is not empty: %s\n' "$output_dir" >&2
     exit 1
 fi
-mkdir -p "$output_dir" "$socket_dir"
+mkdir -p "$output_dir"
+output_dir="$(realpath "$output_dir")"
+steps="$output_dir/steps.txt"
+run_log="$output_dir/run.log"
+build_log="$output_dir/build.log"
+capture_prefix="$output_dir/capture"
 
 if [[ "${ALLOW_DIRTY:-0}" != 1 ]] &&
     [[ -n "$(git -C "$repo_root" status --porcelain --untracked-files=no)" ]]; then
@@ -143,14 +160,17 @@ yolo_model="$yolo_assets/yolo11n.ncnn.bin"
 yolo_input="$yolo_assets/input.ppm"
 starry_image="$repo_root/target/aarch64-unknown-none-softfloat/release/starryos.bin"
 axvisor_image="$repo_root/target/aarch64-unknown-linux-musl/release/axvisor.bin"
-for artifact in \
-    "$rootfs" "$endpoint" "$endpoint_script" "$yolo_param" "$yolo_model" \
-    "$yolo_input" "$starry_image"; do
+required_artifacts=("$rootfs" "$endpoint" "$endpoint_script" "$starry_image")
+if [[ "$task_scope" == integrated ]]; then
+    required_artifacts+=("$yolo_param" "$yolo_model" "$yolo_input")
+fi
+for artifact in "${required_artifacts[@]}"; do
     if [[ ! -s "$artifact" ]]; then
         printf 'error: missing StarryOS artifact: %s\n' "$artifact" >&2
         exit 1
     fi
 done
+rootfs="$(realpath "$rootfs")"
 if ! e2fsck -fn "$rootfs" > "$output_dir/rootfs-preflight.log" 2>&1; then
     printf 'error: base rootfs failed the read-only filesystem check: %s\n' "$rootfs" >&2
     tail -20 "$output_dir/rootfs-preflight.log" >&2
@@ -167,21 +187,6 @@ rootfs_script_sha256="$(
     debugfs -R 'dump /usr/bin/t2n1-run.sh /dev/stdout' "$rootfs" 2>/dev/null |
         sha256sum | awk '{print $1}'
 )"
-host_yolo_param_sha256="$(sha256sum "$yolo_param" | awk '{print $1}')"
-host_yolo_model_sha256="$(sha256sum "$yolo_model" | awk '{print $1}')"
-host_yolo_input_sha256="$(sha256sum "$yolo_input" | awk '{print $1}')"
-rootfs_yolo_param_sha256="$(
-    debugfs -R 'dump /usr/share/task3-yolo/yolo11n.ncnn.param /dev/stdout' "$rootfs" 2>/dev/null |
-        sha256sum | awk '{print $1}'
-)"
-rootfs_yolo_model_sha256="$(
-    debugfs -R 'dump /usr/share/task3-yolo/yolo11n.ncnn.bin /dev/stdout' "$rootfs" 2>/dev/null |
-        sha256sum | awk '{print $1}'
-)"
-rootfs_yolo_input_sha256="$(
-    debugfs -R 'dump /usr/share/task3-yolo/input.ppm /dev/stdout' "$rootfs" 2>/dev/null |
-        sha256sum | awk '{print $1}'
-)"
 if [[ "$host_endpoint_sha256" != "$rootfs_endpoint_sha256" ]]; then
     printf 'error: rootfs endpoint does not match current release binary\n' >&2
     exit 1
@@ -190,29 +195,53 @@ if [[ "$host_script_sha256" != "$rootfs_script_sha256" ]]; then
     printf 'error: rootfs runner does not match current source script\n' >&2
     exit 1
 fi
-for asset in param model input; do
-    host_hash_variable="host_yolo_${asset}_sha256"
-    rootfs_hash_variable="rootfs_yolo_${asset}_sha256"
-    if [[ "${!host_hash_variable}" != "${!rootfs_hash_variable}" ]]; then
-        printf 'error: rootfs YOLO %s does not match current asset\n' "$asset" >&2
-        exit 1
-    fi
-done
 {
     printf 'host_endpoint_sha256=%s\n' "$host_endpoint_sha256"
     printf 'rootfs_endpoint_sha256=%s\n' "$rootfs_endpoint_sha256"
     printf 'host_script_sha256=%s\n' "$host_script_sha256"
     printf 'rootfs_script_sha256=%s\n' "$rootfs_script_sha256"
-    printf 'host_yolo_param_sha256=%s\n' "$host_yolo_param_sha256"
-    printf 'rootfs_yolo_param_sha256=%s\n' "$rootfs_yolo_param_sha256"
-    printf 'host_yolo_model_sha256=%s\n' "$host_yolo_model_sha256"
-    printf 'rootfs_yolo_model_sha256=%s\n' "$rootfs_yolo_model_sha256"
-    printf 'host_yolo_input_sha256=%s\n' "$host_yolo_input_sha256"
-    printf 'rootfs_yolo_input_sha256=%s\n' "$rootfs_yolo_input_sha256"
 } > "$output_dir/rootfs-content-hashes.txt"
 
+if [[ "$task_scope" == integrated ]]; then
+    host_yolo_param_sha256="$(sha256sum "$yolo_param" | awk '{print $1}')"
+    host_yolo_model_sha256="$(sha256sum "$yolo_model" | awk '{print $1}')"
+    host_yolo_input_sha256="$(sha256sum "$yolo_input" | awk '{print $1}')"
+    rootfs_yolo_param_sha256="$(
+        debugfs -R 'dump /usr/share/task3-yolo/yolo11n.ncnn.param /dev/stdout' "$rootfs" 2>/dev/null |
+            sha256sum | awk '{print $1}'
+    )"
+    rootfs_yolo_model_sha256="$(
+        debugfs -R 'dump /usr/share/task3-yolo/yolo11n.ncnn.bin /dev/stdout' "$rootfs" 2>/dev/null |
+            sha256sum | awk '{print $1}'
+    )"
+    rootfs_yolo_input_sha256="$(
+        debugfs -R 'dump /usr/share/task3-yolo/input.ppm /dev/stdout' "$rootfs" 2>/dev/null |
+            sha256sum | awk '{print $1}'
+    )"
+    for asset in param model input; do
+        host_hash_variable="host_yolo_${asset}_sha256"
+        rootfs_hash_variable="rootfs_yolo_${asset}_sha256"
+        if [[ "${!host_hash_variable}" != "${!rootfs_hash_variable}" ]]; then
+            printf 'error: rootfs YOLO %s does not match current asset\n' "$asset" >&2
+            exit 1
+        fi
+    done
+    {
+        printf 'host_yolo_param_sha256=%s\n' "$host_yolo_param_sha256"
+        printf 'rootfs_yolo_param_sha256=%s\n' "$rootfs_yolo_param_sha256"
+        printf 'host_yolo_model_sha256=%s\n' "$host_yolo_model_sha256"
+        printf 'rootfs_yolo_model_sha256=%s\n' "$rootfs_yolo_model_sha256"
+        printf 'host_yolo_input_sha256=%s\n' "$host_yolo_input_sha256"
+        printf 'rootfs_yolo_input_sha256=%s\n' "$rootfs_yolo_input_sha256"
+    } >> "$output_dir/rootfs-content-hashes.txt"
+fi
+
+socket_dir="$(create_task123_runtime_dir)"
+qemu_sock="$socket_dir/qmp.sock"
+serial_sock="$socket_dir/serial.sock"
+
 stop_owned_run() {
-    if [[ -S "$qemu_sock" ]]; then
+    if [[ -n "$run_pid" && -S "$qemu_sock" ]]; then
         python3 "$repo_root/scripts/test/net-dual-guest/qmp_link.py" "$qemu_sock" quit \
             >/dev/null 2>&1 || true
     fi
@@ -220,52 +249,30 @@ stop_owned_run() {
         kill -TERM "$run_pid" 2>/dev/null || true
         wait "$run_pid" 2>/dev/null || true
     fi
-    for socket_path in "$qemu_sock" "$serial_sock"; do
-        while read -r owner_pid; do
-            [[ -n "$owner_pid" ]] && kill -TERM "$owner_pid" 2>/dev/null || true
-        done < <(lsof -t -- "$socket_path" 2>/dev/null || true)
-    done
-    if [[ -n "$runtime_rootfs" ]]; then
-        rm -f -- "$runtime_rootfs"
+    if [[ -n "$socket_dir" && -d "$socket_dir" ]]; then
+        remove_task123_runtime_dir "$socket_dir"
     fi
 }
 trap stop_owned_run EXIT
 
-for socket_path in "$qemu_sock" "$serial_sock"; do
-    if lsof -t -- "$socket_path" >/dev/null 2>&1; then
-        printf 'error: runtime socket is owned by another process: %s\n' "$socket_path" >&2
-        exit 1
-    fi
-    rm -f -- "$socket_path"
-done
-rm -f -- "$capture_prefix.vm1.pcap" "$capture_prefix.vm2.pcap"
-
-mkdir -p "$runtime_dir/${rtos_name}-task2"
-cp "$selected_rtos_dir/$rtos_image" "$runtime_dir/${rtos_name}-task2/$rtos_image"
-cp "$selected_rtos_dir/manifest.toml" "$runtime_dir/${rtos_name}-task2/manifest.toml"
 runtime_rtos_vm_config="$output_dir/rtos.runtime.toml"
 python3 "$repo_root/scripts/test/net-dual-guest/render_vm_entry.py" \
     "$selected_rtos_dir/manifest.toml" \
     "$rtos_vm_config_path" \
-    "$runtime_rtos_vm_config"
+    "$runtime_rtos_vm_config" \
+    --kernel-path "$selected_rtos_dir/$rtos_image"
 
 # The outer StarryOS filesystem is writable.  Every AxVisor run therefore gets
 # a disposable copy: a timeout or forced QEMU exit must not corrupt the clean
 # image used by later scenarios.
-runtime_rootfs="$runtime_dir/runtime-rootfs-${runtime_tag}-$$.img"
+runtime_rootfs="$socket_dir/rootfs.img"
 cp --reflink=auto --sparse=always "$rootfs" "$runtime_rootfs"
 runtime_qemu_config="$output_dir/qemu.runtime.toml"
-python3 - "$qemu_config_path" "$runtime_qemu_config" "$runtime_rootfs" <<'PY'
-import sys
-from pathlib import Path
-
-source, output, rootfs = map(Path, sys.argv[1:])
-text = source.read_text()
-marker = "file=${workspace}/tmp/axbuild/rootfs/rootfs-aarch64-alpine.img"
-if marker not in text:
-    raise SystemExit(f"error: QEMU config does not contain the expected rootfs marker: {source}")
-output.write_text(text.replace(marker, f"file={rootfs.resolve()}"))
-PY
+python3 "$repo_root/scripts/test/net-dual-guest/render_qemu_runtime.py" \
+    "$qemu_config_path" "$runtime_qemu_config" \
+    --rootfs "$runtime_rootfs" \
+    --serial-socket "$serial_sock" \
+    --qmp-socket "$qemu_sock"
 
 {
     if [[ "$collect_rt_stat" == 1 ]]; then
@@ -280,7 +287,15 @@ PY
     printf 'attach 1\n'
     printf 'expect 120 root@starry:/root #\n'
     printf 'cmd (sleep 2; sh /usr/bin/t2n1-run.sh %s) &\n' "$run_mode"
-    printf 'expect 30 TASK3_MODEL_READY model=yolo11n.ncnn\n'
+    if [[ "$task_scope" == integrated ]]; then
+        printf 'expect 30 TASK3_MODEL_READY model=yolo11n.ncnn\n'
+    else
+        case "$scenario" in
+            normal|drop-ack|retry-exhausted|blackout) task2_ready_mode="task2" ;;
+            *) task2_ready_mode="$scenario" ;;
+        esac
+        printf 'expect 30 TASK2_CONTROLLER_READY mode=%s\n' "$task2_ready_mode"
+    fi
     case "$scenario" in
         normal)
             printf 'attach 2\n'
@@ -290,13 +305,11 @@ PY
             printf 'expect 180 STARRY_T2N1_STATUS_DELIVERED.*request=3\n'
             ;;
         drop-ack)
-            printf 'attach 2\n'
-            printf 'expect 120 TASK2_FAULT_DROP_ACK seq=1\n'
-            printf 'attach 1\n'
             printf 'expect 30 STARRY_T2N1_RETRANSMIT seq=1 attempt=1\n'
             printf 'expect 30 STARRY_T2N1_ACK seq=1\n'
             printf 'expect 30 STARRY_T2N1_PASS\n'
             printf 'attach 2\n'
+            printf 'expect 120 TASK2_FAULT_DROP_ACK seq=1\n'
             printf 'expect 30 TASK2_FAULT_DROP_ACK_RECOVERED duplicate_seq=1\n'
             ;;
         retry-exhausted)
@@ -338,7 +351,7 @@ PY
             printf 'expect 20 virtnet: blackout OFF\n'
             printf 'attach 1\n'
             printf 'expect 30 STARRY_T2N1_RECOVERED state=Active\n'
-            printf 'expect 180 STARRY_T2N1_FAULT_RECOVERY_COMPLETE mode=normal.*safe_observed=true recovered=true\n'
+            printf 'expect 180 STARRY_T2N1_FAULT_RECOVERY_COMPLETE mode=%s.*safe_observed=true recovered=true\n' "$run_mode"
             printf 'attach 2\n'
             printf 'expect 60 TASK2_CONTROL_RECEIVED.*request=\n'
             ;;
@@ -363,6 +376,7 @@ PY
     printf 'git_head=%s\n' "$(git -C "$repo_root" rev-parse HEAD)"
     printf 'rtos_name=%s\n' "$rtos_name"
     printf 'rtos_variant=%s\n' "$rtos_variant"
+    printf 'task_scope=%s\n' "$task_scope"
     printf 'host_config=%s\n' "$host_config"
     printf 'qemu_config=%s\n' "$qemu_config"
     printf 'runtime_qemu_config=%s\n' "$runtime_qemu_config"
@@ -374,6 +388,7 @@ PY
         "$host_config" "$runtime_qemu_config" "$starry_vm_config" "$runtime_rtos_vm_config" "$runtime_rootfs"
 } > "$output_dir/command.txt"
 
+acquire_task123_qemu_slot "$repo_root"
 (
     cd "$repo_root"
     cargo xtask axvisor qemu \
@@ -420,11 +435,11 @@ for pcap in "$capture_prefix.vm1.pcap" "$capture_prefix.vm2.pcap"; do
         exit 1
     fi
 done
-cp "$capture_prefix.vm1.pcap" "$output_dir/starry.pcap"
-cp "$capture_prefix.vm2.pcap" "$output_dir/${rtos_name}.pcap"
+mv "$capture_prefix.vm1.pcap" "$output_dir/starry.pcap"
+mv "$capture_prefix.vm2.pcap" "$output_dir/${rtos_name}.pcap"
 cp "$selected_rtos_dir/manifest.toml" "$output_dir/${rtos_name}-manifest.toml"
 cp "$host_config_path" "$output_dir/host-config.toml"
-cp "$qemu_config_path" "$output_dir/qemu.toml"
+cp "$qemu_config_path" "$output_dir/qemu.source.toml"
 cp "$starry_vm_config_path" "$output_dir/vm-starry.toml"
 cp "$rtos_vm_config_path" "$output_dir/vm-${rtos_name}.toml"
 
@@ -438,6 +453,7 @@ python3 "$repo_root/scripts/test/net-dual-guest/verify_pcap.py" \
     | tee "$output_dir/verify-pcap.log"
 python3 "$repo_root/scripts/test/net-dual-guest/verify_starry_task23.py" \
     --scenario "$scenario" \
+    --scope "$task_scope" \
     --starry-pcap "$output_dir/starry.pcap" \
     --zephyr-pcap "$output_dir/${rtos_name}.pcap" \
     --run-log "$run_log" | tee "$output_dir/verify-scenario.log"
@@ -445,9 +461,11 @@ python3 "$repo_root/scripts/test/net-dual-guest/verify_starry_task23.py" \
 {
     sha256sum "$rootfs"
     sha256sum "$endpoint"
-    sha256sum "$yolo_param"
-    sha256sum "$yolo_model"
-    sha256sum "$yolo_input"
+    if [[ "$task_scope" == integrated ]]; then
+        sha256sum "$yolo_param"
+        sha256sum "$yolo_model"
+        sha256sum "$yolo_input"
+    fi
     sha256sum "$starry_image"
     sha256sum "$selected_rtos_dir/$rtos_image"
     sha256sum "$axvisor_image"

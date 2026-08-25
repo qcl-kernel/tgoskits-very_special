@@ -1,0 +1,18 @@
+{
+  "all_counters_closed": true,
+  "error_rate": 0.0,
+  "max_rtt_ms_observed": 131,
+  "mean_rtt_ms_across_runs": 31.408333333333335,
+  "p50_rtt_ms_median_run": 30.0,
+  "p95_rtt_ms_median_run": 40,
+  "p99_rtt_ms_median_run": 41,
+  "runs": 3,
+  "throughput_tps_mean": 31.834,
+  "throughput_tps_range": [
+    31.675,
+    32.046
+  ],
+  "total_retransmissions": 0,
+  "total_transactions": 600,
+  "transactions_per_run": 200
+}

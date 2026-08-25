@@ -1,7 +1,10 @@
 /*
  * AxVisor exposes the RK3588 GIC register windows to this virtualized Guest.
- * The PL011 console and slot-0 virtio-mmio device remain at their QEMU-virt
- * guest addresses because AxVisor creates both as virtual devices.
+ * The board host FDT selects a non-PL011 console.  The explicit PL011
+ * `console0` therefore uses the first AArch64 automatic MMIO/IRQ slots, and
+ * the virtio-net device uses the following slots.  Zephyr has a compiled
+ * devicetree, so keep those guest resources aligned with AxVM's deterministic
+ * device plan.
  */
 
 &gic {
@@ -11,4 +14,14 @@
 
 &its {
 	status = "disabled";
+};
+
+&uart0 {
+	reg = <0x0 0x0b000000 0x0 0x1000>;
+	interrupts = <0x0 0x0 0x2 0x0>;
+};
+
+&virtio_mmio_switch {
+	reg = <0x0 0x0b001000 0x0 0x200>;
+	interrupts = <0x0 0x1 0x2 0xa0>;
 };

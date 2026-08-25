@@ -4,7 +4,7 @@ set -euo pipefail
 # Build static cyclictest (rt-tests) and stress-ng for aarch64 musl and pack
 # them into the Linux initramfs used by the RT-partition measurement flow.
 #
-# Source trees are expected under SRC_ROOT (default ~/.local/src):
+# Source trees are expected under SRC_ROOT (default .deps/rt-partition/src):
 #   rt-tests/            https://git.kernel.org/pub/scm/utils/rt-tests/rt-tests.git
 #   numactl-2.0.18/      https://github.com/numactl/numactl/releases/tag/v2.0.18
 #   stress-ng/           https://github.com/ColinIanKing/stress-ng
@@ -15,16 +15,19 @@ set -euo pipefail
 #   tmp/rt-partition/rt-linux-initramfs.cpio.gz   (busybox rootfs + tools + init)
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+# shellcheck source=scripts/lib/task123-tools.sh
+source "$repo_root/scripts/lib/task123-tools.sh"
 out_dir="${OUT_DIR:-$repo_root/tmp/rt-partition}"
-src_root="${SRC_ROOT:-$HOME/.local/src}"
-cross_cc="${CROSS_CC:-$HOME/.local/toolchains/aarch64-linux-musl-cross/bin/aarch64-linux-musl-gcc}"
+src_root="${SRC_ROOT:-$repo_root/.deps/rt-partition/src}"
+cross_cc="$(resolve_task123_tool CROSS_CC aarch64-linux-musl-gcc)"
 rt_tests_src="${RTTESTS_SRC:-$src_root/rt-tests}"
 numa_src="${NUMA_SRC:-$src_root/numactl-2.0.18}"
 stress_ng_src="${STRESS_NG_SRC:-$src_root/stress-ng}"
-base_initramfs="${BASE_INITRAMFS:-$HOME/tgoskits-realtime/tmp/initramfs-custom}"
+base_initramfs="${BASE_INITRAMFS:-$repo_root/tmp/initramfs-custom}"
 sched_compat_src="$repo_root/scripts/test/rt-partition/musl-sched-compat.c"
 musl_sigev_patch="$repo_root/scripts/test/rt-partition/rt-tests-musl-sigev.patch"
 musl_stack_patch="$repo_root/scripts/test/rt-partition/rt-tests-musl-stack.patch"
+temporary_parent="${TMPDIR:-/tmp}"
 
 for path in "$cross_cc" "$rt_tests_src" "$numa_src" "$stress_ng_src" "$base_initramfs" \
     "$sched_compat_src" "$musl_sigev_patch" "$musl_stack_patch"; do
@@ -70,7 +73,8 @@ if [[ ! -x "$out_dir/tools/stress-ng" ]]; then
 fi
 
 # --- pack initramfs ---------------------------------------------------------
-root_dir="$(mktemp -d /tmp/rt-initramfs-root.XXXXXX)"
+mkdir -p "$temporary_parent"
+root_dir="$(mktemp -d "$temporary_parent/rt-initramfs-root.XXXXXX")"
 trap 'rm -rf "$root_dir"' EXIT
 
 gzip -dc "$base_initramfs" | (cd "$root_dir" && cpio -idm --quiet)

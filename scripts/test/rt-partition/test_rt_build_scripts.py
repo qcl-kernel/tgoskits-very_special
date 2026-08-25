@@ -87,12 +87,32 @@ class RtBuildScriptsTest(unittest.TestCase):
         self.assertIn('out_dir="$(realpath -m "$out_dir")"', BUILD_ZEPHYR)
         self.assertIn('build_dir="$(realpath -m "$build_dir")"', BUILD_ZEPHYR)
 
+    def test_zephyr_build_parameterizes_board_and_memory_cell_width(self):
+        self.assertIn(
+            'zephyr_board="${ZEPHYR_BOARD:-qemu_cortex_a53}"', BUILD_ZEPHYR
+        )
+        self.assertIn(
+            'memory_address_cells="${ZEPHYR_MEMORY_ADDRESS_CELLS:-2}"',
+            BUILD_ZEPHYR,
+        )
+        self.assertIn('-DBOARD="$zephyr_board"', BUILD_ZEPHYR)
+        self.assertIn("board=%s", BUILD_ZEPHYR)
+        self.assertIn("memory_address_cells=%s", BUILD_ZEPHYR)
+
     def test_zephyr_build_accepts_a_board_guest_overlay(self):
         self.assertIn('extra_overlay="${ZEPHYR_EXTRA_OVERLAY:-}"', BUILD_ZEPHYR)
         self.assertIn('overlay_files=("$overlay")', BUILD_ZEPHYR)
         self.assertIn('overlay_files+=("$(realpath "$extra_overlay")")', BUILD_ZEPHYR)
         self.assertIn('IFS=";"; printf "%s" "${overlay_files[*]}"', BUILD_ZEPHYR)
         self.assertIn('printf \'extra_overlay=%s\\n\'', BUILD_ZEPHYR)
+
+    def test_atk_native_overlay_matches_the_physical_console(self):
+        overlay = (
+            ROOT / "scripts/test/zephyr-periodic/atk-dlrk3588-native.overlay"
+        ).read_text()
+        self.assertIn("&uart2", overlay)
+        self.assertIn("current-speed = <1500000>;", overlay)
+        self.assertIn('status = "okay";', overlay)
 
     def test_zephyr_build_records_the_uart_start_gate(self):
         self.assertIn('start_gated="${ZEPHYR_START_GATED:-1}"', BUILD_ZEPHYR)
@@ -154,8 +174,12 @@ class RtBuildScriptsTest(unittest.TestCase):
 
     def test_native_zephyr_runner_archives_complete_evidence(self):
         runner = NATIVE_RUNNER_PATH.read_text()
-        self.assertIn("PERIODIC LATENCY COMPLETE samples=300", runner)
-        self.assertIn("expected 300 native Zephyr samples", runner)
+        self.assertIn(
+            'PERIODIC LATENCY COMPLETE samples=$sample_count', runner
+        )
+        self.assertIn(
+            'expected {sample_count} native Zephyr samples', runner
+        )
         self.assertIn("rt_latency_stats.py", runner)
         self.assertIn("sha256sums", runner)
         self.assertIn("-cpu cortex-a72", runner)
@@ -175,6 +199,17 @@ class RtBuildScriptsTest(unittest.TestCase):
         self.assertIn("static struct latency_sample samples[SAMPLE_COUNT]", ZEPHYR_MAIN)
         self.assertIn("print_samples(samples)", ZEPHYR_MAIN)
 
+    def test_zephyr_sampler_flow_controls_large_csv_dumps(self):
+        self.assertIn("#ifndef RT_DUMP_CHUNK_ROWS", ZEPHYR_MAIN)
+        self.assertIn("PERIODIC LATENCY CHUNK end=%lld", ZEPHYR_MAIN)
+        self.assertIn("wait_for_console_byte('d')", ZEPHYR_MAIN)
+        self.assertIn(
+            'dump_chunk_rows="${ZEPHYR_DUMP_CHUNK_ROWS:-256}"',
+            BUILD_ZEPHYR,
+        )
+        self.assertIn('-DRT_DUMP_CHUNK_ROWS="$dump_chunk_rows"', BUILD_ZEPHYR)
+        self.assertIn("dump_chunk_rows=%s", BUILD_ZEPHYR)
+
     def test_matrix_runner_hashes_archived_build_inputs(self):
         self.assertIn(
             'linux_image="${RT_LINUX_KERNEL_OVERRIDE:-${repo_root}/tmp/rt-partition/linux-qemu}"',
@@ -183,7 +218,14 @@ class RtBuildScriptsTest(unittest.TestCase):
         self.assertIn('cp "$linux_image" "$out_dir/linux-qemu"', MATRIX_RUNNER)
         self.assertIn('printf \'linux_kernel=%s\\n\' "$linux_image"', MATRIX_RUNNER)
         self.assertIn('lines[index] = f\'kernel_path = "{linux_image}"\'', MATRIX_RUNNER)
-        self.assertIn('cp "$work/rt-linux-initramfs.cpio.gz" "$out_dir/"', MATRIX_RUNNER)
+        self.assertIn(
+            'linux_initramfs="${RT_LINUX_INITRAMFS:-${repo_root}/tmp/rt-partition/rt-linux-initramfs.cpio.gz}"',
+            MATRIX_RUNNER,
+        )
+        self.assertIn(
+            'cp "$linux_initramfs" "$out_dir/rt-linux-initramfs.cpio.gz"',
+            MATRIX_RUNNER,
+        )
         self.assertIn('linux_trace="${RT_LINUX_TRACE:-disabled}"', MATRIX_RUNNER)
         self.assertIn('linux_virtual_timer_only="${RT_LINUX_VIRTUAL_TIMER_ONLY:-0}"', MATRIX_RUNNER)
         self.assertIn('linux_wfi_policy="${RT_LINUX_WFI_POLICY:-auto}"', MATRIX_RUNNER)

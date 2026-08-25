@@ -6,11 +6,11 @@
 > results demonstrate reproducibility and relative behavior, not a physical
 > hardware worst-case latency guarantee.
 
-## Current delivery status (2026-08-21)
+## Current delivery status (2026-08-25)
 
 > **CURRENT STATUS / HISTORICAL BODY:** Sections below retain the original
 > design narrative for traceability. Where they describe an earlier scheduler
-> state, the current closure report and scorecard take precedence.
+> state, the current closure and implementation reports take precedence.
 
 This document began as the Phase-2 design baseline. The current implementation
 and acceptance status supersede the early “cooperative FIFO / preemption not
@@ -28,9 +28,34 @@ complete” wording below:
   in `results/task1/two-gap-closure-20260820.md` and
   `results/task1/irq-tail-preemption-design.md`.
 
-The remainder of this document is retained for path-level design history. For
-the final score and claim boundary, use the current closure report and the
-submission scorecard rather than the historical caveats in Sections 1 and 3.
+The official RK3588 physical-board topology is:
+
+```text
+pCPU2: StarryOS vCPU0 -> preprocessing -> RKNN/NPU -> postprocessing
+
+pCPU1: StarryOS vCPU1 -> VirtIO/T2N1 communication
+          priority 89          +
+       Zephyr vCPU0 -> 10 ms periodic/control work
+          priority 90
+       Both are scheduled by bounded-service FP-RR.
+
+RK3588 NPU: owned only by StarryOS; it is not a pCPU.
+```
+
+This communication-share topology is the only official product topology. Its
+board matrix completed RR 3 runs and FP-RR 3 runs, each with 6000
+10-ms samples. Median P99 jitter changed from 0.621 ms to 0.278 ms, a 55.3%
+reduction. AI/RTOS sharing experiments remain useful high-contention
+ablations, but they do not define the product topology and do not enter the
+official board statistics or demo. A no-contention native/virtualized QEMU
+baseline shows RR and FP-RR remain close when no sustained competitor exists.
+
+The remainder of this document is retained for path-level design history. In
+particular, early dedicated-pCPU, cooperative-FIFO, Linux cyclictest, and
+preemption-incomplete statements describe earlier phases and are not the
+current architecture or acceptance status. For the final Chinese submission
+narrative and evidence, use `very_special-成果材料/00-总体架构与设计.md` and
+`very_special-成果材料/01-Task1-实时调度设计与结果.md`.
 
 ## 1. Goal and Claim Boundary
 
@@ -326,19 +351,25 @@ still lacked guest-uptime markers. The final gated 20-second smoke recorded
 
 ### 6.4 Native Zephyr on QEMU
 
-| Metric | Result |
-|---|---:|
-| samples | 300 |
-| mean jitter | 405.783 us |
-| p99 jitter | 599.056 us |
-| max jitter | 836.048 us |
+| Metric | Native Zephyr | AxVisor RR + Zephyr | AxVisor FP-RR + Zephyr |
+|---|---:|---:|---:|
+| samples | 6000 | 6000 | 6000 |
+| mean jitter | 0.178 ms | 2.641 ms | 2.593 ms |
+| p99 jitter | 0.422 ms | 3.387 ms | 3.569 ms |
+| p99.9 jitter | 0.474 ms | 3.876 ms | 4.016 ms |
+| max jitter | 1.748 ms | 4.030 ms | 4.255 ms |
+| over 1 ms | 1 | 5938 | 5897 |
 
-The raw log, image, manifest, command, CSV, statistics, metadata, and hashes
-are in `results/task1/native-zephyr/`.
+Native Zephyr directly owns the QEMU CPU, GIC, and timer. Both virtualized
+arms keep the Zephyr scheduler and workload identical and change only the
+AxVisor host scheduler. With only one Zephyr vCPU and no sustained co-located
+competitor, FP-RR improves mean jitter by 1.82% over RR but increases p99 by
+5.39%. This three-arm run therefore establishes the native/virtualized gap and
+the no-contention boundary; it is not evidence of broad FP-RR tail improvement.
 
-The formal `stress-rt` result remains above native QEMU by 51.32% in mean,
-35.25% at p99, and 5.58% at max. Virtualization overhead and host scheduling
-noise therefore remain measurable even after partitioning.
+The raw logs, CSVs, configurations, source fingerprints, statistics, and
+hashes are in
+`results/task1/qemu-20260825/native-vs-virtual-rerun-6000-01/`.
 
 ### 6.5 Queue Overload Replay
 
@@ -409,7 +440,7 @@ ZEPHYR_MEMORY_BASE=0x40000000 \
   OUT_DIR=tmp/rt-partition/native-zephyr \
   BUILD_DIR=tmp/rt-partition/native-zephyr/build \
   scripts/test/rt-partition/build-zephyr-periodic.sh
-QEMU_BIN=/home/huhu/.local/bin/qemu-system-aarch64 \
+QEMU_BIN=/path/to/qemu-system-aarch64 \
   scripts/test/rt-partition/run-native-zephyr.sh
 
 # Deterministic overload replay
@@ -420,10 +451,10 @@ python3 scripts/test/rt-partition/virq_overload_model.py
 
 - QEMU TCG has host scheduling and instruction-count timing artifacts; effects
   below 50 us are not treated as hardware evidence.
-- No physical board is available, so physical GIC, cache, and interrupt WCET
-  remain unmeasured.
-- Fixed-priority preemption and reschedule IPI are not complete in the final
-  branch.
+- QEMU native/virtualized numbers are TCG-relative and cannot be promoted to
+  RK3588 physical GIC, cache, timer, or interrupt WCET bounds.
+- The official communication-share physical-board matrix is complete at 3+3
+  runs. AI-share is a high-contention ablation, not a second official matrix.
 - CNTP remains software-emulated, so dedicated placement cannot safely remove
   all WFI exits.
 - The guest kernel lacks `CONFIG_NO_HZ_FULL`; it logs `nohz unsupported`.

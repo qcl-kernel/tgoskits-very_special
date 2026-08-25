@@ -12,6 +12,14 @@
 #endif
 #define SAMPLE_COUNT RT_SAMPLE_COUNT
 
+#ifndef RT_DUMP_CHUNK_ROWS
+#define RT_DUMP_CHUNK_ROWS 256
+#endif
+
+#if RT_DUMP_CHUNK_ROWS <= 0
+#error "RT_DUMP_CHUNK_ROWS must be positive"
+#endif
+
 #ifndef RT_START_DELAY_MS
 #define RT_START_DELAY_MS 0
 #endif
@@ -24,6 +32,10 @@ struct latency_sample {
 };
 
 static struct latency_sample samples[SAMPLE_COUNT];
+
+#ifdef RT_DUMP_GATED
+static void wait_for_console_byte(unsigned char expected);
+#endif
 
 static int64_t cycles_to_ns(int64_t cycles)
 {
@@ -39,6 +51,16 @@ static void print_samples(const struct latency_sample *captured)
 		       captured[sequence].deadline_ns,
 		       captured[sequence].actual_ns,
 		       captured[sequence].jitter_ns);
+		const int64_t rows_sent = sequence + 1;
+
+		if (rows_sent % RT_DUMP_CHUNK_ROWS == 0 || rows_sent == SAMPLE_COUNT) {
+			printk("PERIODIC LATENCY CHUNK end=%lld\n", rows_sent);
+#ifdef RT_DUMP_GATED
+			if (rows_sent != SAMPLE_COUNT) {
+				wait_for_console_byte('d');
+			}
+#endif
+		}
 	}
 }
 

@@ -35,6 +35,9 @@ from pathlib import Path
 DUMP_BEGIN = "CAPDUMP_BEGIN"
 DUMP_END = "CAPDUMP_END"
 CAPTURE_DUMP_TIMEOUT_SECONDS = 180
+# QEMU's serial socket accepts a whole write even when the attached Guest's
+# emulated PL011 receive FIFO cannot consume a pasted command atomically.
+SERIAL_COMMAND_BYTE_DELAY_SECONDS = 0.002
 
 PCAP_GLOBAL_HEADER = bytes.fromhex(
     "d4c3b2a1"  # magic, little-endian
@@ -259,6 +262,12 @@ class ConsoleDriver:
                 return False
         return False
 
+    def send_command(self, command: str) -> None:
+        """Pace shell input so a small emulated UART FIFO cannot drop its tail."""
+        for byte in (command + "\n").encode():
+            self.conn.sendall(bytes((byte,)))
+            time.sleep(SERIAL_COMMAND_BYTE_DELAY_SECONDS)
+
     def attach(self, vm_id: int) -> None:
         for _ in range(4):
             if self.attached and self.last_vm == vm_id:
@@ -284,7 +293,7 @@ class ConsoleDriver:
         """Stream the in-hypervisor capture and write one pcap per Guest."""
         self.dump_lines = []
         self.dumping = True
-        self.conn.sendall(b"virtnet capture dump\n")
+        self.send_command("virtnet capture dump")
         deadline = time.time() + CAPTURE_DUMP_TIMEOUT_SECONDS
         got_end = False
         while time.time() < deadline and not self.closed:
@@ -338,77 +347,19 @@ class ConsoleDriver:
         destination.mkdir(parents=True, exist_ok=True)
         self.write_log("\n[driver] progress watchdog fired; collecting post-stall forensics\n")
 
+        # Preserve the serial state exactly as observed at the failure.  Do not
+        # send shell commands here: after an expectation timeout we cannot
+        # prove whether input is routed to Axvisor or to a guest.  The old
+        # best-effort path could reattach Linux and then inject
+        # `virtnet capture dump` into the guest, changing the system under
+        # investigation and even powering it off.  QMP snapshots are
+        # out-of-band and therefore safe in every console state.
+        (destination / "serial-tail.bin").write_bytes(self.tail)
+
         if qmp_sock:
             collect_qmp_forensics(qmp_sock, artifact_dir)
         else:
             (destination / "qmp-error.txt").write_text("QMP socket was not configured\n")
-
-        actions = [
-            (b"\x18h", "detach to Axvisor shell"),
-            (b"rt stat\n", "RT snapshot 1"),
-            (b"vmexit stat\n", "VM-exit snapshot 1"),
-            (b"rt stat\n", "RT snapshot 2"),
-            (b"vmexit stat\n", "VM-exit snapshot 2"),
-            (b"vm console 1\n", "reattach Linux VM"),
-        ]
-        action_log = []
-        for payload, description in actions:
-            try:
-                self.conn.sendall(payload)
-                action_log.append(f"sent: {description}")
-            except OSError as error:
-                action_log.append(f"failed: {description}: {error}")
-            self.hold_ignoring_watchdog(1.0)
-        (destination / "serial-actions.txt").write_text("\n".join(action_log) + "\n")
-        (destination / "serial-tail.bin").write_bytes(self.tail)
-        self.dumping = True
-        try:
-            self.conn.sendall(b"virtnet capture dump\n")
-        except OSError as error:
-            self.dumping = False
-            print(f"error: capture dump unavailable: {error}", file=sys.stderr)
-            return
-        deadline = time.time() + CAPTURE_DUMP_TIMEOUT_SECONDS
-        got_end = False
-        while time.time() < deadline and not self.closed:
-            self.poll_reads()
-            joined = "".join(self.dump_lines)
-            if DUMP_END in joined:
-                got_end = True
-                break
-            time.sleep(0.3)
-        self.dumping = False
-        if not got_end:
-            print("error: capture dump did not complete", file=sys.stderr)
-            return
-        joined = "".join(self.dump_lines)
-        begin = joined.find(DUMP_BEGIN)
-        end = joined.find(DUMP_END)
-        body = joined[begin + len(DUMP_BEGIN):end]
-        frames = {1: [], 2: []}
-        for line in body.splitlines():
-            match = re.match(r"CAPTURE (\d+) (\d+) ([0-9a-f]+)", line.strip())
-            if not match:
-                continue
-            vm = int(match.group(1))
-            nanos = int(match.group(2))
-            frame = bytes.fromhex(match.group(3))
-            frames.setdefault(vm, []).append((nanos, frame))
-        prefix = destination / "capture"
-        for vm, records in sorted(frames.items()):
-            pcap_path = prefix.with_name(f"{prefix.name}.vm{vm}.pcap")
-            with pcap_path.open("wb") as pcap_file:
-                pcap_file.write(PCAP_GLOBAL_HEADER)
-                for nanos, frame in records:
-                    seconds = nanos // 1_000_000_000
-                    micros = (nanos // 1_000) % 1_000_000
-                    length = len(frame)
-                    pcap_file.write(
-                        struct.pack("<IIII", seconds, micros, length, length)
-                    )
-                    pcap_file.write(frame)
-            print(f"pcap: wrote {len(records)} frames to {pcap_path}")
-        self.dump_lines = []
 
 
     def qmp_quit(self, qmp_sock: str) -> None:
@@ -499,7 +450,7 @@ def main() -> int:
             driver.conn.sendall(encoded)
             time.sleep(0.3)
         elif step.startswith("cmd "):
-            driver.conn.sendall((step.split(" ", 1)[1] + "\n").encode())
+            driver.send_command(step.split(" ", 1)[1])
             time.sleep(0.3)
         elif step.startswith("expect "):
             _, seconds, pattern = step.split(" ", 2)

@@ -41,6 +41,35 @@ def frame(
 
 
 class VerifyStarryTask23Tests(unittest.TestCase):
+    def test_task2_scope_accepts_protocol_evidence_without_task3_model_markers(self) -> None:
+        frames = []
+        for sequence in range(1, 4):
+            frames.extend(
+                (
+                    frame(
+                        src=VERIFY.STARRY_IP,
+                        dst=VERIFY.ZEPHYR_IP,
+                        kind=VERIFY.KIND_CONTROL,
+                        sequence=sequence,
+                    ),
+                    frame(
+                        src=VERIFY.ZEPHYR_IP,
+                        dst=VERIFY.STARRY_IP,
+                        kind=VERIFY.KIND_STATUS,
+                        sequence=sequence,
+                    ),
+                )
+            )
+        log = "\n".join(
+            (
+                "TASK2_CONTROLLER_READY mode=task2 source=frozen-control",
+                "STARRY_T2N1_PASS",
+                "STARRY_T2N1_STATUS_DELIVERED request=3",
+            )
+        )
+
+        self.assertEqual(VERIFY.verify_task2_normal(frames, log), [])
+
     def test_retry_exhaustion_requires_five_retries_and_no_ack(self) -> None:
         frames = [
             frame(
@@ -191,6 +220,49 @@ class VerifyStarryTask23Tests(unittest.TestCase):
 
         self.assertEqual(VERIFY.verify_blackout(frames, complete_log), [])
 
+    def test_task2_blackout_accepts_task2_recovery_mode(self) -> None:
+        frames = [
+            frame(
+                src=VERIFY.STARRY_IP,
+                dst=VERIFY.ZEPHYR_IP,
+                kind=VERIFY.KIND_CONTROL,
+                sequence=1,
+            ),
+            frame(
+                src=VERIFY.ZEPHYR_IP,
+                dst=VERIFY.STARRY_IP,
+                kind=VERIFY.KIND_STATUS,
+                sequence=1,
+            ),
+            frame(
+                src=VERIFY.STARRY_IP,
+                dst=VERIFY.ZEPHYR_IP,
+                kind=VERIFY.KIND_CONTROL,
+                sequence=1,
+            ),
+            frame(
+                src=VERIFY.ZEPHYR_IP,
+                dst=VERIFY.STARRY_IP,
+                kind=VERIFY.KIND_STATUS,
+                sequence=1,
+            ),
+        ]
+        task2_log = "\n".join(
+            (
+                "TASK2_CONTROL_RECEIVED seq=1 request=1",
+                "virtnet: blackout ON",
+                "STARRY_T2N1_SAFE source=protocol reason=RetryExhausted",
+                "TASK2_SAFE state=Safe event=HeartbeatTimeout",
+                "virtnet: blackout OFF",
+                "STARRY_T2N1_RECOVERED state=Active",
+                "STARRY_T2N1_FAULT_RECOVERY_COMPLETE mode=task2 "
+                "safe_observed=true recovered=true",
+                "TASK2_CONTROL_RECEIVED seq=1 request=3",
+            )
+        )
+
+        self.assertEqual(VERIFY.verify_task2_only_blackout(frames, task2_log), [])
+
     def test_yolo_model_rejection_keeps_heartbeat_but_emits_no_control(self) -> None:
         frames = [
             frame(
@@ -229,6 +301,29 @@ class VerifyStarryTask23Tests(unittest.TestCase):
             ),
             [],
         )
+
+    def test_model_ready_survives_a_guest_console_handoff(self) -> None:
+        interleaved_zephyr_lines = "\n".join(
+            f"TASK2_HEARTBEAT_RECEIVED peer_uptime_ms={index}"
+            for index in range(14)
+        )
+        log = (
+            "TASK3_MODEL_READY model=yolo11n.ncnn runtime=ncnn ncnn_revision=\n"
+            "\n[Axvisor] attached VM[2] console; use Ctrl+X, then h to return "
+            "to the shell\n"
+            f"{interleaved_zephyr_lines}\n"
+            "\n[Axvisor] attached VM[1] console; use Ctrl+X, then h to return "
+            "to the shell\n"
+            "946fe3fb14a8dff8c06df763f67be522167b2f00 "
+            "param_sha256=d2c0adf8939dc9ce02964ce8ada104447768ffd8e3bffad8fa11e2e61e709c1f "
+            "mode=in-guest run_mode=normal samples=0\n"
+            "TASK3_INFER_STARTED model=yolo11n.ncnn request=1 phase=startup"
+        )
+
+        ready_record = VERIFY.task3_model_ready_record(log)
+
+        self.assertNotIn("TASK2_HEARTBEAT_RECEIVED", ready_record)
+        self.assertIsNotNone(re.search(VERIFY.YOLO_READY_PATTERN, ready_record))
 
 
 if __name__ == "__main__":

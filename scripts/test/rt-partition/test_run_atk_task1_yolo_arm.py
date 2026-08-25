@@ -30,6 +30,82 @@ class RunAtkTask1YoloArmTest(unittest.TestCase):
 
         console.expect.assert_called_once_with(RUNNER.GUEST_PROMPT, 60)
 
+    def test_payload_started_workload_enters_axvisor_without_guest_shell(self):
+        console = mock.Mock()
+
+        RUNNER.prepare_payload_started_workload(console, "idle")
+
+        self.assertEqual(
+            console.method_calls,
+            [
+                mock.call.raw(b"\r"),
+                mock.call.detach(),
+            ],
+        )
+
+    def test_payload_started_pressure_is_active_before_sampling(self):
+        console = mock.Mock()
+
+        RUNNER.prepare_payload_started_workload(console, "yolo")
+
+        self.assertEqual(
+            console.method_calls,
+            [
+                mock.call.raw(b"\r"),
+                mock.call.clear_match_window(),
+                mock.call.expect(
+                    RUNNER.PAYLOAD_PRESSURE_PROGRESS,
+                    RUNNER.POST_SAMPLING_INFERENCE_TIMEOUT_SECONDS,
+                ),
+                mock.call.expect(
+                    RUNNER.COMMUNICATION_STATUS_RECEIVED,
+                    RUNNER.POST_SAMPLING_COMMUNICATION_TIMEOUT_SECONDS,
+                ),
+                mock.call.detach(),
+            ],
+        )
+
+    def test_payload_started_pressure_requires_fresh_progress_after_sampling(self):
+        console = mock.Mock()
+
+        RUNNER.collect_payload_pressure_progress(console)
+
+        self.assertEqual(
+            console.method_calls,
+            [
+                mock.call.command(
+                    "vm console 1", rb"Attached VM\[1\] console", 30
+                ),
+                mock.call.clear_match_window(),
+                mock.call.expect(
+                    RUNNER.PAYLOAD_PRESSURE_PROGRESS,
+                    RUNNER.POST_SAMPLING_INFERENCE_TIMEOUT_SECONDS,
+                ),
+                mock.call.expect(
+                    RUNNER.COMMUNICATION_STATUS_RECEIVED,
+                    RUNNER.POST_SAMPLING_COMMUNICATION_TIMEOUT_SECONDS,
+                ),
+                mock.call.detach(),
+            ],
+        )
+
+    def test_pressure_sampling_requires_live_control_status_traffic(self):
+        console = mock.Mock()
+        config = make_config(
+            expected_samples=6000,
+            load_mode="yolo",
+            workload_start="payload-init",
+            periodic_guest="zephyr",
+        )
+
+        RUNNER.wait_for_sampling_complete(console, config)
+
+        console.expect.assert_called_once_with(
+            rb"PERIODIC LATENCY SAMPLING COMPLETE samples=6000 "
+            rb"controls=[1-9][0-9]* statuses=[1-9][0-9]* heartbeats=[0-9]+\b",
+            config.periodic_timeout_seconds,
+        )
+
     def test_console_drain_logs_serial_without_mirroring_bulk_output(self):
         class FakeSerial:
             def __init__(self, *args, **kwargs):
@@ -137,6 +213,15 @@ class RunAtkTask1YoloArmTest(unittest.TestCase):
                 mock.call.clear_match_window(),
                 mock.call.raw(RUNNER.PERIODIC_DUMP_COMMAND),
                 mock.call.expect(
+                    rb"PERIODIC LATENCY CHUNK end=256\b",
+                    config.periodic_timeout_seconds,
+                ),
+                mock.call.raw(RUNNER.PERIODIC_DUMP_COMMAND),
+                mock.call.expect(
+                    rb"PERIODIC LATENCY CHUNK end=300\b",
+                    config.periodic_timeout_seconds,
+                ),
+                mock.call.expect(
                     rb"PERIODIC LATENCY COMPLETE samples=300\b",
                     config.periodic_timeout_seconds,
                 ),
@@ -169,6 +254,8 @@ def make_config(
     artifacts=(),
     root=Path("/tmp"),
     periodic_guest="rtthread",
+    load_mode="yolo",
+    workload_start="guest-shell",
 ):
     return RUNNER.RunConfig(
         log_path=root / "run.log",
@@ -182,6 +269,8 @@ def make_config(
         period_ms=10,
         completion_grace_seconds=180,
         artifacts=artifacts,
+        load_mode=load_mode,
+        workload_start=workload_start,
         periodic_guest=periodic_guest,
     )
 

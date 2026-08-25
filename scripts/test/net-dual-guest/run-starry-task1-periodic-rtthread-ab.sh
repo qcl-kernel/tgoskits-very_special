@@ -6,6 +6,7 @@ set -euo pipefail
 # The RT-Thread probe prints the same CSV contract as the Zephyr probe.
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+source "$repo_root/scripts/lib/task123-tools.sh"
 output_root="${1:?usage: run-starry-task1-periodic-rtthread-ab.sh OUTPUT_ROOT}"
 repeats="${STARRY_TASK1_PERIODIC_REPEATS:-3}"
 rr_host="$repo_root/scripts/test/net-dual-guest/axvisor-qemu-starry-task1-rr.toml"
@@ -14,10 +15,9 @@ qemu_config="$repo_root/scripts/test/net-dual-guest/qemu-aarch64-starry-rtthread
 starry_vm="$repo_root/scripts/test/net-dual-guest/vm-aarch64-starry-task1-shared.toml"
 rtos_vm="$repo_root/scripts/test/net-dual-guest/vm-aarch64-rtthread-periodic-task1-shared.toml"
 analyzer="$repo_root/scripts/test/net-dual-guest/analyze_starry_task1_periodic_ab.py"
-runtime_dir="$repo_root/tmp/net-dual-guest"
-socket_dir="/tmp/tgoskits-task123"
-qemu_sock="$socket_dir/qmp-starry-rtthread-task1-periodic-capture.sock"
-serial_sock="$socket_dir/serial-starry-rtthread-task1-periodic-capture.sock"
+socket_dir=""
+qemu_sock=""
+serial_sock=""
 periodic_dir="$repo_root/tmp/starry-task1-periodic-rtthread"
 periodic_bin="$periodic_dir/rtthread-periodic.bin"
 periodic_manifest="$periodic_dir/rtthread-periodic.manifest"
@@ -66,14 +66,22 @@ if rr_features ^ fp_features != {"rr-scheduler", "fp-rr-scheduler"}:
     raise SystemExit("scheduler A/B feature difference is not RR versus FP-RR")
 PY
 
+acquire_task123_qemu_slot "$repo_root"
+socket_dir="$(create_task123_runtime_dir)"
+qemu_sock="$socket_dir/qmp.sock"
+serial_sock="$socket_dir/serial.sock"
+
 stop_owned_run() {
-    if [[ -S "$qemu_sock" ]]; then
+    if [[ -n "$run_pid" && -S "$qemu_sock" ]]; then
         python3 "$repo_root/scripts/test/net-dual-guest/qmp_link.py" "$qemu_sock" quit \
             >/dev/null 2>&1 || true
     fi
     if [[ -n "$run_pid" ]] && kill -0 "$run_pid" 2>/dev/null; then
         kill -TERM "$run_pid" 2>/dev/null || true
         wait "$run_pid" 2>/dev/null || true
+    fi
+    if [[ -n "$socket_dir" && -d "$socket_dir" ]]; then
+        remove_task123_runtime_dir "$socket_dir"
     fi
 }
 trap stop_owned_run EXIT
@@ -98,7 +106,7 @@ EOF
 
 run_arm() {
     local arm="$1" run_number="$2" host_config="$3"
-    local run_id run_dir steps build_log run_log
+    local run_id run_dir steps build_log run_log runtime_rootfs runtime_qemu_config
     printf -v run_id '%s-%02d' "$arm" "$run_number"
     run_dir="$output_root/$run_id"
     steps="$run_dir/steps.txt"
@@ -106,17 +114,19 @@ run_arm() {
     run_log="$run_dir/run.log"
     mkdir -p "$run_dir"
     cp "$host_config" "$run_dir/host-config.toml"
-    cp "$qemu_config" "$run_dir/qemu.toml"
+    cp "$qemu_config" "$run_dir/qemu.source.toml"
     cp "$starry_vm" "$run_dir/vm-starry.toml"
     cp "$rtos_vm" "$run_dir/vm-rtthread.toml"
 
-    for socket_path in "$qemu_sock" "$serial_sock"; do
-        if lsof -t -- "$socket_path" >/dev/null 2>&1; then
-            printf 'error: runtime socket is owned by another process: %s\n' "$socket_path" >&2
-            exit 1
-        fi
-        rm -f -- "$socket_path"
-    done
+    rm -f -- "$qemu_sock" "$serial_sock"
+    runtime_rootfs="$socket_dir/rootfs-$run_id.img"
+    runtime_qemu_config="$run_dir/qemu.runtime.toml"
+    cp --reflink=auto --sparse=always "$rootfs" "$runtime_rootfs"
+    python3 "$repo_root/scripts/test/net-dual-guest/render_qemu_runtime.py" \
+        "$qemu_config" "$runtime_qemu_config" \
+        --rootfs "$runtime_rootfs" \
+        --serial-socket "$serial_sock" \
+        --qmp-socket "$qemu_sock"
     cat > "$steps" <<EOF
 expect 120 use (Round-robin|Fixed-priority round-robin) scheduler\\.
 expect 120 \\[VM 1\\] Use .*apk
@@ -143,7 +153,7 @@ EOF
         printf 'arm=%s\nrun=%s\ngit_head=%s\n' "$arm" "$run_number" \
             "$(git -C "$repo_root" rev-parse HEAD)"
         printf 'command=cargo xtask axvisor qemu --config %s --qemu-config %s --vmconfigs %s --vmconfigs %s --rootfs %s\n' \
-            "$host_config" "$qemu_config" "$starry_vm" "$rtos_vm" "$rootfs"
+            "$host_config" "$runtime_qemu_config" "$starry_vm" "$rtos_vm" "$runtime_rootfs"
     } > "$run_dir/command.txt"
 
     printf 'TASK1_PERIODIC_RUN_START arm=%s run=%s\n' "$arm" "$run_number"
@@ -151,10 +161,10 @@ EOF
         cd "$repo_root"
         cargo xtask axvisor qemu \
             --config "$host_config" \
-            --qemu-config "$qemu_config" \
+            --qemu-config "$runtime_qemu_config" \
             --vmconfigs "$starry_vm" \
             --vmconfigs "$rtos_vm" \
-            --rootfs "$rootfs"
+            --rootfs "$runtime_rootfs"
     ) > "$build_log" 2>&1 &
     run_pid=$!
     for _ in $(seq 1 180); do
@@ -178,6 +188,7 @@ EOF
     ) 2>> "$build_log"
     wait "$run_pid" 2>/dev/null || true
     run_pid=""
+    rm -f -- "$runtime_rootfs"
     sha256sum "$periodic_bin" "$rootfs" \
         "$repo_root/target/aarch64-unknown-none-softfloat/release/starryos.bin" \
         "$repo_root/target/aarch64-unknown-linux-musl/release/axvisor.bin" \

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# RAM-only boot of a FIT image on the ATK-DLRK3588 (RK3588) board.
+# RAM-only boot of a FIT or legacy uImage on the ATK-DLRK3588 (RK3588) board.
 #
 # The vendor U-Boot on this board ships with `bootdelay=0`, so the only way to
 # reach its `=>` prompt is to flood the console with Ctrl-C across the whole
@@ -23,14 +23,22 @@
 #     It is compiled in at 0x00c00800, recovered by parsing the U-Boot binary.
 #
 # Usage:
-#   scripts/board/atk-dlrk3588-ram-boot.sh <image.fit>
+#   scripts/board/atk-dlrk3588-ram-boot.sh <image>
 #
 # Environment:
 #   ATK_PORT          serial device (default /dev/ttyACM0)
 #   ATK_BAUD          serial baud rate (default 1500000)
-#   ATK_FASTBOOT_SN   fastboot serial number (default 8d4bd3e013e56633)
-#   ATK_BREAK_WINDOW  seconds to keep flooding Ctrl-C (default 60)
+#   ATK_FASTBOOT_SN   optional fastboot serial; required when multiple devices exist
+#   ATK_FASTBOOT_WAIT seconds to wait for USB fastboot enumeration (default 15)
+#   ATK_BOOT_FORMAT   fit or legacy-uimage (default fit)
+#   ATK_LEGACY_LOAD_ADDRESS destination address for a legacy-uImage payload
+#   ATK_LEGACY_ENTRY_ADDRESS entry address after copying a legacy-uImage payload
+#   ATK_LEGACY_PAYLOAD_SIZE hexadecimal byte count for a legacy-uImage payload
+#   ATK_BREAK_WINDOW  seconds to wait for an operator reset while flooding Ctrl-C (default 300)
 #   ATK_LOG           console capture path (default a mktemp file)
+#   ATK_READY_REGEX   optional ERE that must appear after `booti`
+#   ATK_READY_TIMEOUT maximum seconds to wait for ATK_READY_REGEX (default 180)
+#   ATK_POST_BOOT_BAUD optional serial baud after the kernel handoff
 #   ATK_POST_BOOT_CAPTURE seconds to keep capturing after booti (default 0)
 
 set -euo pipefail
@@ -39,13 +47,22 @@ readonly FASTBOOT_DOWNLOAD_BUFFER=0x00c00800
 
 port="${ATK_PORT:-/dev/ttyACM0}"
 baud="${ATK_BAUD:-1500000}"
-fastboot_sn="${ATK_FASTBOOT_SN:-8d4bd3e013e56633}"
-break_window="${ATK_BREAK_WINDOW:-60}"
+fastboot_sn="${ATK_FASTBOOT_SN:-}"
+fastboot_wait="${ATK_FASTBOOT_WAIT:-15}"
+boot_format="${ATK_BOOT_FORMAT:-fit}"
+legacy_load_address="${ATK_LEGACY_LOAD_ADDRESS:-}"
+legacy_entry_address="${ATK_LEGACY_ENTRY_ADDRESS:-}"
+legacy_payload_size="${ATK_LEGACY_PAYLOAD_SIZE:-}"
+break_window="${ATK_BREAK_WINDOW:-300}"
 post_boot_capture="${ATK_POST_BOOT_CAPTURE:-0}"
+ready_regex="${ATK_READY_REGEX:-}"
+ready_timeout="${ATK_READY_TIMEOUT:-180}"
+post_boot_baud="${ATK_POST_BOOT_BAUD:-}"
 fit_path=""
 console_log=""
 reader_pid=""
 breaker_pid=""
+boot_output_mark=""
 
 main() {
     parse_arguments "$@"
@@ -53,12 +70,29 @@ main() {
     claim_console
     reach_uboot_prompt
     stage_fit_into_ram
-    boot_fit_from_ram
+    case "$boot_format" in
+    fit) boot_fit_from_ram ;;
+    legacy-uimage) boot_legacy_uimage_from_ram ;;
+    esac
     capture_post_boot
     printf 'booted %s from RAM; console capture: %s\n' "$fit_path" "$console_log"
 }
 
 capture_post_boot() {
+    if [[ -n "$post_boot_baud" ]]; then
+        printf 'switching serial capture to post-boot baud %s\n' "$post_boot_baud"
+        sudo -n stty -F "$port" "$post_boot_baud" raw -echo -crtscts
+    fi
+    if [[ -n "$ready_regex" ]]; then
+        printf 'waiting up to %ss for ready marker: %s\n' "$ready_timeout" "$ready_regex"
+        if ! wait_for_console "$boot_output_mark" "$ready_regex" "$ready_timeout"; then
+            printf 'error: booted image did not reach ready marker within %ss: %s\n' \
+                "$ready_timeout" "$ready_regex" >&2
+            printf 'error: see console capture: %s\n' "$console_log" >&2
+            exit 1
+        fi
+        printf 'ready marker observed\n'
+    fi
     if [[ "$post_boot_capture" != "0" ]]; then
         printf 'capturing the booted system for %ss\n' "$post_boot_capture"
         sleep "$post_boot_capture"
@@ -72,8 +106,30 @@ parse_arguments() {
     fi
     fit_path="$1"
     if [[ ! -f "$fit_path" ]]; then
-        printf 'error: FIT image not found: %s\n' "$fit_path" >&2
+        printf 'error: boot image not found: %s\n' "$fit_path" >&2
         exit 2
+    fi
+    case "$boot_format" in
+    fit|legacy-uimage) ;;
+    *)
+        printf 'error: ATK_BOOT_FORMAT must be fit or legacy-uimage: %s\n' \
+            "$boot_format" >&2
+        exit 2
+        ;;
+    esac
+    if [[ "$boot_format" == "legacy-uimage" ]]; then
+        [[ "$legacy_load_address" =~ ^0x[0-9a-fA-F]+$ ]] || {
+            printf 'error: ATK_LEGACY_LOAD_ADDRESS must be hexadecimal\n' >&2
+            exit 2
+        }
+        [[ "$legacy_payload_size" =~ ^0x[1-9a-fA-F][0-9a-fA-F]*$ ]] || {
+            printf 'error: ATK_LEGACY_PAYLOAD_SIZE must be positive hexadecimal\n' >&2
+            exit 2
+        }
+        [[ "$legacy_entry_address" =~ ^0x[0-9a-fA-F]+$ ]] || {
+            printf 'error: ATK_LEGACY_ENTRY_ADDRESS must be hexadecimal\n' >&2
+            exit 2
+        }
     fi
 }
 
@@ -166,7 +222,10 @@ reach_uboot_prompt() {
         ;;
     manual)
         printf 'cannot reach the board from the host.\n'
+        printf 'BOARD_RESET_REQUIRED: press the physical RST button once now.\n'
         printf 'press the RST button now; the Ctrl-C flood is already running.\n'
+        printf 'waiting up to %ss for U-Boot; no manual Ctrl-C input is needed.\n' \
+            "$break_window"
         ;;
     esac
 
@@ -205,7 +264,42 @@ detach_from_axvisor_guest_console() {
 }
 
 board_in_fastboot() {
-    sudo -n fastboot devices 2>/dev/null | grep -q "$fastboot_sn"
+    if [[ -n "$fastboot_sn" ]]; then
+        sudo -n fastboot devices 2>/dev/null | awk '{print $1}' | grep -Fxq "$fastboot_sn"
+    else
+        [[ -n "$(sudo -n fastboot devices 2>/dev/null)" ]]
+    fi
+}
+
+resolve_fastboot_serial() {
+    local -a serials=()
+    local deadline=$((SECONDS + fastboot_wait))
+    while :; do
+        mapfile -t serials < <(sudo -n fastboot devices 2>/dev/null | awk 'NF >= 2 {print $1}')
+        if [[ -n "$fastboot_sn" ]]; then
+            if printf '%s\n' "${serials[@]}" | grep -Fxq "$fastboot_sn"; then
+                return
+            fi
+        elif ((${#serials[@]} == 1)); then
+            fastboot_sn="${serials[0]}"
+            printf 'selected the only fastboot device: %s\n' "$fastboot_sn"
+            return
+        elif ((${#serials[@]} > 1)); then
+            printf 'error: found multiple fastboot devices; set ATK_FASTBOOT_SN\n' >&2
+            return 1
+        fi
+        if ((SECONDS >= deadline)); then
+            break
+        fi
+        sleep 0.25
+    done
+    if [[ -n "$fastboot_sn" ]]; then
+        printf 'error: requested fastboot device did not enumerate within %ss: %s\n' \
+            "$fastboot_wait" "$fastboot_sn" >&2
+    else
+        printf 'error: no fastboot device enumerated within %ss\n' "$fastboot_wait" >&2
+    fi
+    return 1
 }
 
 board_in_adb() {
@@ -252,6 +346,7 @@ stage_fit_into_ram() {
         printf 'error: U-Boot did not enter fastboot; see %s\n' "$console_log" >&2
         exit 1
     fi
+    resolve_fastboot_serial
     if ! sudo -n fastboot -s "$fastboot_sn" stage "$fit_path"; then
         printf 'error: fastboot stage failed\n' >&2
         exit 1
@@ -287,7 +382,24 @@ boot_fit_from_ram() {
     send_uboot_command 'fdt header'
 
     printf 'starting the image from RAM\n'
+    boot_output_mark="$(console_mark)"
     send_console 'booti ${kerneldst} - ${fdtdst}'$'\r'
+}
+
+# Boots a legacy U-Boot image staged in the download buffer.  The vendor's
+# `loados` subcommand aborts while copying this image, and this build does not
+# provide `setexpr`.  `bootm start` first verifies the header and data CRC, an
+# explicit copy moves the payload past the 64-byte legacy header. The payload
+# itself is a standard AArch64 Linux Image (`ARMd` header), so `booti` performs
+# the required exception-level handoff. This vendor build aborts inside both
+# legacy `bootm loados` and `bootm go`; neither may be used after verification.
+boot_legacy_uimage_from_ram() {
+    send_uboot_command "bootm start $FASTBOOT_DOWNLOAD_BUFFER"
+    send_uboot_command "cp.b 0x00c00840 $legacy_load_address $legacy_payload_size"
+
+    printf 'starting the verified AArch64 Image payload from RAM\n'
+    boot_output_mark="$(console_mark)"
+    send_console "booti $legacy_load_address"$'\r'
 }
 
 # Sends one U-Boot command and waits for the prompt before sending the next.

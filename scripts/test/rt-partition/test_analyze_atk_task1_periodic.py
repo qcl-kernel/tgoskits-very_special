@@ -117,6 +117,26 @@ class AnalyzeAtkTask1PeriodicTest(unittest.TestCase):
             self.assertIn("80000.000 ms", text)
             self.assertIn("tail-latency/throughput trade-offs", text)
 
+    def test_report_accepts_periodic_only_runs_without_inference_samples(self):
+        group = {
+            "scheduler": "fp-rr",
+            "runs": 1,
+            "median_p99_ns": 1_650_625,
+            "median_p99_9_ns": 3_821_125,
+            "median_max_ns": 3_821_125,
+            "median_inference_mean_us": "",
+            "median_inference_p99_us": "",
+            "median_inferences_per_minute": "",
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            report = Path(directory) / "SUMMARY.md"
+
+            ANALYZER.write_report(report, [group], 1)
+
+            text = report.read_text()
+            self.assertIn("1.651 ms", text)
+            self.assertIn("| n/a | n/a | n/a |", text)
+
 
 def valid_log() -> str:
     return """\

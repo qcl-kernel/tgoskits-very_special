@@ -1,0 +1,1040 @@
+
+
+
+[Axvisor] detached VM[1] console
+Welcome to AxVisor Shell!
+Type 'help' to see available commands
+Use UP/DOWN arrows to navigate command history
+Console shortcuts:
+  Ctrl+X, then h  return to the Axvisor shell
+  Ctrl+X, then [  attach the previous running guest
+  Ctrl+X, then ]  attach the next running guest
+
+[2Kaxvisor:/$ DDR 3488111f83 cym 24/04/12-12:49:26,fwver: v1.17
+LPDDR4X, 1560MHz
+channel[0] BW=16 Col=10 Bk=8 CS0 Row=16 CS1 Row=16 CS=2 Die BW=16 Size=2048MB
+channel[1] BW=16 Col=10 Bk=8 CS0 Row=16 CS1 Row=16 CS=2 Die BW=16 Size=2048MB
+channel[2] BW=16 Col=10 Bk=8 CS0 Row=16 CS1 Row=16 CS=2 Die BW=16 Size=2048MB
+channel[3] BW=16 Col=10 Bk=8 CS0 Row=16 CS1 Row=16 CS=2 Die BW=16 Size=2048MB
+Manufacturer ID:0x1
+CH0 RX Vref:31.8%, TX Vref:19.8%,19.8%DQ rds:
+h6 l0, h1 l0, h5 l0, h1 l0, h7 l0, h3 l0, h1 l0, h3 l0, 
+h6 l0, h6 l0, h4 l0, h7 l0, h3 l0, h2 l0, h2 l0, h1 l0, 
+
+CH1 RX Vref:30.1%, TX Vref:21.8%,20.8%DQ rds:
+h5 l0, h0 l0, h7 l0, h5 l0, h0 l0, h1 l0, h2 l0, h1 l0, 
+h4 l0, h4 l0, h4 l0, h0 l0, h3 l0, h7 l0, h3 l0, h7 l0, 
+
+CH2 RX Vref:30.5%, TX Vref:21.8%,20.8%DQ rds:
+h0 l0, h0 l0, h0 l0, h7 l0, h2 l0, h0 l0, h7 l0, h4 l0, 
+h7 l0, h2 l0, h6 l0, h7 l0, h1 l0, h1 l0, h0 l0, h3 l0, 
+
+CH3 RX Vref:32.6%, TX Vref:21.8%,19.8%DQ rds:
+h7 l0, h7 l0, h3 l0, h1 l0, h0 l0, h2 l0, h7 l0, h3 l0, 
+h5 l0, h2 l0, h6 l0, h6 l0, h5 l0, h5 l0, h1 l0, h5 l0, 
+
+stride=0x2, ddr_config=0x4
+hash ch_mask0-1 0x20 0x40, bank_mask0-3 0xa00 0x1400 0x2800 0x0, rank_mask0 0x401000
+change to F1: 528MHz
+change to F2: 1068MHz
+change to F3: 1560MHz
+change to F0: 1560MHz
+out
+U-Boot SPL board init
+U-Boot SPL 2017.09-ge4e124926e-230922 #lxh (Sep 25 2023 - 10:58:38), fwver: v1.13
+unknown raw ID 0 0 0
+unrecognized JEDEC id bytes: 00, 00, 00
+Trying to boot from MMC2
+MMC: no card present
+mmc_init: -123, time 0
+spl: mmc init failed with error: -123
+Trying to boot from MMC1
+SPL: A/B-slot: _a, successful: 0, tries-remain: 7
+Trying fit image at 0x4000 sector
+## Verified-boot: 0
+## Checking atf-1 0x00040000 ... sha256(64122e141b...) + OK
+## Checking uboot 0x00200000 ... sha256(6a44ff16cd...) + OK
+## Checking fdt 0x00341b18 ... sha256(8ecccd16d2...) + OK
+## Checking atf-2 0xff100000 ... sha256(ce8968e34f...) + OK
+## Checking atf-3 0x000f0000 ... sha256(ce48b69fdd...) + OK
+## Checking optee 0x08400000 ... sha256(b866e4e4a1...) + OK
+Jumping to U-Boot(0x00200000) via ARM Trusted Firmware(0x00040000)
+Total: 84.717/258.418 ms
+
+INFO:    Preloader serial: 2
+NOTICE:  BL31: v2.3():v2.3-765-g588059758:derrick.huang, fwver: v1.46
+NOTICE:  BL31: Built : 18:13:16, Apr 29 2024
+INFO:    spec: 0x1
+INFO:    code: 0x88
+INFO:    ext 32k is not valid
+INFO:    ddr: stride-en 4CH
+INFO:    GICv3 without legacy support detected.
+INFO:    ARM GICv3 driver initialized in EL3
+INFO:    valid_cpu_msk=0xff bcore0_rst = 0x0, bcore1_rst = 0x0
+INFO:    l3 cache partition cfg-0
+INFO:    system boots from cpu-hwid-0
+INFO:    bypass memory repair
+INFO:    idle_st=0x21fff, pd_st=0x11fff9, repair_st=0xfff70001
+INFO:    dfs DDR fsp_params[0].freq_mhz= 1560MHz
+INFO:    dfs DDR fsp_params[1].freq_mhz= 528MHz
+INFO:    dfs DDR fsp_params[2].freq_mhz= 1068MHz
+INFO:    dfs DDR fsp_params[3].freq_mhz= 1560MHz
+INFO:    BL31: Initialising Exception Handling Framework
+INFO:    BL31: Initializing runtime services
+INFO:    BL31: Initializing BL32
+I/TC: 
+I/TC: OP-TEE version: 3.13.0-791-g185dc3c92 #hisping.lin (gcc version 10.2.1 20201103 (GNU Toolchain for the A-profile Architecture 10.2-2020.11 (arm-10.16))) #2 Tue Apr 16 11:16:18 CST 2024 aarch64, fwver: v1.16 
+I/TC: OP-TEE memory: TEEOS 0x200000 TA 0xc00000 SHM 0x200000
+I/TC: Primary CPU initializing
+I/TC: Primary CPU switching to normal world boot
+INFO:    BL31: Preparing for EL3 exit to normal world
+INFO:    Entry point address = 0x200000
+INFO:    SPSR = 0x3c9
+
+
+U-Boot 2017.09-g0a4dd03 #dengtao (Jan 16 2025 - 11:37:55 +0800)
+
+Model: Rockchip RK3588 Evaluation Board
+MPIDR: 0x81000000
+PreSerial: 2, raw, 0xfeb50000
+DRAM:  8 GiB
+Sysmem: init
+Relocation Offset: eda1c000
+Relocation fdt: eb9fa7e0 - eb9fecc8
+CR: M/C/I
+Using default environment
+
+Hotkey: ctrl+c
+optee api revision: 2.0
+mmc@fe2c0000: 1, mmc@fe2e0000: 0
+Bootdev(atags): mmc 0
+MMC0: HS400 Enhanced Strobe, 200Mhz
+PartType: EFI
+TEEC: Waring: Could not find security partition
+DM: v2
+boot mode: normal
+RESC: 'boot', blk@0x00019463
+resource: sha256+
+FIT: no signed, no conf required
+   - dev=saradc, channel=7, dtb_adc=2748, read=2883, found=0
+   - dev=saradc, channel=7, dtb_adc=1410, read=2883, found=0
+   - dev=saradc, channel=7, dtb_adc=0, read=2883, found=0
+DTB: rk-kernel.dtb
+HASH(c): OK
+I2c0 speed: 100000Hz
+vsel-gpios- not found!
+en-gpios- not found!
+vdd_cpu_big0_s0 800000 uV
+vsel-gpios- not found!
+en-gpios- not found!
+vdd_cpu_big1_s0 800000 uV
+I2c1 speed: 100000Hz
+vsel-gpios- not found!
+en-gpios- not found!
+vdd_npu_s0 800000 uV
+spi2: RK806: 2
+ON=0x40, OFF=0x00
+vdd_gpu_s0 750000 uV
+vdd_cpu_lit_s0 750000 uV
+vdd_log_s0 750000 uV
+vdd_vdenc_s0 init 750000 uV
+vdd_ddr_s0 850000 uV
+Device 'gpio@fd8a0000': seq 0 is in use by 'gpio@fd8a0000'
+get vp0 plane mask:0x5, primary id:2, cursor_plane:-1, from dts
+get vp1 plane mask:0xa, primary id:3, cursor_plane:-1, from dts
+get vp2 plane mask:0x140, primary id:8, cursor_plane:-1, from dts
+get vp3 plane mask:0x280, primary id:9, cursor_plane:-1, from dts
+Could not find baseparameter partition
+Model: ATK-DLRK3588 Board
+MPIDR: 0x81000000
+Rockchip UBOOT DRM driver version: v1.0.1
+vp0 have layer nr:2[0 2 ], primary plane: 2
+vp1 have layer nr:2[1 3 ], primary plane: 3
+vp2 have layer nr:2[6 8 ], primary plane: 8
+vp3 have layer nr:2[7 9 ], primary plane: 9
+Using display timing dts
+dsi@fde20000:  detailed mode clock 119000 kHz, flags[a]
+    H: 1080 1090 1096 1128
+    V: 1920 1940 1946 1956
+bus_format: 100e
+VOP update mode to: 1080x1920p54, type: MIPI0 for VP3
+VP3 set crtc_clock to 119000KHz
+VOP VP3 enable Esmart3[654x270->654x270@213x825] fmt[2] addr[0xedf2c000]
+final DSI-Link bandwidth: 793333 Kbps x 4
+hdmi@fde80000 disconnected
+hdmi@fdea0000 disconnected
+CLK: (sync kernel. arm: enter 1008000 KHz, init 1008000 KHz, kernel 0N/A)
+  b0pll 24000 KHz
+  b1pll 24000 KHz
+  lpll 24000 KHz
+  v0pll 714000 KHz
+  aupll 786431 KHz
+  cpll 1500000 KHz
+  gpll 1188000 KHz
+  npll 850000 KHz
+  ppll 1100000 KHz
+  aclk_center_root 702000 KHz
+  pclk_center_root 100000 KHz
+  hclk_center_root 396000 KHz
+  aclk_center_low_root 500000 KHz
+  aclk_top_root 750000 KHz
+  pclk_top_root 100000 KHz
+  aclk_low_top_root 396000 KHz
+Net:   eth0: ethernet@fe1b0000, eth1: ethernet@fe1c0000
+Hit key to stop autoboot('CTRL+C'):  0  0
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> <INTERRUPT>
+=> fastboot usb 0
+Enter fastboot...OK
+request 00000000ebe5c580 was not queued to ep1in-bulk
+Starting download of 48220904 bytes
+request 00000000ebe5c580 was not queued to ep1in-bulk
+..........................................................................
+..........................................................................
+..........................................................................
+..........................................................................
+.......................................................................request 00000000ebe5c580 was not queued to ep1in-bulk
+
+downloading of 48220904 bytes finished
+=> fdt addr 0x00c00800
+=> fdt get addr fdtsrc /images/fdt-1 data
+=> fdt get size fdtlen /images/fdt-1 data
+=> fdt get value fdtdst /images/fdt-1 load
+=> fdt get addr kernelsrc /images/kernel-1 data
+=> fdt get size kernellen /images/kernel-1 data
+=> fdt get value kerneldst /images/kernel-1 load
+=> printenv fdtsrc fdtlen fdtdst kernelsrc kernellen kerneldst
+fdtsrc=0x00000000039b6a5c
+fdtlen=0x00046646
+fdtdst=0x08300000
+kernelsrc=0x0000000000c00914
+kernellen=0x02DB6040
+kerneldst=0x00400000
+=> cp.b ${fdtsrc} ${fdtdst} ${fdtlen}
+=> cp.b ${kernelsrc} ${kerneldst} ${kernellen}
+=> fdt addr ${fdtdst}
+=> fdt header
+magic:			0xd00dfeed
+totalsize:		0x46646 (288326)
+off_dt_struct:		0x48
+off_dt_strings:		0x40a28
+off_mem_rsvmap:		0x28
+version:		17
+last_comp_version:	16
+boot_cpuid_phys:	0x0
+size_dt_strings:	0x5c1e
+size_dt_struct:		0x409e0
+number mem_rsv:		0x1
+
+=> booti ${kerneldst} - ${fdtdst}
+Fdt Ramdisk skip relocation
+## Flattened Device Tree blob at 0x08300000
+   Booting using the fdt blob at 0x08300000
+   reserving fdt memory region: addr=8300000 size=47000
+   Using Device Tree in place at 0000000008300000, end 0000000008349645
+WARNING: could not set reg FDT_ERR_BADOFFSET.
+## reserved-memory:
+  axvisor-guest@40000000: addr=40000000 size=40000000
+  cma: addr=10000000 size=8000000
+  drm-logo@00000000: addr=edf00000 size=106000
+  ramoops@110000: addr=110000 size=f0000
+Adding bank: 0x00200000 - 0x08400000 (size: 0x08200000)
+Adding bank: 0x09400000 - 0xf0000000 (size: 0xe6c00000)
+Adding bank: 0x100000000 - 0x200000000 (size: 0x100000000)
+Adding bank: 0x2f0000000 - 0x300000000 (size: 0x10000000)
+Total: 4872.553/5209.281 ms
+
+Starting kernel ...
+
+storagemedia=emmc androidboot.storagemedia=emmc androidboot.mode=normal  rw rootwait androidboot.verifiedbootstate=orange earlycon=uart8250,mmio32,0xfeb50000 console=ttyFIQ0 irqchip.gicv3_pseudo_nmi=0 root=PARTLABEL=rootfs
+VM Load @PA:0x400000
+VM Load Offset: 0xffff000080400000
+Memory Map:
+  Rsv    0x00000000110000 - 0x00000000200000 (960 KiB)
+  Free   0x00000000200000 - 0x00000000400000 (2 MiB)
+  KImg   0x00000000400000 - 0x00000003200000 (46 MiB)
+  Free   0x00000003200000 - 0x00000008300000 (81 MiB)
+  Rsv    0x00000008300000 - 0x00000008347000 (284 KiB)
+  Free   0x00000008347000 - 0x00000008400000 (740 KiB)
+  Free   0x00000009400000 - 0x00000010000000 (108 MiB)
+  Rsv    0x00000010000000 - 0x00000018000000 (128 MiB)
+  Free   0x00000018000000 - 0x00000040000000 (640 MiB)
+  Rsv    0x00000040000000 - 0x00000080000000 (1 GiB)
+  Free   0x00000080000000 - 0x000000edf00000 (1.72 GiB)
+  Rsv    0x000000edf00000 - 0x000000ee006000 (1.02 MiB)
+  Free   0x000000ee006000 - 0x000000f0000000 (31.98 MiB)
+  Free   0x00000100000000 - 0x00000200000000 (4 GiB)
+  Free   0x000002f0000000 - 0x00000300000000 (256 MiB)
+Initialize RAM allocator: 0x3200000..0x8300000
+Reserving CPU-local areas
+CPU-local area stride: 0x45000 bytes
+Total CPU-local allocation: 0x228000 bytes (8 CPUs)
+Flushed RAM used range to memory map: 0x3200000..0x3247000, current: 0x3247000
+Flushed RAM used range to memory map: 0x3247000..0x346f000, current: 0x346f000
+CPU-local areas allocated at 0x3247000 - 0x346f000
+EL: 2
+Mapping early memory regions...
+Ram                 : [0x0000000000200000, 0x0000000008400000) -> [0x0000000000200000, 0x0000000008400000) (130 MiB)
+Ram                 : [0x0000000009400000, 0x00000000f0000000) -> [0x0000000009400000, 0x00000000f0000000) (3.61 GiB)
+Ram                 : [0x0000000100000000, 0x0000000200000000) -> [0x0000000100000000, 0x0000000200000000) (4 GiB)
+Ram                 : [0x00000002f0000000, 0x0000000300000000) -> [0x00000002f0000000, 0x0000000300000000) (256 MiB)
+KImage              : [0x0000ffff80000000, 0x0000ffff82e00000) -> [0x0000000000400000, 0x0000000003200000) (46 MiB)
+PerCpu              : [0x0000ff0003247000, 0x0000ff000346f000) -> [0x0000000003247000, 0x000000000346f000) (2.16 MiB)
+Debug serial        : [0x00000000feb50000, 0x00000000feb51000) -> [0x00000000feb50000, 0x00000000feb51000) (4 KiB)
+Boot page table at physical address: PA:0x346f000
+Setting up table registers...
+MMU Entry point at physical address: 0x613974
+Trap vector at 0xffff80215000
+Memory Map:
+  Rsv    0x00000000110000 - 0x00000000200000 (960 KiB)
+  Free   0x00000000200000 - 0x00000000400000 (2 MiB)
+  KImg   0x00000000400000 - 0x00000003200000 (46 MiB)
+  Rsv    0x00000003200000 - 0x00000003247000 (284 KiB)
+  PerCPU 0x00000003247000 - 0x0000000346f000 (2.16 MiB)
+  Rsv    0x0000000346f000 - 0x0000000347b000 (48 KiB)
+  Free   0x0000000347b000 - 0x00000008300000 (78.52 MiB)
+  Rsv    0x00000008300000 - 0x00000008347000 (284 KiB)
+  Free   0x00000008347000 - 0x00000008400000 (740 KiB)
+  Free   0x00000009400000 - 0x00000010000000 (108 MiB)
+  Rsv    0x00000010000000 - 0x00000018000000 (128 MiB)
+  Free   0x00000018000000 - 0x00000040000000 (640 MiB)
+  Rsv    0x00000040000000 - 0x00000080000000 (1 GiB)
+  Free   0x00000080000000 - 0x000000edf00000 (1.72 GiB)
+  Rsv    0x000000edf00000 - 0x000000ee006000 (1.02 MiB)
+  Free   0x000000ee006000 - 0x000000f0000000 (31.98 MiB)
+  MMIO   0x000000feb50000 - 0x000000feb51000 (4 KiB)
+  Free   0x00000100000000 - 0x00000200000000 (4 GiB)
+  Free   0x000002f0000000 - 0x00000300000000 (256 MiB)
+Jumping to main entry point at 0xffff801f56c8 with SP 0x0000ff000328c000
+
+       d8888                            .d88888b.   .d8888b.
+      d88888                           d88P" "Y88b d88P  Y88b
+     d88P888                           888     888 Y88b.
+    d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+   d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+  d88P   888 888     888      88888888 888     888       "888
+ d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+
+arch = aarch64
+platform = ATK-DLRK3588 Board
+target = aarch64-unknown-none-softfloat
+build_mode = 
+log_level = info
+backtrace = false
+smp = 8
+
+[37max_runtime:254] [32mLogging is enabled.[m
+[m[37max_runtime:255] [32mPrimary CPU 0 started, arg = 0x3200000.[m
+[m[37max_runtime:257] [32mFound physcial memory regions:[m
+[m[37max_runtime:259] [32m  [PA:0x110000, PA:0x200000) reserved (READ | WRITE | EXECUTE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0x200000, PA:0x400000) free memory (READ | WRITE | FREE)[m
+[m[37max_runtime:259] [32m  [PA:0x400000, PA:0x3200000) reserved (READ | WRITE | EXECUTE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0x3200000, PA:0x3247000) reserved (READ | WRITE | EXECUTE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0x3247000, PA:0x346f000) reserved (READ | WRITE | EXECUTE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0x346f000, PA:0x347b000) reserved (READ | WRITE | EXECUTE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0x347b000, PA:0x8300000) free memory (READ | WRITE | FREE)[m
+[m[37max_runtime:259] [32m  [PA:0x8300000, PA:0x8347000) reserved (READ | WRITE | EXECUTE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0x8347000, PA:0x8400000) free memory (READ | WRITE | FREE)[m
+[m[37max_runtime:259] [32m  [PA:0x9400000, PA:0x10000000) free memory (READ | WRITE | FREE)[m
+[m[37max_runtime:259] [32m  [PA:0x10000000, PA:0x18000000) reserved (READ | WRITE | EXECUTE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0x18000000, PA:0x40000000) free memory (READ | WRITE | FREE)[m
+[m[37max_runtime:259] [32m  [PA:0x40000000, PA:0x80000000) reserved (READ | WRITE | EXECUTE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0x80000000, PA:0xedf00000) free memory (READ | WRITE | FREE)[m
+[m[37max_runtime:259] [32m  [PA:0xedf00000, PA:0xee006000) reserved (READ | WRITE | EXECUTE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0xee006000, PA:0xf0000000) free memory (READ | WRITE | FREE)[m
+[m[37max_runtime:259] [32m  [PA:0xfeb50000, PA:0xfeb51000) mmio (READ | WRITE | DEVICE | RESERVED)[m
+[m[37max_runtime:259] [32m  [PA:0x100000000, PA:0x200000000) free memory (READ | WRITE | FREE)[m
+[m[37max_runtime:259] [32m  [PA:0x2f0000000, PA:0x300000000) free memory (READ | WRITE | FREE)[m
+[m[37max_runtime:419] [32mInitialize global memory allocator...[m
+[m[37max_runtime:420] [32m  use buddy-slab-allocator allocator.[m
+[m[37max_alloc::buddy_slab:158] [32mInitialize global memory allocator, start_vaddr: 0x100000000, size: 0x100000000[m
+[m[37max_alloc::buddy_slab:424] [32mglobal allocator initialized[m
+[m[37max_alloc::buddy_slab:168] [32mAdd memory region, start_vaddr: 0x200000, size: 0x200000[m
+[m[37mbuddy_slab_allocator::global:151] [32mGlobalAllocator: skip region 0x200000+0x200000, no allocator-visible memory after 2097152 alignment[m
+[m[37max_alloc::buddy_slab:168] [32mAdd memory region, start_vaddr: 0x347b000, size: 0x4e85000[m
+[m[37max_alloc::buddy_slab:168] [32mAdd memory region, start_vaddr: 0x8347000, size: 0xb9000[m
+[m[37mbuddy_slab_allocator::global:151] [32mGlobalAllocator: skip region 0x8347000+0xb9000, no allocator-visible memory after 2097152 alignment[m
+[m[37max_alloc::buddy_slab:168] [32mAdd memory region, start_vaddr: 0x9400000, size: 0x6c00000[m
+[m[37max_alloc::buddy_slab:168] [32mAdd memory region, start_vaddr: 0x18000000, size: 0x28000000[m
+[m[37max_alloc::buddy_slab:168] [32mAdd memory region, start_vaddr: 0x80000000, size: 0x6df00000[m
+[m[37max_alloc::buddy_slab:168] [32mAdd memory region, start_vaddr: 0xee006000, size: 0x1ffa000[m
+[m[37max_alloc::buddy_slab:168] [32mAdd memory region, start_vaddr: 0x2f0000000, size: 0x10000000[m
+[m[37max_runtime:294] [32mkernel aspace: [VA:0x0, VA:0xffffffffffffffff)[m
+[m[37max_mm:107] [32mInitialize virtual memory management...[m
+[m[37max_runtime:306] [32mInitialize platform devices...[m
+[m[37msomeboot::arch::power:23] [32mPower management method : SMC[m
+[m[37msomehal::driver:5] [32mInitializing rdrive with FDT at 0x3200000[m
+[m[37max_driver::soc::rockchip::pinctrl:301] [32mRockchip RK3588 pinctrl registered successfully[m
+[m[37msomehal::arch::gic::v3:274] [32mGICv3 CPU 0 EOI mode: two_step=true[m
+[m[37max_task::api:249] [32mInitialize scheduling...[m
+[m[37max_task::api:257] [32m  use Fixed-priority round-robin scheduler.[m
+[m[37max_runtime:337] [32mInitialize interrupt handlers...[m
+[m[37max_runtime::devices:2] [32mProbe platform devices...[m
+[m[37max_driver::serial::ns16550:49] [32mProbing NS16550 serial device: serial@feb60000[m
+[m[37max_driver::serial::ns16550:92] [32mNS16550 serial@0xfeb60000 registered successfully[m
+[m[37max_driver::serial::rockchip_fiq:35] [32mRockchip FIQ debugger takes disabled UART alias serial2 at /serial@feb50000[m
+�[37max_driver::serial::rockchip_fiq:44] [32mRockchip FIQ debugger UART@0xfeb50000 registered successfully, serial-id=2, baudrate=1500000, irq-mode=true[m
+[m[37max_driver::soc::rockchip::cru::rk3588:60] [32mRK3588 CRU reg: addr=0xfd7c0000, size=0x5c000, rockchip,grf=<0x7a>[m
+[m[37mrockchip_soc::variants::rk3588::cru:123] [32mCRU@fd7c0000: Initializing and verifying clock configuration...[m
+[m[37mrockchip_soc::variants::rk3588::cru:174] [33m⚠ CRU@fd7c0000: ACLK_BUS_ROOT div mismatch! u-boot: 3, current: 4[m
+[m[37mrockchip_soc::variants::rk3588::cru:248] [32m✓ CRU@fd7c0000: Clock configuration verified[m
+[m[37max_driver::soc::rockchip::cru::rk3588:79] [32mRK3588 CRU clock/reset registered successfully[m
+[m[37max_driver::soc::rockchip::pm:78] [32mRockchip power-domain provider registered successfully[m
+[m[37max_driver::block::rockchip::clock:12] [32m[mmc@fe2e0000] enabled SDHCI clock Some("core") (0x13a)[m
+[m[37max_driver::block::rockchip::clock:12] [32m[mmc@fe2e0000] enabled SDHCI clock Some("bus") (0x138)[m
+[m[37max_driver::block::rockchip::clock:12] [32m[mmc@fe2e0000] enabled SDHCI clock Some("axi") (0x139)[m
+[m[37max_driver::block::rockchip::clock:12] [32m[mmc@fe2e0000] enabled SDHCI clock Some("block") (0x13b)[m
+[m[37max_driver::block::rockchip::clock:12] [32m[mmc@fe2e0000] enabled SDHCI clock Some("timer") (0x13c)[m
+[m[37max_driver::block::rockchip::sdhci_rk3588:176] [32mrockchip-sdhci probe: node=mmc@fe2e0000, addr=0xfe2e0000, size=0x10000[m
+[m[37max_driver::block::rockchip::sdhci_rk3588:191] [32mrockchip-sdhci: using external CRU clock[m
+[m[37max_driver::block::rockchip::sdhci_rk3588:212] [32mrockchip-sdhci: defer protocol initialization controller=rockchip-sdhci:/mmc@fe2e0000 media=MMC preference=MmcFirst[m
+[m[37max_driver::block::rockchip::sdhci_rk3588:222] [32mrockchip-sdhci block device registered irq=None[m
+[m[37max_runtime::serial:895] [32mserial runtime NS16550 UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 622, cells: [0, 334, 4] }))), polling=false[m
+[m[37max_runtime::serial:895] [32mserial runtime Rockchip FIQ Debugger UART ready: cpu=0, irq=Some(Source(FdtInterrupt(FdtIrqSpec { controller: 622, cells: [0, 333, 4] }))), polling=false[m
+[m[ 10.363693 0:2 [37max_runtime:359] [32mruntime console active: serial1, ttyS2[m
+[m[ 10.363926 0:6 [37msdmmc_protocol::sdio::init::state_machine:102] [32msdio: submit bus op ResetAll[m
+[m[ 10.364018 0:6 [37max_fs_ng::block::runtime::hctx:177] [32mblock hctx 0 bound to CPU 0 with hardware depth 1[m
+[m[ 10.364089 0:6 [37max_fs_ng::block::runtime::lifecycle::device:333] [32mblock device rockchip-sdhci:/mmc@fe2e0000 IRQ source 0 (IrqId { domain: IrqDomainId(7), hwirq: HwIrq(237) }) fixed to CPU 0 for queue mask 0x1[m
+[m[ 10.364419 0:7 [37max_driver::block::rockchip::sdhci_rk3588:266] [32mrockchip-sdhci: RK3588 DWCMSHC vendor reset area1=0x500[m
+[m[ 10.364552 0:7 [37msdmmc_protocol::sdio::init::state_machine:102] [32msdio: submit bus op PowerOn[m
+[m[ 10.374698 0:7 [37msdmmc_protocol::sdio::init::state_machine:102] [32msdio: submit bus op SwitchVoltage(V330)[m
+[m[ 10.379270 0:7 [37msdmmc_protocol::sdio::init::state_machine:63] [32msdio: submit bus op SetBusWidth(Bit1)[m
+[m[ 10.379431 0:7 [37msdmmc_protocol::sdio::init::state_machine:63] [32msdio: submit bus op SetClock(Identification)[m
+[m[ 10.379690 0:7 [37max_driver::block::rockchip::sdhci_rk3588:121] [32mrockchip-sdhci: core clock set to 375000 Hz[m
+[m[ 10.422115 0:7 [37msdmmc_protocol::sdio::init::state_machine::identify:264] [32msdio: detected Mmc ocr=0xc0ff8080[m
+[m[ 10.423652 0:7 [37msdmmc_protocol::sdio::init::state_machine::identify:340] [32msdio: CSD capacity_blocks=None[m
+[m[ 10.435793 0:7 [37msdmmc_protocol::sdio::init::state_machine::mmc:38] [32msdio: EXT_CSD sector_count=122159104[m
+[m[ 10.438337 0:7 [37max_driver::block::rockchip::sdhci_rk3588:121] [32mrockchip-sdhci: core clock set to 50000000 Hz[m
+[m[ 10.438744 0:7 [37msdmmc_protocol::sdio::init::state_machine::mmc:314] [32msdio: MMC speed selected HighSpeed bus_width=Bit8[m
+[m[ 10.438985 0:7 [37msdmmc_protocol::sdio::init::state_machine::mmc:340] [32msdio: enabled 1024 KiB volatile write cache[m
+[m[ 10.439144 0:7 [37msdmmc_protocol::sdio::init::state_machine:237] [32msdio: init done kind=Mmc sd_v2=false high_capacity=true rca=0x1 ocr=0xc0ff8080 host_bus_width=Bit8 ext_csd_bus_width=Some(Sdr1) ext_csd_timing=Some(Compat)[m
+[m[ 10.439171 0:7 [37msdmmc_protocol::rdif::queue:172] [32msdmmc block init complete: kind=Mmc high_capacity=true rca=1 capacity_blocks=122159104 cache_enabled=true[m
+[m[ 10.468037 0:2 [37max_fs_ng::root:348] [32m    partition 1 name=Some("uboot") fs=None lba 16384..24576[m
+[m[ 10.468734 0:2 [37max_fs_ng::root:348] [32m    partition 2 name=Some("misc") fs=None lba 24576..32768[m
+[m[ 10.469284 0:2 [37max_fs_ng::root:348] [32m    partition 3 name=Some("boot") fs=None lba 32768..163840[m
+[m[ 10.469806 0:2 [37max_fs_ng::root:348] [32m    partition 4 name=Some("recovery") fs=None lba 163840..425984[m
+[m[ 10.470292 0:2 [37max_fs_ng::root:348] [32m    partition 5 name=Some("backup") fs=None lba 425984..491520[m
+[m[ 10.470628 0:2 [37max_fs_ng::root:348] [32m    partition 6 name=Some("rootfs") fs=Some(Ext4) lba 491520..29851648[m
+[m[ 10.470932 0:2 [37max_fs_ng::root:348] [32m    partition 7 name=Some("oem") fs=Some(Ext4) lba 29851648..30113792[m
+[m[ 10.471235 0:2 [37max_fs_ng::root:348] [32m    partition 8 name=Some("userdata") fs=Some(Ext4) lba 30113792..122159071[m
+[m[ 10.471264 0:2 [37max_fs_ng::root:364] [32m  block device 0 (rockchip-sdhci:/mmc@fe2e0000) has Gpt partition table with 8 partitions[m
+[m[ 10.471325 0:2 [37max_fs_ng::root:462] [32m  matched root by PARTLABEL on disk0 partition 6 (rootfs, fs=ext4, lba 491520..29851648)[m
+[m[ 10.471357 0:2 [37max_fs_ng:109] [32mInitialize filesystem subsystem...[m
+[m[ 10.471369 0:2 [37max_fs_ng:110] [32m  selected root device: disk0 partition 6 (rootfs, fs=ext4, lba 491520..29851648)[m
+[m[ 10.472158 0:2 [37mrsext4::crc32c::arm64:54] [33mID_AA64ISAR0_EL1[19:16]: 0x1[m
+[m[ 10.472173 0:2 [37mrsext4::crc32c::arm64:57] [33mHardware CRC32C support detected.[m
+[m[ 10.487085 0:2 [37mrsext4::ext4::mount:331] [32m/lost+found exists (superblock hint inode=11)[m
+[m[ 10.488164 0:2 [37mrsext4::ext4::mount:466] [32mExt4 filesystem mounted[m
+[m[ 10.488185 0:2 [37mrsext4::ext4::mount:467] [32m  - block size: 4096 bytes[m
+[m[ 10.488198 0:2 [37mrsext4::ext4::mount:468] [32m  - total blocks: 3670016[m
+[m[ 10.488210 0:2 [37mrsext4::ext4::mount:469] [32m  - free blocks: 3298217[m
+[m[ 10.488222 0:2 [37mrsext4::ext4::mount:470] [32m  - total inodes: 847616[m
+[m[ 10.488234 0:2 [37mrsext4::ext4::mount:471] [32m  - free inodes: 833535[m
+[m[ 10.488246 0:2 [37mrsext4::ext4::sync:13] [32mSyncing filesystem...[m
+I/TC: Secondary CPU 1 initializing
+I/TC: Secondary CPU 1 switching to normal world boot
+I/TC: Secondary CPU 2 initializing
+I/TC: Secondary CPU 2 switching to normal world boot
+I/TC: Secondary CPU 3 initializing
+I/TC: Secondary CPU 3 switching to normal world boot
+I/TC: Secondary CPU 4 initializing
+I/TC: Secondary CPU 4 switching to normal world boot
+I/TC: Secondary CPU 5 initializing
+I/TC: Secondary CPU 5 switching to normal world boot
+I/TC: Secondary CPU 6 initializing
+I/TC: Secondary CPU 6 switching to normal world boot
+I/TC: Secondary CPU 7 initializing
+I/TC: Secondary CPU 7 switching to normal world boot
+[m[ 10.500817 1 [37msomehal::arch::gic::v3:274] [32mGICv3 CPU 1 EOI mode: two_step=true[m
+[m
+       d8888            888     888  d8b
+      d88888            888     888  Y8P
+     d88P888            888     888
+    d88P 888  888  888  Y88b   d88P  888  .d8888b    .d88b.   888d888
+   d88P  888  `Y8bd8P'   Y88b d88P   888  88K       d88""88b  888P"
+  d88P   888    X88K      Y88o88P    888  "Y8888b.  888  888  888
+ d8888888888  .d8""8b.     Y888P     888       X88  Y88..88P  888
+d88P     888  888  888      Y8P      888   88888P'   "Y88P"   888
+
+by AxVisor Team
+
+[Axvisor] dropped 169 host log records (32635 source bytes)
+[ 10.504165 2 [37msomehal::arch::gic::v3:274] [32mGICv3 CPU 2 EOI mode: two_step=true[m
+[m
+[ 10.507491 3 [37msomehal::arch::gic::v3:274] [32mGICv3 CPU 3 EOI mode: two_step=true[m
+[m
+[ 10.510811 4 [37msomehal::arch::gic::v3:274] [32mGICv3 CPU 4 EOI mode: two_step=true[m
+[m
+[ 10.514139 5 [37msomehal::arch::gic::v3:274] [32mGICv3 CPU 5 EOI mode: two_step=true[m
+[m
+[ 10.517452 6 [37msomehal::arch::gic::v3:274] [32mGICv3 CPU 6 EOI mode: two_step=true[m
+[m
+[ 10.520766 7 [37msomehal::arch::gic::v3:274] [32mGICv3 CPU 7 EOI mode: two_step=true[m
+[m
+[ 10.494106 0:2 [37mrsext4::ext4::mount:550] [32mExt4 filesystem mounted[m
+[m
+[ 10.500842 1 [37max_runtime::mp:84] [32mSecondary CPU 1 started.[m
+[m
+[ 10.504184 2 [37max_runtime::mp:84] [32mSecondary CPU 2 started.[m
+[m
+[ 10.507509 3 [37max_runtime::mp:84] [32mSecondary CPU 3 started.[m
+[m
+[ 10.510823 4 [37max_runtime::mp:84] [32mSecondary CPU 4 started.[m
+[m
+[ 10.514151 5 [37max_runtime::mp:84] [32mSecondary CPU 5 started.[m
+[m
+[ 10.517464 6 [37max_runtime::mp:84] [32mSecondary CPU 6 started.[m
+[m
+[ 10.520778 7 [37max_runtime::mp:84] [32mSecondary CPU 7 started.[m
+[m
+[ 10.494144 0:2 [37max_fs_ng:122] [32m  filesystem type: "ext4"[m
+[m
+[ 10.500940 1:8 [37max_runtime::mp:123] [32mSecondary CPU 1 init OK.[m
+[m
+[ 10.504275 2:10 [37max_runtime::mp:123] [32mSecondary CPU 2 init OK.[m
+[m
+[ 10.507598 3:12 [37max_runtime::mp:123] [32mSecondary CPU 3 init OK.[m
+[m
+[ 10.510872 4:14 [37max_runtime::mp:123] [32mSecondary CPU 4 init OK.[m
+[m
+[ 10.514199 5:16 [37max_runtime::mp:123] [32mSecondary CPU 5 init OK.[m
+[m
+[ 10.517512 6:18 [37max_runtime::mp:123] [32mSecondary CPU 6 init OK.[m
+[m
+[ 10.520826 7:20 [37max_runtime::mp:123] [32mSecondary CPU 7 init OK.[m
+[m
+[ 10.496269 0:2 [37mrsext4::blockgroup_description::desc:109] [31mGroup descriptor checksum mismatch: group=0 stored=0x0000 expected=0x0589 desc_size=64 block_bitmap=8196 inode_bitmap=24580 inode_table=40964 free_blocks=57348 free_inodes=0 used_dirs=8196 itable_unused=0 flags=0x1 block_bitmap_csum=0x0 inode_bitmap_csum=0x0[m
+[m
+[ 10.686375 1:25 [37maxvm::host::arceos:348] [32mCore 1 is initializing hardware virtualization support...[m
+[m
+[ 10.686397 2:26 [37maxvm::host::arceos:348] [32mCore 2 is initializing hardware virtualization support...[m
+[m
+[ 10.686424 3:27 [37maxvm::host::arceos:348] [32mCore 3 is initializing hardware virtualization support...[m
+[m
+[ 10.686456 4:29 [37maxvm::host::arceos:348] [32mCore 4 is initializing hardware virtualization support...[m
+[m
+[ 10.686490 5:31 [37maxvm::host::arceos:348] [32mCore 5 is initializing hardware virtualization support...[m
+[m
+[ 10.686519 6:34 [37maxvm::host::arceos:348] [32mCore 6 is initializing hardware virtualization support...[m
+[m
+[ 10.686561 7:36 [37maxvm::host::arceos:348] [32mCore 7 is initializing hardware virtualization support...[m
+[m
+[ 10.496290 0:2 [37mrsext4::ext4::mount:554] [31mMount failed: EUCLEAN: Structure needs cleaning[m
+[m
+[ 10.686389 1:25 [37maxvm::timer:519] [32mInitializing AxVM timer wheel...[m
+[m
+[ 10.686411 2:26 [37maxvm::timer:519] [32mInitializing AxVM timer wheel...[m
+[m
+[ 10.686438 3:27 [37maxvm::timer:519] [32mInitializing AxVM timer wheel...[m
+[m
+[ 10.686464 4:29 [37maxvm::timer:519] [32mInitializing AxVM timer wheel...[m
+[m
+[ 10.686498 5:31 [37maxvm::timer:519] [32mInitializing AxVM timer wheel...[m
+[m
+[ 10.686527 6:34 [37maxvm::timer:519] [32mInitializing AxVM timer wheel...[m
+[m
+[ 10.686569 7:36 [37maxvm::timer:519] [32mInitializing AxVM timer wheel...[m
+[m
+[ 10.496305 0:2 [37max_fs_ng::fs::ext4::rsext4::fs:127] [33mext4 journal replay failed with EUCLEAN; retrying read-only without journal replay[m
+[m
+[ 10.686455 1:25 [37maxvm::host::arceos:352] [32mHardware virtualization support enabled on core 1 (2/8)[m
+[m
+[ 10.686483 2:26 [37maxvm::host::arceos:352] [32mHardware virtualization support enabled on core 2 (3/8)[m
+[m
+[ 10.686505 3:27 [37maxvm::host::arceos:352] [32mHardware virtualization support enabled on core 3 (4/8)[m
+[m
+[ 10.686506 4:29 [37maxvm::host::arceos:352] [32mHardware virtualization support enabled on core 4 (5/8)[m
+[m
+[ 10.686536 5:31 [37maxvm::host::arceos:352] [32mHardware virtualization support enabled on core 5 (6/8)[m
+[m
+[ 10.686568 6:34 [37maxvm::host::arceos:352] [32mHardware virtualization support enabled on core 6 (7/8)[m
+[m
+[ 10.686600 7:36 [37maxvm::host::arceos:352] [32mHardware virtualization support enabled on core 7 (8/8)[m
+[m
+[ 10.496337 0:2 [37mrsext4::blockgroup_description::desc:109] [31mGroup descriptor checksum mismatch: group=0 stored=0x0000 expected=0x0589 desc_size=64 block_bitmap=8196 inode_bitmap=24580 inode_table=40964 free_blocks=57348 free_inodes=0 used_dirs=8196 itable_unused=0 flags=0x1 block_bitmap_csum=0x0 inode_bitmap_csum=0x0[m
+[m
+[ 10.496356 0:2 [37mrsext4::ext4::mount:554] [31mMount failed: EUCLEAN: Structure needs cleaning[m
+[m
+[ 10.496377 0:2 [37max_fs_ng::root:622] [33m  failed to initialize filesystem for partition disk0 partition 7 (oem, fs=ext4, lba 29851648..30113792): Io[m
+[m
+[ 10.497281 0:2 [37mrsext4::blockgroup_description::desc:109] [31mGroup descriptor checksum mismatch: group=0 stored=0x0a8d expected=0x16fe desc_size=64 block_bitmap=262145 inode_bitmap=262161 inode_table=262177 free_blocks=3808 free_inodes=1088 used_dirs=0 itable_unused=1088 flags=0x5 block_bitmap_csum=0x4c1cbc8f inode_bitmap_csum=0xe0e99c72[m
+[m
+[ 10.497309 0:2 [37mrsext4::ext4::mount:554] [31mMount failed: EUCLEAN: Structure needs cleaning[m
+[m
+[ 10.497322 0:2 [37max_fs_ng::fs::ext4::rsext4::fs:127] [33mext4 journal replay failed with EUCLEAN; retrying read-only without journal replay[m
+[m
+[ 10.497354 0:2 [37mrsext4::blockgroup_description::desc:109] [31mGroup descriptor checksum mismatch: group=0 stored=0x0a8d expected=0x16fe desc_size=64 block_bitmap=262145 inode_bitmap=262161 inode_table=262177 free_blocks=3808 free_inodes=1088 used_dirs=0 itable_unused=1088 flags=0x5 block_bitmap_csum=0x4c1cbc8f inode_bitmap_csum=0xe0e99c72[m
+[m
+[ 10.497373 0:2 [37mrsext4::ext4::mount:554] [31mMount failed: EUCLEAN: Structure needs cleaning[m
+[m
+[ 10.497393 0:2 [37max_fs_ng::root:622] [33m  failed to initialize filesystem for partition disk0 partition 8 (userdata, fs=ext4, lba 30113792..122159071): Io[m
+[m
+[ 10.520779 0:2 [37max_runtime:399] [32mPrimary CPU 0 init OK.[m
+[m
+[ 10.521064 0:2 [37max_fs_ng::block::runtime::lifecycle::device:409] [32mblock device rockchip-sdhci:/mmc@fe2e0000 online with 1 hctxs across 8 CPUs[m
+[m
+[ 10.521232 0:2 [37maxvisor:130] [32mStarting virtualization...[m
+[m
+[ 10.521246 0:2 [37maxvm::host::arceos:330] [32mEnabling hardware virtualization support on all cores...[m
+[m
+[ 10.521259 0:2 [37maxvm::host::arceos:336] [32mCore 0 is initializing hardware virtualization support...[m
+[m
+[ 10.521272 0:2 [37maxvm::timer:519] [32mInitializing AxVM timer wheel...[m
+[m
+[ 10.686317 0:2 [37maxvm::host::arceos:338] [32mHardware virtualization support enabled on core 0[m
+[m
+[ 10.686557 0:2 [37maxvm::host::arceos:365] [32mWaiting for all cores to enable hardware virtualization...[m
+[m
+[ 10.688011 0:2 [37maxvm::host::arceos:376] [32mAll cores have enabled hardware virtualization support.[m
+[m
+[ 13.419101 1:41 [37maxvm::runtime::vcpus:1121] [32mVM[2] VCpu[0] waiting for running[m
+[m
+[ 13.418945 2:39 [37maxvm::runtime::vcpus:1121] [32mVM[1] VCpu[0] waiting for running[m
+[m
+[ 13.418382 0:2 [37maxvm::host::arceos:193] [32mReleased 1 host filesystem block IRQ registration(s) during shutdown[m
+[m
+[ 13.419120 1:41 [37maxvm::runtime::vcpus:1159] [32mVM[2] VCpu[0] running on CPU1...[m
+[m
+[ 13.418966 2:39 [37maxvm::runtime::vcpus:1159] [32mVM[1] VCpu[0] running on CPU2...[m
+[m
+[ 13.418404 0:2 [37maxvisor::manager:135] [32mHost filesystem cleanly unmounted before guest passthrough devices start[m
+[m
+[ 13.418422 0:2 [37maxvm::runtime:84] [32mVMM starting, booting VMs...[m
+[m
+[ 13.418439 0:2 [37maxvm::vm:1777] [32mStarting VM[1][m
+[m
+[ 13.418458 0:2 [37maxvm::runtime::vcpus:1047] [32mSpawning task for VM[1] VCpu[0][m
+[m
+[ 13.418500 0:2 [37maxvm::runtime::vcpus:1066] [32mVCpu task Task(39, "VM[1]-VCpu[0]") created priority=89 cpumask: [2, ][m
+[m
+[ 13.418842 0:2 [37maxvm::arch::aarch64::gic::physical:61] [32mregistered assigned AArch64 SPI route host_intid=142 guest_intid=142[m
+[m
+[ 13.418858 0:2 [37maxvm::arch::aarch64::gic::physical:61] [32mregistered assigned AArch64 SPI route host_intid=143 guest_intid=143[m
+[m
+[ 13.418871 0:2 [37maxvm::arch::aarch64::gic::physical:61] [32mregistered assigned AArch64 SPI route host_intid=144 guest_intid=144[m
+[m
+[ 13.418884 0:2 [37maxvm::arch::aarch64::gic::physical:61] [32mregistered assigned AArch64 SPI route host_intid=237 guest_intid=237[m
+[m
+[ 13.418940 0:2 [37maxvm::runtime:92] [32mVM[1] boot success[m
+[m
+[ 13.418953 0:2 [37maxvm::vm:1777] [32mStarting VM[2][m
+[m
+[ 13.418970 0:2 [37maxvm::runtime::vcpus:1047] [32mSpawning task for VM[2] VCpu[0][m
+[m
+[ 13.419009 0:2 [37maxvm::runtime::vcpus:1066] [32mVCpu task Task(41, "VM[2]-VCpu[0]") created priority=90 cpumask: [1, ][m
+[m
+[ 13.419092 0:2 [37maxvm::runtime:92] [32mVM[2] boot success[m
+[m
+[ 13.419175 0:2 [37maxvisor:172] [32m[OK] Default guest initialized[m
+[m
+[ 13.419189 0:2 [37maxvisor:177] [32mshell task on CPU0[m
+[m
+[VM 1] console=ttyS2
+[VM 1] VM Load @PA:0x40000000
+[VM 1] VM Load Offset: 0xc0000000
+[VM 2] *** Booting Zephyr OS build dccb09599635bdff17633fa7e9dab014b91dce90 ***
+[VM 2] TASK2_MAIN_START
+[VM 2] TASK2_SOCKET_CREATE
+[VM 2] TASK2_SOCKET_CREATED fd=0
+[VM 2] TASK2_NET_CONFIGURED interface=virtio-net ip=10.0.42.2/24
+[VM 2] TASK2_READY role=managed local=10.0.42.2:4242 peer=10.0.42.15:4242
+[VM 2] PERIODIC LATENCY READY frequency_hz=24000000 period_ms=10 samples=300
+[VM 1] Memory Map:
+[VM 1]   KImg   0x00000040000000 - 0x00000041000000 (16 MiB)
+[VM 1]   Free   0x00000041000000 - 0x0000007c000000 (944 MiB)
+[VM 1]   Rsv    0x0000007c000000 - 0x0000007db16000 (27.09 MiB)
+[VM 1]   Free   0x0000007db16000 - 0x00000080000000 (36.91 MiB)
+[VM 1] Initialize RAM allocator: 0x41000000..0x7c000000
+[VM 1] Reserving CPU-local areas
+[VM 1] CPU-local area stride: 0x41000 bytes
+[VM 1] Total CPU-local allocation: 0x82000 bytes (2 CPUs)
+[VM 1] Flushed RAM used range to memory map: 0x41000000..0x41003000, current: 0x41003000
+[VM 1] Flushed RAM used range to memory map: 0x41003000..0x41085000, current: 0x41085000
+[VM 1] CPU-local areas allocated at 0x41003000 - 0x41085000
+[VM 1] EL: 1
+[VM 1] Mapping early memory regions...
+[VM 1] Ram                 : [0xffff000040000000, 0xffff000080000000) -> [0x0000000040000000, 0x0000000080000000) (1 GiB)
+[VM 1] KImage              : [0xffffffff80000000, 0xffffffff81000000) -> [0x0000000040000000, 0x0000000041000000) (16 MiB)
+[VM 1] PerCpu              : [0xffffff0041003000, 0xffffff0041085000) -> [0x0000000041003000, 0x0000000041085000) (520 KiB)
+[VM 1] Debug serial        : [0xffff0000feb50000, 0xffff0000feb51000) -> [0x00000000feb50000, 0x00000000feb51000) (4 KiB)
+[VM 1] Boot page table at physical address: PA:0x41085000
+[VM 1] Setting up table registers...
+[VM 1] MMU Entry point at physical address: 0x4034c518
+[VM 1] Trap vector at 0xffffffff80351800
+[VM 1] Memory Map:
+[VM 1]   KImg   0x00000040000000 - 0x00000041000000 (16 MiB)
+[VM 1]   Rsv    0x00000041000000 - 0x00000041003000 (12 KiB)
+[VM 1]   PerCPU 0x00000041003000 - 0x00000041085000 (520 KiB)
+[VM 1]   Rsv    0x00000041085000 - 0x0000004108e000 (36 KiB)
+[VM 1]   Free   0x0000004108e000 - 0x0000007c000000 (943.45 MiB)
+[VM 1]   Rsv    0x0000007c000000 - 0x0000007db16000 (27.09 MiB)
+[VM 1]   Free   0x0000007db16000 - 0x00000080000000 (36.91 MiB)
+[VM 1]   MMIO   0x000000feb50000 - 0x000000feb51000 (4 KiB)
+[VM 1] Jumping to main entry point at 0xffffffff803317e0 with SP 0xffffff0041044000
+[VM 1] 
+[VM 1]        d8888                            .d88888b.   .d8888b.
+[VM 1]       d88888                           d88P" "Y88b d88P  Y88b
+[VM 1]      d88P888                           888     888 Y88b.
+[VM 1]     d88P 888 888d888  .d8888b  .d88b.  888     888  "Y888b.
+[VM 1]    d88P  888 888P"   d88P"    d8P  Y8b 888     888     "Y88b.
+[VM 1]   d88P   888 888     888      88888888 888     888       "888
+[VM 1]  d8888888888 888     Y88b.    Y8b.     Y88b. .d88P Y88b  d88P
+[VM 1] d88P     888 888      "Y8888P  "Y8888   "Y88888P"   "Y8888P"
+[VM 1] 
+[VM 1] arch = aarch64
+[VM 1] platform = ATK-DLRK3588 Board
+[VM 1] target = aarch64-unknown-none-softfloat
+[VM 1] build_mode = 
+[VM 1] log_level = warn
+[VM 1] backtrace = false
+[VM 1] smp = 2
+[VM 1] 
+[ 13.704621 2:39 [37maxvm::configured::devices::virtio_net:685] [33mvirtio-net drops an ingress frame: NotReady[m
+[m
+[VM 1] [37max_driver::soc::scmi:54] [33m[scmi] SCMI shmem phandle 69 cannot be resolved by rdrive; using RK3588 shmem fallback 0x10f000+0x100[m
+[VM 1] [m[37mrockchip_soc::variants::rk3588::cru:174] [33m⚠ CRU@ffff0000fd7c0000: ACLK_BUS_ROOT div mismatch! u-boot: 3, current: 4[m
+[VM 1] [mBoot at 1970-01-01 00:00:02.070329041 UTC
+[VM 1] 
+[VM 1] [37mrsext4::crc32c::arm64:54] [33mID_AA64ISAR0_EL1[19:16]: 0x1[m
+[VM 1] [m[37mrsext4::crc32c::arm64:57] [33mHardware CRC32C support detected.[m
+[VM 1] [m[37mrsext4::blockgroup_description::desc:109] [31mGroup descriptor checksum mismatch: group=0 stored=0x0000 expected=0x0589 desc_size=64 block_bitmap=8196 inode_bitmap=24580 inode_table=40964 free_blocks=57348 free_inodes=0 used_dirs=8196 itable_unused=0 flags=0x1 block_bitmap_csum=0x0 inode_bitmap_csum=0x0[m
+[VM 1] [m[37mrsext4::ext4::mount:554] [31mMount failed: EUCLEAN: Structure needs cleaning[m
+[VM 1] [m[37max_fs_ng::fs::ext4::rsext4::fs:127] [33mext4 journal replay failed with EUCLEAN; retrying read-only without journal replay[m
+[VM 1] [m[37mrsext4::blockgroup_description::desc:109] [31mGroup descriptor checksum mismatch: group=0 stored=0x0000 expected=0x0589 desc_size=64 block_bitmap=8196 inode_bitmap=24580 inode_table=40964 free_blocks=57348 free_inodes=0 used_dirs=8196 itable_unused=0 flags=0x1 block_bitmap_csum=0x0 inode_bitmap_csum=0x0[m
+[VM 1] [m[37mrsext4::ext4::mount:554] [31mMount failed: EUCLEAN: Structure needs cleaning[m
+[VM 1] [m[37max_fs_ng::root:622] [33m  failed to initialize filesystem for partition disk0 partition 7 (oem, fs=ext4, lba 29851648..30113792): Io[m
+[VM 1] [m[37mrsext4::blockgroup_description::desc:109] [31mGroup descriptor checksum mismatch: group=0 stored=0x0a8d expected=0x16fe desc_size=64 block_bitmap=262145 inode_bitmap=262161 inode_table=262177 free_blocks=3808 free_inodes=1088 used_dirs=0 itable_unused=1088 flags=0x5 block_bitmap_csum=0x4c1cbc8f inode_bitmap_csum=0xe0e99c72[m
+[VM 1] [m[37mrsext4::ext4::mount:554] [31mMount failed: EUCLEAN: Structure needs cleaning[m
+[VM 1] [m[37max_fs_ng::fs::ext4::rsext4::fs:127] [33mext4 journal replay failed with EUCLEAN; retrying read-only without journal replay[m
+[VM 1] [m[37mrsext4::blockgroup_description::desc:109] [31mGroup descriptor checksum mismatch: group=0 stored=0x0a8d expected=0x16fe desc_size=64 block_bitmap=262145 inode_bitmap=262161 inode_table=262177 free_blocks=3808 free_inodes=1088 used_dirs=0 itable_unused=1088 flags=0x5 block_bitmap_csum=0x4c1cbc8f inode_bitmap_csum=0xe0e99c72[m
+[VM 1] [m[37mrsext4::ext4::mount:554] [31mMount failed: EUCLEAN: Structure needs cleaning[m
+[VM 1] [m[37max_fs_ng::root:622] [33m  failed to initialize filesystem for partition disk0 partition 8 (userdata, fs=ext4, lba 30113792..122159071): Io[m
+[VM 1] [m[37max_net:979] [33mDHCP bootstrap timed out[m
+[ 16.248157 2:39 [37maxvm::runtime::hvc:280] [32mVM[1] PSCI_CPU_ON target=0x1 entry=0x4034ba8c context=0x41044e00[m
+[m
+[ 16.248203 2:39 [37maxvm::runtime::vcpus:1047] [32mSpawning task for VM[1] VCpu[1][m
+[m
+[ 16.248246 2:39 [37maxvm::runtime::vcpus:1066] [32mVCpu task Task(44, "VM[1]-VCpu[1]") created priority=89 cpumask: [1, ][m
+[m
+[ 16.248301 1:44 [37maxvm::runtime::vcpus:1121] [32mVM[1] VCpu[1] waiting for running[m
+[m
+[ 16.248345 1:44 [37maxvm::runtime::vcpus:1159] [32mVM[1] VCpu[1] running on CPU1...[m
+[m
+[VM 1] [mInitialized 6 tracepoints
+[VM 1] kmod subsystem initialized
+[VM 1] [37mstarry_kernel::pseudofs::dev::tty::serial:190] [33m/dev/console has no serial TTY binding[m
+[VM 1] [m[37mstarry_kernel::entry:99] [33mFailed to bind console tty: NoSuchDevice[m
+[VM 1] [mTASK3_HYBRID_SCENE_BEGIN source=rknn communication_cpu=1 ai_cpu=0
+[VM 1] TASK3_CONTROLLER_STARTED cpu=1 pid=2
+[VM 1] [37mrockchip_npu:281] [33mPowerOn operation not yet implemented[m
+[VM 1] [m[37mrockchip_npu:276] [33mSetProcNice operation not applicable in bare metal context[m
+[VM 1] [m[37mrockchip_npu::ioctrl:256] [33mrknpu submit: core_mask=0x1 active_cores=1 subcore_layout=[CoreSubmitState { core_idx: 0, task_iter: 632, task_end: 662, current_start: 0, current_number: 0, current_int_mask: 0, completed: 0, inflight: false }][m
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=204
+[VM 2] TASK2_CONTROL_RECEIVED seq=1 request=1
+[VM 2] TASK3_CONTROL_APPLIED request=1 value=600
+[VM 2] TASK3_PLANT_STATE before=300 after=380 dist=0
+[VM 2] TASK2_STATUS_SENT seq=1
+[VM 2] TASK2_ACK seq=1
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=722
+[VM 2] TASK2_CONTROL_RECEIVED seq=2 request=2
+[VM 2] TASK3_CONTROL_APPLIED request=2 value=700
+[VM 2] TASK3_PLANT_STATE before=380 after=460 dist=0
+[VM 2] TASK2_STATUS_SENT seq=2
+[VM 2] TASK2_ACK seq=2
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=933
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=1164
+[VM 2] TASK2_CONTROL_RECEIVED seq=3 request=3
+[VM 2] TASK3_CONTROL_APPLIED request=3 value=600
+[VM 2] TASK3_PLANT_STATE before=460 after=469 dist=0
+[VM 2] TASK2_STATUS_SENT seq=3
+[VM 2] TASK2_ACK seq=3
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=1380
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=1614
+[VM 2] TASK2_CONTROL_RECEIVED seq=4 request=4
+[VM 2] TASK3_CONTROL_APPLIED request=4 value=500
+[VM 2] TASK3_PLANT_STATE before=469 after=438 dist=0
+[VM 2] TASK2_STATUS_SENT seq=4
+[VM 2] TASK2_ACK seq=4
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=1837
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=2072
+[VM 2] TASK2_CONTROL_RECEIVED seq=5 request=5
+[VM 2] TASK3_CONTROL_APPLIED request=5 value=600
+[VM 2] TASK3_PLANT_STATE before=438 after=456 dist=0
+[VM 2] TASK2_STATUS_SENT seq=5
+[VM 2] TASK2_ACK seq=5
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=2306
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=2543
+[VM 2] TASK2_CONTROL_RECEIVED seq=6 request=6
+[VM 2] TASK3_CONTROL_APPLIED request=6 value=500
+[VM 2] TASK3_PLANT_STATE before=456 after=432 dist=0
+[VM 2] TASK2_STATUS_SENT seq=6
+[VM 2] TASK2_ACK seq=6
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=2779
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=2989
+[VM 2] TASK2_CONTROL_RECEIVED seq=7 request=7
+[VM 2] TASK3_CONTROL_APPLIED request=7 value=0
+[VM 2] TASK3_PLANT_STATE before=432 after=432 dist=0
+[VM 2] TASK2_STATUS_SENT seq=7
+[VM 2] TASK2_ACK seq=7
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=3189
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=3433
+[VM 2] TASK2_CONTROL_RECEIVED seq=8 request=8
+[VM 2] TASK3_CONTROL_APPLIED request=8 value=0
+[VM 2] TASK3_PLANT_STATE before=432 after=432 dist=0
+[VM 2] TASK2_STATUS_SENT seq=8
+[VM 2] TASK2_ACK seq=8
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=3637
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=3877
+[VM 2] TASK3_DISTURBANCE change=150 at_ms=8420
+[VM 2] TASK2_CONTROL_RECEIVED seq=9 request=9
+[VM 2] TASK3_CONTROL_APPLIED request=9 value=0
+[VM 2] TASK3_PLANT_STATE before=432 after=432 dist=150
+[VM 2] TASK2_STATUS_SENT seq=9
+[VM 2] TASK2_ACK seq=9
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=4097
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=4330
+[VM 2] TASK2_CONTROL_RECEIVED seq=10 request=10
+[VM 2] TASK3_CONTROL_APPLIED request=10 value=0
+[VM 2] TASK3_PLANT_STATE before=432 after=432 dist=150
+[VM 2] TASK2_STATUS_SENT seq=10
+[VM 2] TASK2_ACK seq=10
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=4551
+[VM 2] TASK2_CONTROL_RECEIVED seq=11 request=11
+[VM 2] TASK3_CONTROL_APPLIED request=11 value=0
+[VM 2] TASK3_PLANT_STATE before=432 after=432 dist=150
+[VM 2] TASK2_STATUS_SENT seq=11
+[VM 2] TASK2_ACK seq=11
+[VM 2] TASK2_CONTROL_RECEIVED seq=12 request=12
+[VM 2] TASK3_CONTROL_APPLIED request=12 value=400
+[VM 2] TASK3_PLANT_STATE before=432 after=534 dist=150
+[VM 2] TASK2_STATUS_SENT seq=12
+[VM 2] TASK2_ACK seq=12
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=4949
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=5159
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=5368
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=5578
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=5778
+[VM 1] [m[37mrockchip_npu:286] [33mPowerOff operation not yet implemented[m
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=5978
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=6187
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=6387
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=6597
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=6807
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=7016
+[VM 1] [mTASK2_READY role=controller local=10.0.42.15:4242 peer=10.0.42.2:4242
+[VM 1] TASK3_MODEL_READY model=yolov8.rknn version=rockchip-yolov8-rknn-external sha256=external:rknn-control-v3 path=/usr/share/task3-yolo mode=bounded-contract
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=4267
+[VM 1] TASK3_DETECTION event_index=1 event_id=road-0375 class=2 confidence_milli=880 center_x_milli=715 center_y_milli=602 area_milli=28 request=1
+[VM 1] TASK3_RKNN_INPUT elapsed_ms=261 generation=1 event_index=1 event_id=road-0375 outcome=track infer_start_ns=6372239416 infer_end_ns=6457812666 request=1
+[VM 1] TASK3_CONTROL_SENT elapsed_ms=261 event_index=1 event_id=road-0375 source=yolov8.rknn generation=1 request=1 action=SetOutput value=600 outcome=track infer_start_ns=6372239416 infer_end_ns=6457812666 seq=1
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=4469
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=4671
+[VM 1] TASK2_ACK seq=1
+[VM 1] TASK3_STATUS_RECEIVED elapsed_ms=396 event_index=1 event_id=road-0375 request=1 value=380 state=380 protocol_state=Active rtt_ms=135 status_ns=6600525750 end_to_end_us=228286
+[VM 1] TASK3_RKNN_ACK generation=1 event_index=1 request=1 elapsed_ms=396
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=5114
+[VM 1] TASK3_DETECTION event_index=2 event_id=road-0380 class=2 confidence_milli=848 center_x_milli=716 center_y_milli=608 area_milli=25 request=2
+[VM 1] TASK3_RKNN_INPUT elapsed_ms=722 generation=2 event_index=2 event_id=road-0380 outcome=track infer_start_ns=6747127625 infer_end_ns=6789692000 request=2
+[VM 1] TASK3_CONTROL_SENT elapsed_ms=722 event_index=2 event_id=road-0380 source=yolov8.rknn generation=2 request=2 action=SetOutput value=700 outcome=track infer_start_ns=6747127625 infer_end_ns=6789692000 seq=2
+[VM 1] TASK2_ACK seq=2
+[VM 1] TASK3_STATUS_RECEIVED elapsed_ms=780 event_index=2 event_id=road-0380 request=2 value=460 state=460 protocol_state=Active rtt_ms=58 status_ns=6984542541 end_to_end_us=237414
+[VM 1] TASK3_RKNN_ACK generation=2 event_index=2 request=2 elapsed_ms=780
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=5552
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=7216
+[VM 1] TASK3_DETECTION event_index=3 event_id=road-0385 class=2 confidence_milli=837 center_x_milli=482 center_y_milli=581 area_milli=19 request=3
+[VM 1] TASK3_RKNN_INPUT elapsed_ms=1164 generation=3 event_index=3 event_id=road-0385 outcome=track infer_start_ns=7191481791 infer_end_ns=7232873666 request=3
+[VM 1] TASK3_CONTROL_SENT elapsed_ms=1164 event_index=3 event_id=road-0385 source=yolov8.rknn generation=3 request=3 action=SetOutput value=600 outcome=track infer_start_ns=7191481791 infer_end_ns=7232873666 seq=3
+[VM 1] TASK2_ACK seq=3
+[VM 1] TASK3_STATUS_RECEIVED elapsed_ms=1221 event_index=3 event_id=road-0385 request=3 value=469 state=469 protocol_state=Active rtt_ms=57 status_ns=7426292416 end_to_end_us=234810
+[VM 1] TASK3_RKNN_ACK generation=3 event_index=3 request=3 elapsed_ms=1221
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=5998
+[VM 1] TASK3_DETECTION event_index=4 event_id=road-0390 class=2 confidence_milli=823 center_x_milli=436 center_y_milli=589 area_milli=24 request=4
+[VM 1] TASK3_RKNN_INPUT elapsed_ms=1614 generation=4 event_index=4 event_id=road-0390 outcome=track infer_start_ns=7638128166 infer_end_ns=7680113000 request=4
+[VM 1] TASK3_CONTROL_SENT elapsed_ms=1614 event_index=4 event_id=road-0390 source=yolov8.rknn generation=4 request=4 action=SetOutput value=500 outcome=track infer_start_ns=7638128166 infer_end_ns=7680113000 seq=4
+[VM 1] TASK2_ACK seq=4
+[VM 1] TASK3_STATUS_RECEIVED elapsed_ms=1672 event_index=4 event_id=road-0390 request=4 value=438 state=438 protocol_state=Active rtt_ms=58 status_ns=7876404958 end_to_end_us=238276
+[VM 1] TASK3_RKNN_ACK generation=4 event_index=4 request=4 elapsed_ms=1672
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=6455
+[VM 1] TASK3_DETECTION event_index=5 event_id=road-0395 class=2 confidence_milli=837 center_x_milli=685 center_y_milli=583 area_milli=20 request=5
+[VM 1] TASK3_RKNN_INPUT elapsed_ms=2072 generation=5 event_index=5 event_id=road-0395 outcome=track infer_start_ns=8098169041 infer_end_ns=8139833041 request=5
+[VM 1] TASK3_CONTROL_SENT elapsed_ms=2072 event_index=5 event_id=road-0395 source=yolov8.rknn generation=5 request=5 action=SetOutput value=600 outcome=track infer_start_ns=8098169041 infer_end_ns=8139833041 seq=5
+[VM 1] TASK2_ACK seq=5
+[VM 1] TASK3_STATUS_RECEIVED elapsed_ms=2130 event_index=5 event_id=road-0395 request=5 value=456 state=456 protocol_state=Active rtt_ms=58 status_ns=8334672791 end_to_end_us=236503
+[VM 1] TASK3_RKNN_ACK generation=5 event_index=5 request=5 elapsed_ms=2130
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=6820
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=7027
+[VM 1] TASK3_DETECTION event_index=6 event_id=road-0400 class=2 confidence_milli=855 center_x_milli=342 center_y_milli=613 area_milli=36 request=6
+[VM 1] TASK3_RKNN_INPUT elapsed_ms=2543 generation=6 event_index=6 event_id=road-0400 outcome=track infer_start_ns=8564828125 infer_end_ns=8606626291 request=6
+[VM 1] TASK3_CONTROL_SENT elapsed_ms=2543 event_index=6 event_id=road-0400 source=yolov8.rknn generation=6 request=6 action=SetOutput value=500 outcome=track infer_start_ns=8564828125 infer_end_ns=8606626291 seq=6
+[VM 1] TASK2_ACK seq=6
+[VM 1] TASK3_STATUS_RECEIVED elapsed_ms=2599 event_index=6 event_id=road-0400 request=6 value=432 state=432 protocol_state=Active rtt_ms=56 status_ns=8803501875 end_to_end_us=238673
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=7416
+[VM 1] TASK3_RKNN_ACK generation=6 event_index=6 request=6 elapsed_ms=2599
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=7292
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=7499
+[VM 1] TASK3_DETECTION event_index=7 event_id=hazard-0000 class=0 confidence_milli=862 center_x_milli=420 center_y_milli=850 area_milli=24 request=7
+[VM 1] TASK3_RKNN_INPUT elapsed_ms=2989 generation=7 event_index=7 event_id=hazard-0000 outcome=stop-hazard infer_start_ns=8991967541 infer_end_ns=9050232041 request=7
+[VM 1] TASK3_CONTROL_SENT elapsed_ms=2989 event_index=7 event_id=hazard-0000 source=yolov8.rknn generation=7 request=7 action=Stop value=0 outcome=stop-hazard infer_start_ns=8991967541 infer_end_ns=9050232041 seq=7
+[VM 1] TASK2_ACK seq=7
+[VM 1] TASK3_STATUS_RECEIVED elapsed_ms=3047 event_index=7 event_id=hazard-0000 request=7 value=432 state=432 protocol_state=Stopped rtt_ms=58 status_ns=9251456083 end_to_end_us=259488
+[VM 1] TASK3_RKNN_ACK generation=7 event_index=7 request=7 elapsed_ms=3047
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=7808
+[VM 1] TASK3_DETECTION event_index=8 event_id=hazard-0010 class=0 confidence_milli=862 center_x_milli=506 center_y_milli=422 area_milli=17 request=8
+[VM 1] TASK3_RKNN_INPUT elapsed_ms=3433 generation=8 event_index=8 event_id=hazard-0010 outcome=stop-latched infer_start_ns=9443455583 infer_end_ns=9501368916 request=8
+[VM 1] TASK3_CONTROL_SENT elapsed_ms=3433 event_index=8 event_id=hazard-0010 source=yolov8.rknn generation=8 request=8 action=Stop value=0 outcome=stop-latched infer_start_ns=9443455583 infer_end_ns=9501368916 seq=8
+[VM 1] TASK2_ACK seq=8
+[VM 1] TASK3_STATUS_RECEIVED elapsed_ms=3490 event_index=8 event_id=hazard-0010 request=8 value=432 state=432 protocol_state=Stopped rtt_ms=57 status_ns=9695154583 end_to_end_us=251699
+[VM 1] TASK3_RKNN_ACK generation=8 event_index=8 request=8 elapsed_ms=3490
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=8256
+[VM 1] TASK3_DETECTION event_index=9 event_id=hazard-0020 class=0 confidence_milli=844 center_x_milli=426 center_y_milli=722 area_milli=25 request=9
+[VM 1] TASK3_RKNN_INPUT elapsed_ms=3877 generation=9 event_index=9 event_id=hazard-0020 outcome=stop-latched infer_start_ns=9891531125 infer_end_ns=9949072000 request=9
+[VM 1] TASK3_CONTROL_SENT elapsed_ms=3877 event_index=9 event_id=hazard-0020 source=yolov8.rknn generation=9 request=9 action=Stop value=0 outcome=stop-latched infer_start_ns=9891531125 infer_end_ns=9949072000 seq=9
+[VM 1] TASK2_ACK seq=9
+[VM 1] TASK3_STATUS_RECEIVED elapsed_ms=3936 event_index=9 event_id=hazard-0020 request=9 value=432 state=432 protocol_state=Stopped rtt_ms=59 status_ns=10141343041 end_to_end_us=249811
+[VM 1] TASK3_RKNN_ACK generation=9 event_index=9 request=9 elapsed_ms=3936
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=8715
+[VM 1] TASK3_DETECTION event_index=10 event_id=road-0405 class=2 confidence_milli=859 center_x_milli=261 center_y_milli=656 area_milli=58 request=10
+[VM 1] TASK3_RKNN_INPUT elapsed_ms=4330 generation=10 event_index=10 event_id=road-0405 outcome=stop-latched infer_start_ns=10355701125 infer_end_ns=10396782666 request=10
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=7618
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=7819
+[VM 1] TASK3_CONTROL_SENT elapsed_ms=4330 event_index=10 event_id=road-0405 source=yolov8.rknn generation=10 request=10 action=Stop value=0 outcome=stop-latched infer_start_ns=10355701125 infer_end_ns=10396782666 seq=10
+[VM 1] TASK2_ACK seq=10
+[VM 1] TASK3_STATUS_RECEIVED elapsed_ms=4392 event_index=10 event_id=road-0405 request=10 value=432 state=432 protocol_state=Stopped rtt_ms=62 status_ns=10596789291 end_to_end_us=241088
+[VM 1] TASK3_RKNN_ACK generation=10 event_index=10 request=10 elapsed_ms=4392
+[VM 1] TASK3_CONTROL_SENT elapsed_ms=4551 event_index=11 event_id=explicit-reset source=yolov8.rknn generation=10 request=11 action=Reset value=0 outcome=reset infer_start_ns=10755372541 infer_end_ns=10755372541 seq=11
+[VM 1] TASK2_ACK seq=11
+[VM 1] TASK3_STATUS_RECEIVED elapsed_ms=4581 event_index=11 event_id=explicit-reset request=11 value=432 state=432 protocol_state=Active rtt_ms=30 status_ns=10786364166 end_to_end_us=30991
+[VM 1] TASK3_DETECTION event_index=12 event_id=road-0410 class=2 confidence_milli=860 center_x_milli=207 center_y_milli=670 area_milli=74 request=12
+[VM 1] TASK3_RKNN_INPUT elapsed_ms=4739 generation=11 event_index=12 event_id=road-0410 outcome=track infer_start_ns=10790943333 infer_end_ns=10832189375 request=12
+[VM 1] TASK3_CONTROL_SENT elapsed_ms=4739 event_index=12 event_id=road-0410 source=yolov8.rknn generation=11 request=12 action=SetOutput value=400 outcome=track infer_start_ns=10790943333 infer_end_ns=10832189375 seq=12
+[VM 1] TASK2_ACK seq=12
+[VM 1] TASK3_STATUS_RECEIVED elapsed_ms=4795 event_index=12 event_id=road-0410 request=12 value=534 state=534 protocol_state=Active rtt_ms=56 status_ns=10999976750 end_to_end_us=209033
+[VM 1] TASK3_RKNN_ACK generation=11 event_index=12 request=12 elapsed_ms=4795
+[VM 1] TASK3_EXPERIMENT_COMPLETE source=yolov8.rknn events=12 statuses=12 elapsed_ms=4795
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=9568
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=9778
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=9987
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=10196
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=10396
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=10610
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=10900
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=11107
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=11317
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=11526
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=11729
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=11935
+[VM 1] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=12137
+[VM 1] YOLOv8 UVC RKNN Benchmark
+[VM 1] =========================
+[VM 1] model=model/yolov8.rknn label=model/coco_80_labels_list.txt device=0 size=320x240 fps=30 duration=60 infer_every=1 report_interval=5 min_confidence=25 core_mask=all profile=1 profile_frames=1 validate_list=validation/scene-images.txt expected=none write_expected=/tmp/scene-expected.txt validation_loops=1 control_output=/rknn-control.txt control_ack=/rknn-control.ack
+[VM 1] load lable model/coco_80_labels_list.txt
+[VM 1] model input num: 1, output num: 9
+[VM 1] input tensors:
+[VM 1]   index=0, name=images, n_dims=4, dims=[1, 640, 640, 3], n_elems=1228800, size=1228800, fmt=NHWC, type=INT8, qnt_type=AFFINE, zp=-128, scale=0.003922
+[VM 1] output tensors:
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=8020
+[VM 1]   index=0, name=318, n_dims=4, dims=[1, 64, 80, 80], n_elems=409600, size=409600, fmt=NCHW, type=INT8, qnt_type=AFFINE, zp=-58, scale=0.117659
+[VM 1]   index=1, name=onnx::ReduceSum_326, n_dims=4, dims=[1, 80, 80, 80], n_elems=512000, size=512000, fmt=NCHW, type=INT8, qnt_type=AFFINE, zp=-128, scale=0.003104
+[VM 1]   index=2, name=331, n_dims=4, dims=[1, 1, 80, 80], n_elems=6400, size=6400, fmt=NCHW, type=INT8, qnt_type=AFFINE, zp=-128, scale=0.003173
+[VM 1]   index=3, name=338, n_dims=4, dims=[1, 64, 40, 40], n_elems=102400, size=102400, fmt=NCHW, type=INT8, qnt_type=AFFINE, zp=-45, scale=0.093747
+[VM 1]   index=4, name=onnx::ReduceSum_346, n_dims=4, dims=[1, 80, 40, 40], n_elems=128000, size=128000, fmt=NCHW, type=INT8, qnt_type=AFFINE, zp=-128, scale=0.003594
+[VM 1]   index=5, name=350, n_dims=4, dims=[1, 1, 40, 40], n_elems=1600, size=1600, fmt=NCHW, type=INT8, qnt_type=AFFINE, zp=-128, scale=0.003627
+[VM 1]   index=6, name=357, n_dims=4, dims=[1, 64, 20, 20], n_elems=25600, size=25600, fmt=NCHW, type=INT8, qnt_type=AFFINE, zp=-34, scale=0.083036
+[VM 1]   index=7, name=onnx::ReduceSum_365, n_dims=4, dims=[1, 80, 20, 20], n_elems=32000, size=32000, fmt=NCHW, type=INT8, qnt_type=AFFINE, zp=-128, scale=0.003874
+[VM 1]   index=8, name=369, n_dims=4, dims=[1, 1, 20, 20], n_elems=400, size=400, fmt=NCHW, type=INT8, qnt_type=AFFINE, zp=-128, scale=0.003922
+[VM 1] model is NHWC input fmt
+[VM 1] model input height=640, width=640, channel=3
+[VM 1] bench-rknn: init_yolov8_model success width=640 height=640 channel=3
+[VM 1] bench-rknn: set_core_mask=all ret=0
+[VM 1] UVC_RKNN_VALIDATE_BEGIN images=11 mode=write_expected
+[VM 1] input image: 1226 x 370, subsampling: 4:2:0, colorspace: YCbCr, orientation: 1
+[VM 1] src width is not 4/16-aligned, convert image use cpu
+[VM 1] RKNN_PROFILE frame=0 ret=0 total_ms=85.54 malloc_ms=0.06 letterbox_ms=26.17 inputs_set_ms=7.79 run_ms=39.90 outputs_get_ms=9.53 rknn_perf_run_ms=39.82 perf_run_query_ret=0 postprocess_ms=1.89 outputs_release_ms=0.03 detections=8
+[VM 1] UVC_RKNN_VALIDATE_IMAGE index=0 path=validation/road-0375.jpg width=1226 height=370 detections=8
+[VM 1] RKNN_CONTROL_EVENT version=3 generation=1 image=0 event_id=road-0375 kind=detection infer_start_ns=6372239416 infer_end_ns=6457812666
+[VM 1] RKNN_CONTROL_ACK generation=1
+[VM 1] input image: 1226 x 370, subsampling: 4:2:0, colorspace: YCbCr, orientation: 1
+[VM 1] src width is not 4/16-aligned, convert image use cpu
+[VM 1] RKNN_PROFILE frame=1 ret=0 total_ms=42.52 malloc_ms=0.02 letterbox_ms=19.31 inputs_set_ms=0.70 run_ms=16.12 outputs_get_ms=3.40 rknn_perf_run_ms=16.08 perf_run_query_ret=0 postprocess_ms=2.77 outputs_release_ms=0.03 detections=8
+[VM 1] UVC_RKNN_VALIDATE_IMAGE index=1 path=validation/road-0380.jpg width=1226 height=370 detections=8
+[VM 1] RKNN_CONTROL_EVENT version=3 generation=2 image=1 event_id=road-0380 kind=detection infer_start_ns=6747127625 infer_end_ns=6789692000
+[VM 1] RKNN_CONTROL_ACK generation=2
+[VM 1] input image: 1226 x 370, subsampling: 4:2:0, colorspace: YCbCr, orientation: 1
+[VM 1] src width is not 4/16-aligned, convert image use cpu
+[VM 1] RKNN_PROFILE frame=2 ret=0 total_ms=41.35 malloc_ms=0.02 letterbox_ms=19.66 inputs_set_ms=0.51 run_ms=16.73 outputs_get_ms=2.76 rknn_perf_run_ms=16.69 perf_run_query_ret=0 postprocess_ms=1.48 outputs_release_ms=0.03 detections=8
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=8230
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=8431
+[VM 1] UVC_RKNN_VALIDATE_IMAGE index=2 path=validation/road-0385.jpg width=1226 height=370 detections=8
+[VM 1] RKNN_CONTROL_EVENT version=3 generation=3 image=2 event_id=road-0385 kind=detection infer_start_ns=7191481791 infer_end_ns=7232873666
+[VM 1] RKNN_CONTROL_ACK generation=3
+[VM 1] input image: 1226 x 370, subsampling: 4:2:0, colorspace: YCbCr, orientation: 1
+[VM 1] src width is not 4/16-aligned, convert image use cpu
+[VM 1] RKNN_PROFILE frame=3 ret=0 total_ms=41.94 malloc_ms=0.02 letterbox_ms=19.79 inputs_set_ms=0.52 run_ms=16.62 outputs_get_ms=3.26 rknn_perf_run_ms=16.58 perf_run_query_ret=0 postprocess_ms=1.55 outputs_release_ms=0.03 detections=7
+[VM 1] UVC_RKNN_VALIDATE_IMAGE index=3 path=validation/road-0390.jpg width=1226 height=370 detections=7
+[VM 1] RKNN_CONTROL_EVENT version=3 generation=4 image=3 event_id=road-0390 kind=detection infer_start_ns=7638128166 infer_end_ns=7680113000
+[VM 1] RKNN_CONTROL_ACK generation=4
+[VM 1] input image: 1226 x 370, subsampling: 4:2:0, colorspace: YCbCr, orientation: 1
+[VM 1] src width is not 4/16-aligned, convert image use cpu
+[VM 1] RKNN_PROFILE frame=4 ret=0 total_ms=41.62 malloc_ms=0.02 letterbox_ms=19.84 inputs_set_ms=0.51 run_ms=16.26 outputs_get_ms=3.24 rknn_perf_run_ms=16.21 perf_run_query_ret=0 postprocess_ms=1.56 outputs_release_ms=0.03 detections=7
+[VM 1] UVC_RKNN_VALIDATE_IMAGE index=4 path=validation/road-0395.jpg width=1226 height=370 detections=7
+[VM 1] RKNN_CONTROL_EVENT version=3 generation=5 image=4 event_id=road-0395 kind=detection infer_start_ns=8098169041 infer_end_ns=8139833041
+[VM 1] RKNN_CONTROL_ACK generation=5
+[VM 1] input image: 1226 x 370, subsampling: 4:2:0, colorspace: YCbCr, orientation: 1
+[VM 1] src width is not 4/16-aligned, convert image use cpu
+[VM 1] RKNN_PROFILE frame=5 ret=0 total_ms=41.76 malloc_ms=0.02 letterbox_ms=19.64 inputs_set_ms=0.50 run_ms=16.37 outputs_get_ms=3.37 rknn_perf_run_ms=16.33 perf_run_query_ret=0 postprocess_ms=1.58 outputs_release_ms=0.03 detections=7
+[VM 1] UVC_RKNN_VALIDATE_IMAGE index=5 path=validation/road-0400.jpg width=1226 height=370 detections=7
+[VM 1] RKNN_CONTROL_EVENT version=3 generation=6 image=5 event_id=road-0400 kind=detection infer_start_ns=8564828125 infer_end_ns=8606626291
+[VM 1] RKNN_CONTROL_ACK generation=6
+[VM 1] input image: 640 x 360, subsampling: 4:2:0, colorspace: YCbCr, orientation: 1
+[VM 1] failed to open RGA:No such file or directory.
+[VM 1] rga_api version 1.10.1_[0]
+[VM 1] 2741 im2d_rga_impl rga_get_context(66): The current RockchipRga singleton is destroyed. Please check if RkRgaInit/RkRgaDeInit are called, if so, please disable them.
+[VM 1] src handle error 0
+[VM 1] RGA convert unavailable, falling back to CPU conversion
+[VM 1] RKNN_PROFILE frame=6 ret=0 total_ms=58.22 malloc_ms=0.02 letterbox_ms=35.42 inputs_set_ms=0.51 run_ms=17.12 outputs_get_ms=3.14 rknn_perf_run_ms=17.07 perf_run_query_ret=0 postprocess_ms=1.83 outputs_release_ms=0.02 detections=8
+[VM 1] UVC_RKNN_VALIDATE_IMAGE index=6 path=validation/hazard-0000.jpg width=640 height=360 detections=8
+[VM 1] RKNN_CONTROL_EVENT version=3 generation=7 image=6 event_id=hazard-0000 kind=detection infer_start_ns=8991967541 infer_end_ns=9050232041
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=8634
+[VM 1] RKNN_CONTROL_ACK generation=7
+[VM 1] input image: 640 x 360, subsampling: 4:2:0, colorspace: YCbCr, orientation: 1
+[VM 1] RKNN_PROFILE frame=7 ret=0 total_ms=57.87 malloc_ms=0.02 letterbox_ms=34.35 inputs_set_ms=0.70 run_ms=17.39 outputs_get_ms=3.11 rknn_perf_run_ms=17.35 perf_run_query_ret=0 postprocess_ms=2.11 outputs_release_ms=0.02 detections=10
+[VM 1] UVC_RKNN_VALIDATE_IMAGE index=7 path=validation/hazard-0010.jpg width=640 height=360 detections=10
+[VM 1] RKNN_CONTROL_EVENT version=3 generation=8 image=7 event_id=hazard-0010 kind=detection infer_start_ns=9443455583 infer_end_ns=9501368916
+[VM 1] RKNN_CONTROL_ACK generation=8
+[VM 1] input image: 640 x 360, subsampling: 4:2:0, colorspace: YCbCr, orientation: 1
+[VM 1] RKNN_PROFILE frame=8 ret=0 total_ms=57.31 malloc_ms=0.02 letterbox_ms=34.19 inputs_set_ms=0.51 run_ms=16.87 outputs_get_ms=3.00 rknn_perf_run_ms=16.83 perf_run_query_ret=0 postprocess_ms=2.52 outputs_release_ms=0.02 detections=11
+[VM 1] UVC_RKNN_VALIDATE_IMAGE index=8 path=validation/hazard-0020.jpg width=640 height=360 detections=11
+[VM 1] RKNN_CONTROL_EVENT version=3 generation=9 image=8 event_id=hazard-0020 kind=detection infer_start_ns=9891531125 infer_end_ns=9949072000
+[VM 1] RKNN_CONTROL_ACK generation=9
+[VM 1] input image: 1226 x 370, subsampling: 4:2:0, colorspace: YCbCr, orientation: 1
+[VM 1] RKNN_PROFILE frame=9 ret=0 total_ms=41.04 malloc_ms=0.02 letterbox_ms=19.71 inputs_set_ms=0.52 run_ms=16.18 outputs_get_ms=2.82 rknn_perf_run_ms=16.14 perf_run_query_ret=0 postprocess_ms=1.60 outputs_release_ms=0.03 detections=7
+[VM 1] UVC_RKNN_VALIDATE_IMAGE index=9 path=validation/road-0405.jpg width=1226 height=370 detections=7
+[VM 1] RKNN_CONTROL_EVENT version=3 generation=10 image=9 event_id=road-0405 kind=detection infer_start_ns=10355701125 infer_end_ns=10396782666
+[VM 1] RKNN_CONTROL_ACK generation=10
+[VM 1] input image: 1226 x 370, subsampling: 4:2:0, colorspace: YCbCr, orientation: 1
+[VM 1] RKNN_PROFILE frame=10 ret=0 total_ms=41.20 malloc_ms=0.02 letterbox_ms=19.75 inputs_set_ms=0.52 run_ms=16.41 outputs_get_ms=2.74 rknn_perf_run_ms=16.37 perf_run_query_ret=0 postprocess_ms=1.57 outputs_release_ms=0.03 detections=6
+[VM 1] UVC_RKNN_VALIDATE_IMAGE index=10 path=validation/road-0410.jpg width=1226 height=370 detections=6
+[VM 1] RKNN_CONTROL_EVENT version=3 generation=11 image=10 event_id=road-0410 kind=detection infer_start_ns=10790943333 infer_end_ns=10832189375
+[VM 1] RKNN_CONTROL_ACK generation=11
+[VM 1] UVC_RKNN_VALIDATE_EXPECTED_WRITTEN path=/tmp/scene-expected.txt images=11
+[VM 1] UVC_RKNN_BENCH_PROFILE_RESULT profile_samples=11 perf_run_query_errors=0 total_ms_avg=50.04 total_ms_p50=41.94 total_ms_p95=71.88 malloc_ms_avg=0.02 letterbox_ms_avg=24.35 letterbox_ms_p50=19.79 letterbox_ms_p95=34.88 inputs_set_ms_avg=1.21 run_ms_avg=18.73 run_ms_p50=16.62 run_ms_p95=28.65 outputs_get_ms_avg=3.67 outputs_get_ms_p50=3.14 outputs_get_ms_p95=6.47 rknn_perf_run_ms_avg=18.68 rknn_perf_run_ms_p50=16.58 rknn_perf_run_ms_p95=28.58 postprocess_ms_avg=1.86 postprocess_ms_p50=1.60 postprocess_ms_p95=2.64 outputs_release_ms_avg=0.02
+[VM 1] UVC_RKNN_VALIDATE_PASS images=11 loops=1 inferences=11
+[VM 1] TASK3_HYBRID_SCENE_END source=rknn controller_complete=1 producer_rc=0
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=8835
+[VM 2] TASK2_HEARTBEAT_RECEIVED peer_uptime_ms=9036

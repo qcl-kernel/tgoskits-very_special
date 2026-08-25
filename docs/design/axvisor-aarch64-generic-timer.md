@@ -27,7 +27,7 @@
 2. 同一 VM 的所有 vCPU 共享相同且不可变的计数器频率与 offset。
 3. 客户机定时器或客户机计数器 offset 仍安装在硬件中时，不得运行任何 host Rust 代码。
 4. 定时器输出是 level input；pending、active、enable、route、EOI 和 DIR 状态全部由 VGIC 独占。
-5. 已 acknowledge 的 host CNTV PPI 只有在对应客户机投递退休后才 deactivate，显式迁移或 teardown 除外。
+5. 已 acknowledge 且仍有 asserted 客户机 CNTV level 的 host PPI 只有在对应客户机投递退休后才 deactivate；如果 snapshot 证明 CNTV level 未 asserted，则必须立即完成这个没有客户机退休路径的 activation。
 6. WFI 使用最早的可投递定时器 deadline，绝不把 stale callback 直接转成强制 PPI。
 7. Host 固件与 runtime 消费同一份经过校验的定时器 profile。
 
@@ -139,11 +139,14 @@ CNTV host 中断处理分为以下阶段：
 3. lower-EL IRQ 汇编在停止 CNTV 前 acknowledge CPU-local PPI；
 4. 切回 host 后的 Rust 对捕获的 acknowledgement 执行 priority drop，并记录其 opaque token 与 owner pCPU；
 5. timer snapshot publication 更新 virtual PPI level；
-6. VGIC 拥有投递以及客户机 enable/active 状态；
-7. GICv2 EOI/DIR 或 GICv3 LR/TDIR 退休会在 controller lock 释放后到达 typed backend 退休边界；
-8. host token 在 owner pCPU 上 deactivate。
+6. 如果 publication 后 virtual timer level 未 asserted，host token 在 owner pCPU 上立即 deactivate，因为不存在能够到达 EOI/DIR 的客户机投递；
+7. 否则 VGIC 拥有投递以及客户机 enable/active 状态；
+8. GICv2 EOI/DIR 或 GICv3 LR/TDIR 退休会在 controller lock 释放后到达 typed backend 退休边界；
+9. host token 在 owner pCPU 上 deactivate。
 
 拉低 timer line 不会完成 host activation。当客户机先清除 CVAL 或 CTL、再写 DIR 时，virtual line 可能已为低电平，但此前的投递在架构上仍是 active；因此这一点不可省略。
+
+“publication 后未 asserted”与“此前已投递、之后被客户机拉低”是不同状态。前者从未建立客户机退休路径，若继续保留 token 会让物理 PPI 永久 active；后者已有权威 VGIC active 状态，仍必须等待对应退休。Timer-level publication 失败时也必须尝试完成 host activation，防止错误路径泄漏 CPU-local PPI 所有权。
 
 迁移可以在新 pCPU 装载 vCPU 前，强制完成旧 pCPU 上的 activation。Reset、stop 和 drop 同样会先使 timer-wheel 工作失效，再完成并丢弃 host activation。这些是显式生命周期操作，不可替代普通客户机退休路径。
 
@@ -225,6 +228,7 @@ Runtime vCPU 绑定和 FDT 安装校验并消费同一份 `GuestTimerProfile`；
 - 未分配的 GICv3 LPI 能解析到 MSI leaf，并在 host `DIR` 中保留完整 24-bit INTID；
 - EOI 后高电平重新 pending，低电平不重新 pending；
 - host timer-PPI 只通过 VGIC retirement 完成；
+- disabled CNTV 或仅 CNTP asserted 时，已 acknowledge 的 host CNTV token 立即完成，不等待不存在的客户机 CNTV 退休；
 - 四项/五项 FDT interrupts，以及 malformed cell、PPI class/trigger、frequency、parent、phandle 和 interrupt order。
 
 合入前，验证矩阵还必须完成：

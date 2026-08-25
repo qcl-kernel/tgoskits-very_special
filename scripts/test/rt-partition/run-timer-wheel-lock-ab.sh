@@ -2,6 +2,7 @@
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+source "$repo_root/scripts/lib/task123-tools.sh"
 iterations="${RT_TIMER_LOCK_AB_ITERATIONS:-5000}"
 expiry_samples="${RT_TIMER_LOCK_AB_EXPIRY_SAMPLES:-64}"
 expiry_delay_us="${RT_TIMER_LOCK_AB_EXPIRY_DELAY_US:-100000}"
@@ -39,6 +40,7 @@ cleanup() {
 trap cleanup EXIT
 
 mkdir -p "$output_root" "$work_root"
+acquire_task123_qemu_slot "$repo_root"
 
 run_case() {
     local name="$1"

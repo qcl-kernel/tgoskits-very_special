@@ -1,0 +1,10 @@
+environment=native-qemu-without-axvisor
+git_commit=9bef4f8560ec9abc29d64ebb734b818419e0ecce
+qemu_version=QEMU emulator version 10.2.1
+start_ns=1787660264872643156
+end_ns=1787660384882504495
+elapsed_ms=120009
+timeout_sec=120
+qemu_exit_status=124
+timing_model=wall-clock TCG
+claim_scope=QEMU TCG trend only; sub-50us effects are not hardware-real-time evidence

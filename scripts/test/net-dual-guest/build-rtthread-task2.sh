@@ -8,7 +8,16 @@ source "$repo_root/scripts/test/net-dual-guest/rtthread-guest-config.sh"
 out_dir="${OUT_DIR:-$repo_root/tmp/net-dual-guest/rtthread-task2}"
 rtthread_commit="6ea682795bdbac59d3700b21e159ccaa3f7632cb"
 rtthread_cache="${RTTHREAD_BASE:-$repo_root/tmp/net-dual-guest/rt-thread-upstream}"
-toolchain_dir="${RTT_EXEC_PATH:-/tmp/rtthread-toolchain/bin}"
+if [[ -n "${RTT_EXEC_PATH:-}" ]]; then
+    toolchain_dir="$RTT_EXEC_PATH"
+else
+    toolchain_gcc="$(command -v aarch64-none-elf-gcc 2>/dev/null || true)"
+    if [[ -z "$toolchain_gcc" ]]; then
+        printf 'error: aarch64-none-elf-gcc was not found; set RTT_EXEC_PATH or add it to PATH\n' >&2
+        exit 1
+    fi
+    toolchain_dir="$(dirname "$(realpath "$toolchain_gcc")")"
+fi
 fault_mode="${TASK2_FAULT_MODE:-none}"
 task1_quiet="${TASK1_QUIET:-0}"
 
@@ -74,8 +83,6 @@ perl -pi -e \
 
 if [[ -n "${SCONS_PYTHONPATH:-}" ]]; then
     scons_env=(env "PYTHONPATH=$SCONS_PYTHONPATH")
-elif [[ -d /tmp/rtthread-scons ]]; then
-    scons_env=(env "PYTHONPATH=/tmp/rtthread-scons")
 else
     scons_env=(env)
 fi

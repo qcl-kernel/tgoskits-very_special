@@ -1,0 +1,11 @@
+platform,scenario,topology,scheduler,runs,requests,successes,errors,timeouts,retries,recovery,mean_rtt_ms,p95_rtt_ms,p99_rtt_ms,max_rtt_ms,throughput_transactions_per_s,measurement_scope,evidence
+qemu,normal,dual-guest,qemu-fifo,1,3,3,0,0,0,not-required,152.000,338,338,338,,reliability-scenario,tmp/competition-task123/current-fix-qemu/20260824T201803Z-suite-task2-2820310/task2-normal
+qemu,drop-ack,dual-guest,qemu-fifo,1,,,0,,1,recovered,,,,,,reliability-scenario,tmp/competition-task123/current-fix-qemu/20260824T201803Z-suite-task2-2820310/task2-drop-ack
+qemu,retry-exhausted,dual-guest,qemu-fifo,1,,,0,,5,recovered,,,,,,reliability-scenario,tmp/competition-task123/current-fix-qemu/20260824T201803Z-suite-task2-2820310/task2-retry-exhausted
+qemu,blackout,dual-guest,qemu-fifo,1,,,0,,5,recovered,,,,59,,reliability-scenario,tmp/competition-task123/current-fix-qemu/20260824T201803Z-suite-task2-2820310/task2-blackout
+qemu,out-of-order,dual-guest,qemu-fifo,1,,,0,0,0,recovered,,,,64,,reliability-scenario,tmp/competition-task123/current-fix-qemu/20260824T201803Z-suite-task2-2820310/task2-out-of-order
+qemu,invalid-parameter,dual-guest,qemu-fifo,1,,,0,0,0,recovered,,,,64,,reliability-scenario,tmp/competition-task123/current-fix-qemu/20260824T201803Z-suite-task2-2820310/task2-invalid-parameter
+atk-dlrk3588,bounded-200,communication-share,fp-rr,1,200,200,0,0,0,not-required,31.565,40,41,130,31.675,bounded-throughput,results/task2/board-20260825/bounded-200/fp-rr-run1.log
+atk-dlrk3588,bounded-200,communication-share,fp-rr,1,200,200,0,0,0,not-required,31.200,40,41,130,32.046,bounded-throughput,results/task2/board-20260825/bounded-200/fp-rr-run2.log
+atk-dlrk3588,bounded-200,communication-share,fp-rr,1,200,200,0,0,0,not-required,31.460,40,41,131,31.781,bounded-throughput,results/task2/board-20260825/bounded-200/fp-rr-run3.log
+atk-dlrk3588,bounded-200-aggregate,communication-share,fp-rr,3,600,600,0,0,0,not-required,31.408,40,41,131,31.834,bounded-throughput,results/task2/board-20260825/bounded-200/summary.json

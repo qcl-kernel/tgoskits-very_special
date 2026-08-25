@@ -8,8 +8,8 @@
 ```text
 AxVisor FP-RR
 ├── StarryOS Guest (priority 89)
-│   ├── vCPU0 -> pCPU1: virtio-net、T2N1、CONTROL/STATUS、通信 IRQ
-│   ├── vCPU1 -> pCPU2: 图像预处理、RKNN 提交、后处理
+│   ├── vCPU0 -> pCPU2: 启动、图像预处理、RKNN 提交、后处理
+│   ├── vCPU1 -> pCPU1: virtio-net、T2N1、CONTROL/STATUS、通信 IRQ
 │   └── RK3588 NPU: YOLO 张量推理
 └── Zephyr Guest (priority 90)
     └── vCPU0 -> pCPU1: 10 ms 周期任务、控制执行、STATUS 回传
@@ -25,7 +25,7 @@ runtime 调用和 NMS 仍在 CPU 上执行。
 
 ```toml
 cpu_num = 2
-phys_cpu_ids = [0x100, 0x200]
+phys_cpu_ids = [0x200, 0x100]
 host_sched_priority = 89
 
 [devices]
@@ -49,8 +49,9 @@ AxVisor host 或 Zephyr。eMMC 控制器由 StarryOS 使用其板载根文件系
 程序和数据通过只读 `/proc/initrd` 解包到 tmpfs，不写入持久文件系统。
 
 FP-RR 下，Zephyr 的 priority 90 可以抢占同在 pCPU1 上运行、priority 89 的
-StarryOS 通信 vCPU。StarryOS 的 AI 辅助工作位于 pCPU2，避免重型预处理和
-后处理直接阻塞 RTOS。RR 变体保留为同拓扑调度基线。
+StarryOS 通信 vCPU。StarryOS 的 primary vCPU 和 AI 辅助工作位于 pCPU2，避免
+重型预处理和后处理直接阻塞 RTOS，同时避免高优先级 Zephyr 在两个 Guest
+尚未 Ready 时饿死 StarryOS primary vCPU。RR 变体保留为同拓扑调度基线。
 
 ## 可移植构建
 
@@ -83,7 +84,7 @@ Zephyr 实板计时器频率固定为 RK3588 的 24 MHz；QEMU 测试仍使用�
 
 构建后的配置和启动日志至少应证明：
 
-1. StarryOS `cpu_num = 2`，vCPU0 映射 pCPU1、vCPU1 映射 pCPU2；
+1. StarryOS `cpu_num = 2`，vCPU0 映射 pCPU2、vCPU1 映射 pCPU1；
 2. Zephyr vCPU0 映射 pCPU1，且 FP-RR 优先级 90 高于 StarryOS 的 89；
 3. `/npu@fdab0000` 及依赖只分配给 StarryOS，RKNN 完成真实张量推理；
 4. StarryOS 通信路径和 Zephyr 完成 `CONTROL -> STATUS` 闭环；

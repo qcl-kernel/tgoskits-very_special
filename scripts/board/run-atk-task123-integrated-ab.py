@@ -141,6 +141,7 @@ def main() -> int:
         console = Console(config.port, config.baud, config.log_path)
         console.note(
             f"mode={config.mode} scheduler=fp-rr shared_pcpu=0x100 "
+            "starry_communication_cpu=1 starry_ai_cpu=0 "
             f"rtos={config.rtos_name} rtos_priority=90 "
             "starry_priority=89 ram_only=true"
         )
@@ -359,6 +360,8 @@ def write_metadata(
         f"rtos={config.rtos_name}",
         "scheduler=fp-rr",
         "shared_pcpu=0x100",
+        "starry_communication_cpu=1",
+        "starry_ai_cpu=0",
         "rtos_priority=90",
         "starry_priority=89",
         "ram_only=true",

@@ -5,12 +5,20 @@ project(periodic_latency)
 
 target_sources(app PRIVATE src/main.c)
 
+if(RT_ATK_EARLY_UART)
+  target_sources(app PRIVATE src/atk_early_uart.S)
+endif()
+
 if(RT_START_GATED)
   target_compile_definitions(app PRIVATE RT_START_GATED=1)
 endif()
 
 if(RT_DUMP_GATED)
   target_compile_definitions(app PRIVATE RT_DUMP_GATED=1)
+endif()
+
+if(DEFINED RT_DUMP_CHUNK_ROWS)
+  target_compile_definitions(app PRIVATE RT_DUMP_CHUNK_ROWS=${RT_DUMP_CHUNK_ROWS})
 endif()
 
 if(DEFINED RT_SAMPLE_COUNT)

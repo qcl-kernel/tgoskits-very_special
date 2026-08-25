@@ -18,20 +18,24 @@ set -euo pipefail
 # Env:   BLACKOUT_START_MS (default 25000), BLACKOUT_DURATION_MS (default 10000)
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+source "$repo_root/scripts/lib/task123-tools.sh"
 rootfs="${STARRY_TASK23_ROOTFS:-$repo_root/tmp/axbuild/rootfs/rootfs-aarch64-alpine.img}"
 label="${1:?label required}"
 mode="${2:-yolo}"
 fault="${3:-blackout}"
 injection_mode="${4:-out-of-order}"
 workdir="$repo_root/tmp/net-dual-guest"
-log="/tmp/task3-${label}.log"
-proxy_log="/tmp/task3-${label}-proxy.log"
-qemu_sock="$workdir/qmp-p3-final.sock"
+out_dir="${TASK3_OUTPUT_DIR:-$repo_root/results/task3/fault-$label}"
+runtime_dir=""
+log=""
+proxy_log=""
+qemu_sock=""
 qmp="$repo_root/scripts/test/net-dual-guest/qmp_link.py"
 proxy="$repo_root/scripts/test/net-dual-guest/ack_drop_proxy.py"
 blackout_start_ms="${BLACKOUT_START_MS:-25000}"
 blackout_duration_ms="${BLACKOUT_DURATION_MS:-10000}"
 proxy_pid=""
+run_pid=""
 
 case "$mode" in
     baseline|cnn|yolo)
@@ -59,21 +63,49 @@ if [ ! -s "$initramfs" ]; then
 fi
 
 cleanup() {
+    if [[ -n "$run_pid" && -n "$qemu_sock" && -S "$qemu_sock" ]]; then
+        python3 "$qmp" "$qemu_sock" quit >/dev/null 2>&1 || true
+    fi
+    if [[ -n "$run_pid" ]] && kill -0 "$run_pid" 2>/dev/null; then
+        kill -TERM "$run_pid" 2>/dev/null || true
+        wait "$run_pid" 2>/dev/null || true
+    fi
     if [ -n "$proxy_pid" ]; then
         kill "$proxy_pid" 2>/dev/null || true
+        wait "$proxy_pid" 2>/dev/null || true
     fi
-    pkill -f "qemu-system-[a]arch64" 2>/dev/null || true
+    if [[ -n "$runtime_dir" && -d "$runtime_dir" ]]; then
+        remove_task123_runtime_dir "$runtime_dir"
+    fi
 }
 trap cleanup EXIT
 
-pkill -f "ack_drop_proxy.py" 2>/dev/null || true
-pkill -f "qemu-system-[a]arch64" 2>/dev/null || true
-sleep 3
-
-cp "$initramfs" \
-    "$workdir/linux-task2/task2-linux-initramfs.cpio.gz"
-rm -f "$qemu_sock" "$workdir/linux-p3-final.pcap" "$workdir/rtos-p3-final.pcap" \
-    "$log" "$proxy_log"
+if [[ -d "$out_dir" ]] && find "$out_dir" -mindepth 1 -print -quit | grep -q .; then
+    printf 'error: output directory is not empty: %s\n' "$out_dir" >&2
+    exit 1
+fi
+mkdir -p "$out_dir"
+out_dir="$(realpath "$out_dir")"
+log="$out_dir/guest.log"
+proxy_log="$out_dir/proxy.log"
+runtime_dir="$(create_task123_runtime_dir)"
+qemu_sock="$runtime_dir/qmp.sock"
+runtime_rootfs="$runtime_dir/rootfs.img"
+runtime_qemu_config="$out_dir/qemu.runtime.toml"
+runtime_linux_vm="$out_dir/vm-linux.runtime.toml"
+capture_prefix="$runtime_dir/capture"
+mapfile -t proxy_ports < <(allocate_task123_tcp_ports 2)
+linux_proxy_port="${proxy_ports[0]}"
+rtos_proxy_port="${proxy_ports[1]}"
+cp --reflink=auto --sparse=always "$rootfs" "$runtime_rootfs"
+python3 "$repo_root/scripts/test/net-dual-guest/render_qemu_runtime.py" \
+    "$repo_root/scripts/test/net-dual-guest/qemu-aarch64-p3-proxy-final.toml" \
+    "$runtime_qemu_config" --rootfs "$runtime_rootfs" --qmp-socket "$qemu_sock" \
+    --capture-prefix "$capture_prefix" --netdev-port "12731=$linux_proxy_port" \
+    --netdev-port "12732=$rtos_proxy_port"
+python3 "$repo_root/scripts/test/net-dual-guest/render_vm_runtime.py" \
+    "$repo_root/scripts/test/net-dual-guest/vm-aarch64-p2-linux.toml" \
+    "$runtime_linux_vm" --ramdisk-path "$initramfs"
 
 if [ "$fault" = blackout ]; then
     drop_count=0
@@ -91,7 +123,7 @@ fi
 
 # Start the relay first: both QEMU netdevs connect to it.
 nohup python3 "$proxy" \
-    --linux-port 12731 --rtos-port 12732 \
+    --linux-port "$linux_proxy_port" --rtos-port "$rtos_proxy_port" \
     --drop-direction rtos-to-linux --drop-kind ack --drop-count "$drop_count" \
     "${blackout_args[@]}" \
     "${inject_args[@]}" \
@@ -109,10 +141,10 @@ fi
 
 nohup cargo xtask axvisor qemu \
     --config scripts/test/net-dual-guest/axvisor-qemu-debug.toml \
-    --qemu-config scripts/test/net-dual-guest/qemu-aarch64-p3-proxy-final.toml \
-    --vmconfigs scripts/test/net-dual-guest/vm-aarch64-p2-linux.toml \
+    --qemu-config "$runtime_qemu_config" \
+    --vmconfigs "$runtime_linux_vm" \
     --vmconfigs scripts/test/net-dual-guest/vm-aarch64-p2-rtos.toml \
-    --rootfs "$rootfs" \
+    --rootfs "$runtime_rootfs" \
     > "$log" 2>&1 &
 run_pid=$!
 
@@ -183,23 +215,21 @@ echo "[fault] quitting"
 python3 "$qmp" "$qemu_sock" quit || true
 sleep 15
 kill "$proxy_pid" 2>/dev/null || true
-pkill -f "qemu-system-[a]arch64" 2>/dev/null || true
-sleep 3
+wait "$proxy_pid" 2>/dev/null || true
+proxy_pid=""
+wait "$run_pid" 2>/dev/null || true
+run_pid=""
 echo "run $label mode=$mode fault=$fault finished; log=$log proxy_log=$proxy_log"
 
-for pcap in "$workdir/linux-p3-final.pcap" "$workdir/rtos-p3-final.pcap"; do
+for pcap in "$capture_prefix.vm1.pcap" "$capture_prefix.vm2.pcap"; do
     if [ ! -s "$pcap" ]; then
         echo "missing or empty pcap: $pcap" >&2
         exit 1
     fi
 done
 
-out_dir="$repo_root/results/task3/fault-$label"
-mkdir -p "$out_dir"
-cp "$log" "$out_dir/guest.log"
-cp "$proxy_log" "$out_dir/proxy.log"
-cp "$workdir/linux-p3-final.pcap" "$out_dir/linux.pcap"
-cp "$workdir/rtos-p3-final.pcap" "$out_dir/rtos.pcap"
+mv "$capture_prefix.vm1.pcap" "$out_dir/linux.pcap"
+mv "$capture_prefix.vm2.pcap" "$out_dir/rtos.pcap"
 
 if [ "$fault" = ack-drop ]; then
     drop_ack="$(sed -n 's/.*PROXY_DROP .*ack=\([0-9][0-9]*\).*/\1/p' "$proxy_log" | head -1)"
@@ -239,4 +269,5 @@ fi
         printf 'blackout_duration_ms = %s\n' "$blackout_duration_ms"
     fi
 } > "$out_dir/manifest.toml"
+write_task123_source_identity "$repo_root" "$out_dir"
 echo "archived evidence under $out_dir"

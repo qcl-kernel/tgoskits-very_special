@@ -1,0 +1,125 @@
+{
+  "schema": 1,
+  "artifacts": [
+    {
+      "path": "dashboard-data.json",
+      "bytes": 14266,
+      "sha256": "0c183b0fe3ff13eaf486c4ed7a5c5fef9d0e913922d019853a5f62df78628ff8",
+      "role": "rendered-demo"
+    },
+    {
+      "path": "dashboard-safe.png",
+      "bytes": 507079,
+      "sha256": "91497e8a72417b57147009ac0b6896c23e16ea0d771434a15442770f7647f86d",
+      "role": "rendered-demo"
+    },
+    {
+      "path": "dashboard.html",
+      "bytes": 25576,
+      "sha256": "e2d5ed1c8ecc8ba6aa5470bde2ed9b75e2ab43b67ab6f36e7749b03ba6413da4",
+      "role": "rendered-demo"
+    },
+    {
+      "path": "dashboard.mp4",
+      "bytes": 278287,
+      "sha256": "bc823317ad42d063215c3e1111b4340c08736648d305f85d4d413ede565523b4",
+      "role": "rendered-demo"
+    },
+    {
+      "path": "dashboard.png",
+      "bytes": 691940,
+      "sha256": "50f6c3f5967cba1b49db6598d3d5e5cb2ed58e267982955f842cfb6525ce3281",
+      "role": "rendered-demo"
+    },
+    {
+      "path": "dashboard.svg",
+      "bytes": 1803,
+      "sha256": "9b473f57899f0a8779a6103b564e0700b516bce344a33994adaf4728be26af0d",
+      "role": "rendered-demo"
+    },
+    {
+      "path": "raw/fixed-fp-rr-run2.log",
+      "bytes": 52084,
+      "sha256": "343ddb3177eff0d0a7a28f22334a7426fba7d8a7cb61cfa1293ec884c8d14223",
+      "role": "raw-log"
+    },
+    {
+      "path": "raw/rknn-fp-rr-run2.log",
+      "bytes": 70627,
+      "sha256": "5edc717edd83b44c2d4c4fdd39f4dca5af7b8442f390a2fcca474d2bb19b41ff",
+      "role": "raw-log"
+    },
+    {
+      "path": "raw/yolo-console.log",
+      "bytes": 84064,
+      "sha256": "f878f8f7d6c9e1702cdcb825d45174922c3ed6ab38f361e21fd36c690b08d6d6",
+      "role": "raw-log"
+    },
+    {
+      "path": "scene-images/rknn/validation/hazard-0000.jpg",
+      "bytes": 17540,
+      "sha256": "db8d7b530f11ac695302f7c9f486264d36f8f488385ed8202416751c5045de39",
+      "role": "benchmark-input"
+    },
+    {
+      "path": "scene-images/rknn/validation/hazard-0010.jpg",
+      "bytes": 16863,
+      "sha256": "ce5065920ac3fa7af813e652cb52cdb02138584ecb80bc7dcdb28655f2f54917",
+      "role": "benchmark-input"
+    },
+    {
+      "path": "scene-images/rknn/validation/hazard-0020.jpg",
+      "bytes": 16670,
+      "sha256": "b0fee599b840f5ea45cfa8be11643c221922aaa177050531e1de947ba35f2ea0",
+      "role": "benchmark-input"
+    },
+    {
+      "path": "scene-images/rknn/validation/road-0375.jpg",
+      "bytes": 68549,
+      "sha256": "373c2308ad8fb03fcc6b862383867f57ea0b95749464a22e8fd50b64bf7b8041",
+      "role": "benchmark-input"
+    },
+    {
+      "path": "scene-images/rknn/validation/road-0380.jpg",
+      "bytes": 67248,
+      "sha256": "ddf3be8ddcebeaefaf96a9cf4c9f53efef1f39908c835bec8fa56886b4d1cce5",
+      "role": "benchmark-input"
+    },
+    {
+      "path": "scene-images/rknn/validation/road-0385.jpg",
+      "bytes": 67986,
+      "sha256": "986ceec765d5a43acfc38d6bf6935df31728e16e166be087c9fdd4636345e91d",
+      "role": "benchmark-input"
+    },
+    {
+      "path": "scene-images/rknn/validation/road-0390.jpg",
+      "bytes": 68797,
+      "sha256": "776b8e8b855b509d94ecd561e67e692ebe0354a8bd9daf8dcd151739d8641d8a",
+      "role": "benchmark-input"
+    },
+    {
+      "path": "scene-images/rknn/validation/road-0395.jpg",
+      "bytes": 67329,
+      "sha256": "0c4a5a705b11aca8c6013dcd0871dca4dd8129fbfdecd5973bd0c6dbb0d83097",
+      "role": "benchmark-input"
+    },
+    {
+      "path": "scene-images/rknn/validation/road-0400.jpg",
+      "bytes": 68392,
+      "sha256": "fb1690026516d0cc8f584f307ab9b5ecae2b8d24947ca9af547a954a057f7261",
+      "role": "benchmark-input"
+    },
+    {
+      "path": "scene-images/rknn/validation/road-0405.jpg",
+      "bytes": 65746,
+      "sha256": "805c95ec5fcd85f1c08b93ed4ec7507e5a4c04981a503c12dab254b9b2152b94",
+      "role": "benchmark-input"
+    },
+    {
+      "path": "scene-images/rknn/validation/road-0410.jpg",
+      "bytes": 67345,
+      "sha256": "b61fdfae814243620b54dc4d9cdcde2f600a97022b953d4955ab15f121b3b1e1",
+      "role": "benchmark-input"
+    }
+  ]
+}

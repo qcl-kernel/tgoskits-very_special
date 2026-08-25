@@ -2,7 +2,9 @@
 set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
-cc="${CROSS_CC:-$HOME/.local/toolchains/aarch64-linux-musl-cross/bin/aarch64-linux-musl-gcc}"
+# shellcheck source=scripts/lib/task123-tools.sh
+source "$repo_root/scripts/lib/task123-tools.sh"
+cc="$(resolve_task123_tool CROSS_CC aarch64-linux-musl-gcc)"
 out_dir="${OUT_DIR:-$repo_root/tmp/net-dual-guest}"
 mkdir -p "$out_dir"
 "$cc" -static -no-pie -O2 -Wall -Wextra -Werror -s \

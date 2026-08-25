@@ -94,20 +94,25 @@ neither is a long-duration soak test.
 ## RKNN/NPU hybrid integration
 
 This branch keeps the semantic state machine in `task3-model` and changes only
-the perception adapter.  The RKNN process pinned to StarryOS vCPU1 publishes
+the perception adapter.  The RKNN process pinned to StarryOS vCPU0 publishes
 one atomically replaced event record after each inference.  The T2N1 process
-on vCPU0 validates the record, applies `VideoSafetyController`, and translates
+on vCPU1 validates the record, applies `VideoSafetyController`, and translates
 the resulting decision into the existing `SetOutput`, `Stop`, or `Reset`
 protocol action.  Zephyr remains the sole control executor and returns STATUS.
 
-The event record contains a strictly increasing generation, frozen event ID,
-event kind, normalized detection fields, and `CLOCK_MONOTONIC` inference start
-and end timestamps.  The controller records CONTROL send and STATUS receipt
-with the same StarryOS monotonic clock.  Therefore inference-start-to-STATUS is
-measured without Linux/RTOS clock synchronization; CONTROL-to-STATUS RTT is a
-second, narrower measurement.  Timestamp quantization is nanoseconds, while
-the practical precision is bounded by RKNN publication, the controller poll
-period, guest scheduling, and network delivery.
+The version-3 event record contains a strictly increasing generation, frozen
+event ID, event kind, normalized detection fields, and `CLOCK_MONOTONIC`
+inference start and end timestamps.  After publishing generation N, the RKNN
+producer waits for an atomically published acknowledgement for generation N.
+The T2N1 controller writes that acknowledgement only after the matching STATUS
+has arrived.  A 30-second producer timeout fails explicitly instead of
+overwriting an unconsumed generation.  The controller records CONTROL send and
+STATUS receipt with the same StarryOS monotonic clock.  Therefore
+inference-start-to-STATUS is measured without Linux/RTOS clock synchronization;
+CONTROL-to-STATUS RTT is a second, narrower measurement.  Timestamp
+quantization is nanoseconds, while the practical precision is bounded by RKNN
+publication, the controller poll period, guest scheduling, and network
+delivery.
 
 The fixed-perception arm traverses the same frozen manifest and image paths but
 publishes a fixed target of 500 and performs no semantic hazard recognition.
@@ -125,11 +130,30 @@ the perception decision source.
 - Restarting the RKNN executable once per frame was rejected because repeated
   model initialization would dominate the measured latency.
 - A shared-memory queue would reduce polling overhead, but it expands the
-  cross-process synchronization surface; the bounded twelve-event experiment
-  does not need that complexity.
+  cross-process synchronization surface.  The bounded twelve-event experiment
+  instead uses a one-record rendezvous: atomic event publication plus a
+  generation-specific STATUS acknowledgement provides lossless backpressure
+  without a general queue.
 
 The event record is an experiment-local interface, versioned in its readiness
 marker and rejected on missing, duplicate, unknown, or out-of-range fields.
-The existing generation/target record remains accepted only by legacy runs;
-the continuous-scene runner requires the new version and never silently falls
-back.
+Version 2's unacknowledged single-slot publication is not accepted because a
+slow CONTROL-to-STATUS cycle can lose intermediate generations.  The
+continuous-scene runner requires version 3 and never silently falls back.
+
+## Physical-board evidence window
+
+Each RAM-only boot emits one `TASK3_HYBRID_SCENE_BEGIN` marker before starting
+the workload.  Controller and RKNN diagnostic output is buffered in separate
+guest files while NPU kernel messages may use the shared UART.  After both
+producer receives the final generation acknowledgement, init prints the
+buffered logs serially and emits one `TASK3_HYBRID_SCENE_END` carrying the
+controller-complete flag and producer exit status.  The controller remains
+alive after the bounded RKNN scene because StarryOS BusyBox PID 1 cannot
+reliably reap that background child; the final acknowledgement is written only
+after the twelfth STATUS and is therefore the completion synchronization
+point.  Host quantification
+removes ANSI and Axvisor VM prefixes, selects only the latest complete
+BEGIN-to-END window, and then requires exactly one completion marker and twelve
+correlated CONTROL/STATUS chains.  A truncated or byte-corrupted record fails
+validation; it is never repaired or counted as protocol success.

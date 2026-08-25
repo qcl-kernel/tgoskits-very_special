@@ -2,6 +2,7 @@
 """Regression checks for the two-vCPU RT Linux workload topology."""
 
 import re
+import tomllib
 import unittest
 from pathlib import Path
 
@@ -14,9 +15,18 @@ GUEST_SHARED_RUNNER = (
     ROOT / "scripts/test/rt-partition/run-guest-shared-ab.sh"
 ).read_text()
 RUNNER_STEPS = RUNNER.split('cat > "$steps" <<EOF', 1)[1].split("\nEOF", 1)[0]
+ZEPHYR_VM_CONFIG = tomllib.loads(
+    (ROOT / "scripts/test/rt-partition/rt-partition-zephyr.toml").read_text()
+)
 
 
 class RtLinuxAffinityTest(unittest.TestCase):
+    def test_periodic_zephyr_exposes_the_physical_timer_used_by_the_guest(self):
+        self.assertFalse(
+            ZEPHYR_VM_CONFIG["base"]["aarch64_virtual_timer_only"],
+            "qemu_cortex_a53 Zephyr accesses CNTP; hiding it stops the VM",
+        )
+
     def test_p1_runner_interleaves_official_baseline_and_dedicated_runs(self):
         baseline = P1_RUNNER.index("P1_RUN_START variant=baseline")
         modified = P1_RUNNER.index("P1_RUN_START variant=modified")
@@ -47,6 +57,21 @@ class RtLinuxAffinityTest(unittest.TestCase):
         self.assertIn('zephyr_timeout="${RT_ZEPHYR_TIMEOUT_SEC:-180}"', RUNNER)
         self.assertIn("expect ${zephyr_timeout} PERIODIC LATENCY COMPLETE", RUNNER)
 
+    def test_runner_accepts_owned_work_and_initramfs_paths(self):
+        self.assertIn(
+            'work="${RT_WORK_DIR:-${repo_root}/tmp/rt-partition}"',
+            RUNNER,
+        )
+        self.assertIn(
+            'linux_initramfs="${RT_LINUX_INITRAMFS:-${repo_root}/tmp/rt-partition/rt-linux-initramfs.cpio.gz}"',
+            RUNNER,
+        )
+        self.assertIn('"$linux_initramfs"', RUNNER)
+        self.assertIn('cp "$linux_initramfs" "$out_dir/rt-linux-initramfs.cpio.gz"', RUNNER)
+        self.assertIn('"$linux_initramfs" \\', RUNNER)
+        self.assertIn('elif line.startswith("ramdisk_path = "):', RUNNER)
+        self.assertIn("Linux VM template has no ramdisk_path field", RUNNER)
+
     def test_all_formal_scenarios_budget_for_slow_tcg_guest_time(self):
         idle = RUNNER.split("idle)", 1)[1].split(";;", 1)[0]
         stress_noiso = RUNNER.split("stress-noiso)", 1)[1].split(";;", 1)[0]
@@ -76,6 +101,25 @@ class RtLinuxAffinityTest(unittest.TestCase):
         self.assertIn('rt_load_cpu=*) load_cpu="${arg#rt_load_cpu=}"', INIT)
         self.assertIn('/bin/busybox taskset -c "$load_cpu" /bin/stress-ng', INIT)
         self.assertNotRegex(INIT, re.compile(r"stress-ng\s+--taskset"))
+
+    def test_guest_shared_scenario_starts_declared_stress_load(self):
+        stress_dispatch = INIT.split('case "$scenario" in', 1)[1].split(
+            "esac", 1
+        )[0]
+        stress_arms = re.findall(
+            r"(?ms)^\s*([^\n]+)\)\n(?:(?!;;).)*RT_STRESS_START.*?;;",
+            stress_dispatch,
+        )
+        enabled_scenarios = {
+            scenario
+            for arm in stress_arms
+            for scenario in arm.strip().split("|")
+        }
+        self.assertIn(
+            "stress-guest-shared",
+            enabled_scenarios,
+            "the guest-shared A/B scenario must start stress-ng before sampling",
+        )
 
     def test_guest_moves_cyclictest_before_libnuma_starts(self):
         self.assertIn('all_cpus="0-$((cpu_total - 1))"', INIT)

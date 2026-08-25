@@ -5,7 +5,7 @@ set -euo pipefail
 # interleaved order, then summarize the repeated Zephyr tail-latency results.
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
-baseline_root="${RT_P1_BASELINE_ROOT:-/home/huhu/tgoskits-rt-baseline}"
+baseline_root="${RT_P1_BASELINE_ROOT:-$repo_root/.deps/tgoskits-rt-baseline}"
 output_root="${RT_P1_OUTPUT_ROOT:-${repo_root}/results/task1/p1-interleaved}"
 repeats="${RT_P1_REPEATS:-3}"
 max_attempts="${RT_P1_MAX_ATTEMPTS:-3}"
@@ -13,7 +13,7 @@ duration_sec="${RT_P1_DURATION_SEC:-90}"
 burner_busy_ms="${RT_P1_BURNER_BUSY_MS:-10}"
 burner_idle_ms="${RT_P1_BURNER_IDLE_MS:-53}"
 burner_start_delay_ms="${RT_P1_BURNER_START_DELAY_MS:-60000}"
-rootfs="${RT_P1_ROOTFS:-${repo_root}/tmp/axbuild/rootfs/rootfs-aarch64-alpine.img/rootfs-aarch64-alpine.img}"
+rootfs="${RT_P1_ROOTFS:-${repo_root}/tmp/axbuild/rootfs/rootfs-aarch64-alpine.img}"
 runner="${repo_root}/scripts/test/rt-partition/run-cyclictest.sh"
 baseline_zephyr="${repo_root}/scripts/test/rt-partition/upstream-dev-zephyr.toml"
 

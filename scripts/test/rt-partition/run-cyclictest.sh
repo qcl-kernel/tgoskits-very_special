@@ -7,6 +7,7 @@ set -euo pipefail
 # mandatory when the selected source tree supports those diagnostics.
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+source "$repo_root/scripts/lib/task123-tools.sh"
 source_root="${RT_SOURCE_ROOT:-$repo_root}"
 scenario="${RT_SCENARIO:-idle}"
 loops="${RT_LOOPS:-1800000}"
@@ -25,7 +26,10 @@ vmexit_diagnostics="${RT_VMEXIT_DIAGNOSTICS:-1}"
 runtime_diagnostics="${RT_RUNTIME_DIAGNOSTICS:-0}"
 timer_storm_command="${RT_TIMER_STORM_COMMAND:-}"
 rootfs_override="${RT_ROOTFS:-}"
+work="${RT_WORK_DIR:-${repo_root}/tmp/rt-partition}"
+work="$(realpath -m "$work")"
 linux_image="${RT_LINUX_KERNEL_OVERRIDE:-${repo_root}/tmp/rt-partition/linux-qemu}"
+linux_initramfs="${RT_LINUX_INITRAMFS:-${repo_root}/tmp/rt-partition/rt-linux-initramfs.cpio.gz}"
 linux_trace="${RT_LINUX_TRACE:-disabled}"
 linux_trace_buffer_kb="${RT_LINUX_TRACE_BUFFER_KB:-8192}"
 linux_virtual_timer_only="${RT_LINUX_VIRTUAL_TIMER_ONLY:-0}"
@@ -233,7 +237,6 @@ timeout_sec="${RT_TIMEOUT_SEC:-$minimum_outer_timeout}"
     exit 2
 }
 
-work="${repo_root}/tmp/rt-partition"
 out_root="${RT_OUTPUT_ROOT:-${repo_root}/results/task1/matrix}"
 out_dir="${out_root}/${scenario}"
 board_toml="${RT_BOARD_CONFIG:-${repo_root}/scripts/test/rt-partition/board-qemu-aarch64-rt.toml}"
@@ -259,7 +262,7 @@ build_log="${out_dir}/build-qemu.log"
 for path in "$board_toml" "$linux_template" "$zephyr_template"; do
     [[ -f "$path" ]] || { printf 'error: missing %s\n' "$path" >&2; exit 1; }
 done
-for path in "$linux_image" "$work/rt-linux-initramfs.cpio.gz" \
+for path in "$linux_image" "$linux_initramfs" \
     "$zephyr_image" "$zephyr_manifest"; do
     [[ -f "$path" ]] || {
         printf 'error: missing %s (stage the guest images and run build-rt-tools.sh)\n' "$path" >&2
@@ -328,7 +331,8 @@ rm -f "$serial_sock" "$qmp_sock" "$run_log" "$build_log" \
 cmdline="console=ttyAMA0 rdinit=/init devtmpfs.mount=1 loglevel=7 isolcpus=${rt_cpu} nohz_full=${rt_cpu} irqaffinity=${load_cpu} rt_scenario=${scenario} rt_cpu=${rt_cpu} rt_load_cpu=${load_cpu} rt_loops=${cyclictest_loops} rt_duration_sec=${duration_sec} rt_interval_us=${interval_us} rt_maxlat_us=${maxlat_us} rt_priority=${priority} rt_trace=${linux_trace} rt_trace_buffer_kb=${linux_trace_buffer_kb} rt_start_delay_sec=${start_delay_sec} rt_hold_after_complete=${hold_after_complete}"
 
 python3 - "$linux_template" "$linux_config" "$cmdline" "$linux_image" \
-    "$linux_virtual_timer_only" "$linux_wfi_policy" "$linux_phys_cpu_ids" <<'PY'
+    "$linux_initramfs" "$linux_virtual_timer_only" "$linux_wfi_policy" \
+    "$linux_phys_cpu_ids" <<'PY'
 import sys
 from pathlib import Path
 
@@ -336,12 +340,14 @@ source = Path(sys.argv[1])
 destination = Path(sys.argv[2])
 cmdline = sys.argv[3]
 linux_image = sys.argv[4]
-virtual_timer_only = sys.argv[5] == "1"
-wfi_policy = sys.argv[6]
-phys_cpu_ids = sys.argv[7]
+linux_initramfs = sys.argv[5]
+virtual_timer_only = sys.argv[6] == "1"
+wfi_policy = sys.argv[7]
+phys_cpu_ids = sys.argv[8]
 lines = source.read_text().splitlines()
 cmdline_replaced = False
 kernel_replaced = False
+ramdisk_replaced = False
 timer_contract_replaced = False
 wfi_policy_replaced = False
 for index, line in enumerate(lines):
@@ -351,6 +357,9 @@ for index, line in enumerate(lines):
     elif line.startswith("kernel_path = "):
         lines[index] = f'kernel_path = "{linux_image}"'
         kernel_replaced = True
+    elif line.startswith("ramdisk_path = "):
+        lines[index] = f'ramdisk_path = "{linux_initramfs}"'
+        ramdisk_replaced = True
     elif line.startswith("aarch64_virtual_timer_only = "):
         lines[index] = (
             "aarch64_virtual_timer_only = "
@@ -366,6 +375,8 @@ if not cmdline_replaced:
     raise SystemExit("Linux VM template has no cmdline field")
 if not kernel_replaced:
     raise SystemExit("Linux VM template has no kernel_path field")
+if not ramdisk_replaced:
+    raise SystemExit("Linux VM template has no ramdisk_path field")
 # Older upstream AxVisor templates do not expose the realtime timer/WFI
 # contract knobs. Keep those templates usable for an official baseline; the
 # current tree still replaces both fields when present.
@@ -422,7 +433,10 @@ cat > "$qemu_config" <<EOF
 args = [
   "-display", "none",
   "-monitor", "none",
-  "-serial", "unix:${serial_sock},server,nowait",
+  # QEMU must not boot until the collector owns the serial connection.  With
+  # nowait, early Axvisor markers can be emitted before serial_console.py
+  # connects, making a healthy boot look like a timeout.
+  "-serial", "unix:${serial_sock},server",
   "-cpu", "cortex-a72",
   "-machine", "virt,virtualization=on,gic-version=3",
   "-smp", "4",
@@ -528,6 +542,7 @@ if [[ -n "$rootfs_override" ]]; then
     rootfs_args=(--rootfs "$rootfs_override")
 fi
 
+acquire_task123_qemu_slot "$repo_root"
 cd "$source_root"
 timeout "$timeout_sec" cargo xtask axvisor qemu \
     --config "$board_toml" \
@@ -933,6 +948,7 @@ PY
     printf 'hold_after_complete=%s\n' "$hold_after_complete"
     printf 'rootfs_override=%s\n' "${rootfs_override:-none}"
     printf 'linux_kernel=%s\n' "$linux_image"
+    printf 'linux_initramfs=%s\n' "$linux_initramfs"
     printf 'board_config=%s\n' "$board_toml"
     printf 'zephyr_guest_type=%s\n' "$zephyr_guest_type"
     printf 'zephyr_start_delay_ms=%s\n' "$zephyr_start_delay_ms"
@@ -963,7 +979,7 @@ cp "$linux_config" "$out_dir/linux.toml"
 cp "$zephyr_config" "$out_dir/zephyr.toml"
 cp "$qemu_config" "$out_dir/qemu.toml"
 cp "$linux_image" "$out_dir/linux-qemu"
-cp "$work/rt-linux-initramfs.cpio.gz" "$out_dir/"
+cp "$linux_initramfs" "$out_dir/rt-linux-initramfs.cpio.gz"
 cp "$zephyr_image" "$out_dir/zephyr-periodic.bin"
 cp "$zephyr_manifest" "$out_dir/zephyr-periodic.manifest"
 cp "$axvisor_bin" "$out_dir/"

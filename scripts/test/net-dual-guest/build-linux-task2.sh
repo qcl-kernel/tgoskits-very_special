@@ -42,6 +42,7 @@ build_role() {
         TASK2_ROLE="$role" \
         TASK2_LOCAL_IP="$local_ip" \
         TASK2_PEER_IP="$peer_ip" \
+        ${TASK2_BENCHMARK_COUNT:+TASK2_BENCHMARK_COUNT="$TASK2_BENCHMARK_COUNT"} \
         ${TASK3_CONTROL_LOOP:+TASK3_CONTROL_LOOP="$TASK3_CONTROL_LOOP"} \
         ${TASK3_AI:+TASK3_AI="$TASK3_AI"} \
         ${TASK3_MODEL:+TASK3_MODEL="$TASK3_MODEL"} \
@@ -50,6 +51,7 @@ build_role() {
         ${TASK3_YOLO_MIN_AREA_MILLI:+TASK3_YOLO_MIN_AREA_MILLI="$TASK3_YOLO_MIN_AREA_MILLI"} \
         ${TASK3_YOLO_MAX_TARGET_STEP:+TASK3_YOLO_MAX_TARGET_STEP="$TASK3_YOLO_MAX_TARGET_STEP"} \
         ${TASK3_RKNN_CONTROL_PATH:+TASK3_RKNN_CONTROL_PATH="$TASK3_RKNN_CONTROL_PATH"} \
+        ${TASK3_RKNN_ACK_PATH:+TASK3_RKNN_ACK_PATH="$TASK3_RKNN_ACK_PATH"} \
         NCNN_PREFIX="$ncnn_prefix" \
         CXX_aarch64_unknown_linux_musl="$cross_cxx" \
         AR_aarch64_unknown_linux_musl="$cross_ar" \

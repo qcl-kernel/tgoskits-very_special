@@ -5,6 +5,7 @@ set -euo pipefail
 # the same CSV/statistics evidence used by the RT-partition experiment.
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
+source "$repo_root/scripts/lib/task123-tools.sh"
 input_dir="${NATIVE_ZEPHYR_INPUT_DIR:-${repo_root}/tmp/rt-partition/native-zephyr}"
 out_dir="${NATIVE_ZEPHYR_OUTPUT_DIR:-${repo_root}/results/task1/native-zephyr}"
 qemu_bin="${QEMU_BIN:-qemu-system-aarch64}"
@@ -45,8 +46,8 @@ actual_sha="$(sha256sum "$input_bin" | awk '{print $1}')"
     printf 'error: native Zephyr image is linked at %s, expected 0x40000000\n' "$linked_base" >&2
     exit 1
 }
-[[ "$sample_count" == "300" ]] || {
-    printf 'error: native Zephyr manifest sample count is %s, expected 300\n' "$sample_count" >&2
+[[ "$sample_count" =~ ^[1-9][0-9]*$ ]] || {
+    printf 'error: native Zephyr manifest sample count is invalid: %s\n' "$sample_count" >&2
     exit 1
 }
 [[ "$start_gated" == "0" ]] || {
@@ -77,6 +78,7 @@ qemu_args=(
 printf '%q ' "$qemu_bin" "${qemu_args[@]}" > "$out_dir/qemu-command.txt"
 printf '\n' >> "$out_dir/qemu-command.txt"
 
+acquire_task123_qemu_slot "$repo_root"
 start_ns="$(date +%s%N)"
 set +e
 timeout --signal=INT --kill-after=5 "$timeout_sec" \
@@ -94,13 +96,14 @@ case "$qemu_status" in
         exit 1
         ;;
 esac
-rg -F "PERIODIC LATENCY COMPLETE samples=300" "$out_dir/raw.log" >/dev/null || {
-    printf 'error: native Zephyr did not reach PERIODIC LATENCY COMPLETE samples=300\n' >&2
+rg -F "PERIODIC LATENCY COMPLETE samples=$sample_count" "$out_dir/raw.log" >/dev/null || {
+    printf 'error: native Zephyr did not reach PERIODIC LATENCY COMPLETE samples=%s\n' \
+        "$sample_count" >&2
     tail -80 "$out_dir/raw.log" >&2
     exit 1
 }
 
-python3 - "$out_dir/raw.log" "$out_dir/zephyr.csv" <<'PY'
+python3 - "$out_dir/raw.log" "$out_dir/zephyr.csv" "$sample_count" <<'PY'
 import csv
 import re
 import sys
@@ -108,10 +111,13 @@ from pathlib import Path
 
 log_path = Path(sys.argv[1])
 csv_path = Path(sys.argv[2])
+sample_count = int(sys.argv[3])
 log = log_path.read_text(errors="replace")
 header = "sequence,timestamp_ns,deadline_ns,actual_ns,jitter_ns"
 header_index = log.find(header)
-complete_index = log.find("PERIODIC LATENCY COMPLETE samples=300", header_index)
+complete_index = log.find(
+    f"PERIODIC LATENCY COMPLETE samples={sample_count}", header_index
+)
 if header_index < 0 or complete_index < header_index:
     raise SystemExit("native Zephyr CSV markers are missing")
 
@@ -122,9 +128,11 @@ for line in log[header_index + len(header):complete_index].splitlines():
     match = re.search(r"(\d+,-?\d+,-?\d+,-?\d+,-?\d+)$", candidate)
     if match:
         rows.append(match.group(1).split(","))
-if len(rows) != 300:
-    raise SystemExit(f"expected 300 native Zephyr samples, found {len(rows)}")
-if [int(row[0]) for row in rows] != list(range(300)):
+if len(rows) != sample_count:
+    raise SystemExit(
+        f"expected {sample_count} native Zephyr samples, found {len(rows)}"
+    )
+if [int(row[0]) for row in rows] != list(range(sample_count)):
     raise SystemExit("native Zephyr sample sequence is incomplete or out of order")
 
 with csv_path.open("w", newline="") as stream:

@@ -301,11 +301,11 @@ def write_chart(path: Path, groups: list[dict[str, object]]) -> None:
 def write_report(path: Path, groups: list[dict[str, object]], run_count: int) -> None:
     by_scheduler = {str(group["scheduler"]): group for group in groups}
     lines = [
-        "# Sustained real-YOLO Task 1 A/B",
+        "# Task 1 periodic scheduler A/B",
         "",
         f"Validated runs: {run_count}. Every accepted run has contiguous periodic samples, "
-        "a matching completion count, the requested real ncnn/YOLO inference count, and no "
-        "fatal marker.",
+        "a matching completion count, the requested ncnn/YOLO inference count (which may be "
+        "zero for a periodic-only run), and no fatal marker.",
         "",
         "| Scheduler | Runs | Median P99 | Median P99.9 | Median max | YOLO mean | YOLO P99 | Throughput |",
         "|---|---:|---:|---:|---:|---:|---:|---:|",
@@ -316,12 +316,18 @@ def write_report(path: Path, groups: list[dict[str, object]], run_count: int) ->
             continue
         throughput = group["median_inferences_per_minute"]
         throughput_text = f"{float(throughput):.3f}/min" if throughput != "" else "n/a"
+        inference_mean_text = format_optional_milliseconds(
+            group["median_inference_mean_us"]
+        )
+        inference_p99_text = format_optional_milliseconds(
+            group["median_inference_p99_us"]
+        )
         lines.append(
             f"| {scheduler} | {group['runs']} | {float(group['median_p99_ns']) / 1_000_000:.3f} ms | "
             f"{float(group['median_p99_9_ns']) / 1_000_000:.3f} ms | "
             f"{float(group['median_max_ns']) / 1_000_000:.3f} ms | "
-            f"{float(group['median_inference_mean_us']) / 1000:.3f} ms | "
-            f"{float(group['median_inference_p99_us']) / 1000:.3f} ms | "
+            f"{inference_mean_text} | "
+            f"{inference_p99_text} | "
             f"{throughput_text} |"
         )
     if "rr" in by_scheduler and "fp-rr" in by_scheduler:
@@ -339,6 +345,10 @@ def write_report(path: Path, groups: list[dict[str, object]], run_count: int) ->
             )
         )
     path.write_text("\n".join(lines) + "\n")
+
+
+def format_optional_milliseconds(value: object) -> str:
+    return "n/a" if value == "" else f"{float(value) / 1000:.3f} ms"
 
 
 def main() -> int:

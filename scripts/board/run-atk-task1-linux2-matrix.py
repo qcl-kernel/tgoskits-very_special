@@ -11,8 +11,8 @@ import serial
 
 
 class Console:
-    def __init__(self, path: str, log: Path) -> None:
-        self.serial = serial.Serial(path, 1_500_000, timeout=0.1)
+    def __init__(self, path: str, baud: int, log: Path) -> None:
+        self.serial = serial.Serial(path, baud, timeout=0.1, exclusive=True)
         self.log = log.open("wb")
         self.buffer = bytearray()
 
@@ -62,9 +62,16 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("log")
     parser.add_argument("--port", default="/dev/ttyACM0")
+    parser.add_argument("--baud", type=int, default=1_500_000)
     parser.add_argument("--linux-timeout", type=float, default=90)
+    parser.add_argument("--expected-samples", type=int, default=300)
+    parser.add_argument("--periodic-timeout", type=float, default=90)
     args = parser.parse_args()
-    console = Console(args.port, Path(args.log))
+    if args.baud <= 0 or args.expected_samples <= 0:
+        parser.error("baud and expected-samples must be positive")
+    if args.linux_timeout <= 0 or args.periodic_timeout <= 0:
+        parser.error("timeouts must be positive")
+    console = Console(args.port, args.baud, Path(args.log))
     host = rb"axvisor:(/)?\$"
     try:
         console.expect(rb"RT_CPUS total=2", 60)
@@ -76,7 +83,12 @@ def main() -> int:
         console.buffer.clear()
         console.raw(b"g")
         console.expect(rb"PERIODIC LATENCY START", 10)
-        console.expect(rb"PERIODIC LATENCY COMPLETE samples=300", 90)
+        console.expect(
+            rb"PERIODIC LATENCY COMPLETE samples="
+            + str(args.expected_samples).encode()
+            + rb"\b",
+            args.periodic_timeout,
+        )
         console.detach()
         console.command("rt stat", host)
         console.command("vmexit stat", host)

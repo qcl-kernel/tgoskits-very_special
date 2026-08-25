@@ -1,0 +1,11 @@
+/*
+ * The ATK-DLRK3588 debug console is UART2. Keep the 24 MHz / divisor-1 UART
+ * contract already established by the vendor firmware so the RAM-only
+ * handoff does not create a blind baud-rate transition.
+ */
+
+&uart2 {
+	clock-frequency = <24000000>;
+	current-speed = <1500000>;
+	status = "okay";
+};

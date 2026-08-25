@@ -12,6 +12,62 @@
 
 English | [中文](README_CN.md)
 
+## OpenRace Task 1–3 成果导航
+
+本分支在 **ATK-DLRK3588（RK3588）** 实板和 QEMU 上实现了一个由
+AxVisor 承载 StarryOS 与 Zephyr 的智能控制系统：Task 1 提供实时调度底座，
+Task 2 提供双 Guest 可靠通信，Task 3 将 RKNN/NPU 推理结果安全地交给 RTOS 执行。
+完整成果入口见 [成果材料总览](very_special-成果材料/README.md)。
+
+```text
+                              RK3588
++------------------------------------------------------------------+
+| pCPU2: StarryOS vCPU0                                            |
+|        图像 -> RKNN Runtime -> NPU -> 后处理/安全决策            |
+|                                      |                           |
+| pCPU1: StarryOS vCPU1                |       Zephyr vCPU0        |
+|        VirtIO-net/T2N1 -- CONTROL -->+------> 控制执行/10 ms任务 |
+|                         <-- ACK/STATUS -------------------------- |
+|                AxVisor bounded FP-RR 共享实时通信域               |
++------------------------------------------------------------------+
+```
+
+正式架构将 NPU 独占分配给 StarryOS，并把 AI CPU 工作放在 pCPU2；通信 vCPU
+与 Zephyr 共享 pCPU1，以隔离推理计算，同时保留真实的通信/控制竞争。Task 2
+使用独立 VirtIO-net endpoint、AxVisor L2 switch、UDP/IPv4 和 T2N1 协议。
+T2N1 采用 28 字节定长头、CRC32、sequence/ACK、有界重传、去重、乱序拒绝及
+Safe/恢复状态机，完整事务为：
+
+```text
+StarryOS controller                         Zephyr executor
+        |---- CONTROL(seq, request_id) ----------->|
+        |<----------------------------- ACK -------|
+        |<---- STATUS(last_request_id, state) -----|
+        |------------------------------ ACK ------>|
+```
+
+快速核对入口：
+
+- [总体架构与设计](very_special-成果材料/00-总体架构与设计.md)
+- [Task 1 实时调度](very_special-成果材料/01-Task1-实时调度设计与结果.md)、[Task 2 通信协议与吞吐](very_special-成果材料/02-Task2-双Guest通信设计与结果.md)、[Task 3 推理控制](very_special-成果材料/03-Task3-推理控制设计与结果.md)
+- [实现范围与源码对应](very_special-成果材料/09-任务要求与实现覆盖.md)
+- [证据与日志索引](very_special-成果材料/07-证据索引与验收状态.md)：原始串口、CSV/JSON、pcap、图片、视频和 SHA-256 的位置
+- 实板结果目录：[Task 1](results/task1/board-20260825/)、[Task 2](results/task2/board-20260825/)、[Task 3](results/task3/board-20260825/)
+- [最短复现导航](very_special-成果材料/10-复现导航.md)与[脚本说明](scripts/competition/README-task123.md)
+
+所有命令从仓库根目录执行；先检查环境并查看可用入口：
+
+```bash
+scripts/competition/task123.sh doctor
+scripts/competition/task123.sh --list
+scripts/competition/task123.sh suite full
+```
+
+实板可分别运行 `board task1-communication`、`board task2-throughput` 和
+`board task3-matrix`。脚本只使用 RAM-only `fastboot stage`；仅当终端出现
+`BOARD_RESET_REQUIRED` 时按一次板卡 RST。更详细的依赖、参数和核验标志见
+[复现导航](very_special-成果材料/10-复现导航.md)。
+
 ## 1. Introduction
 
 TGOSKits is an integrated repository for operating system and virtualization development. It brings together ArceOS, StarryOS, Axvisor, shared components, platform crates, and driver infrastructure in one workspace. A unified `cargo xtask` entry point is used for build, run, debug, and test workflows, making the repository suitable for component development, cross-system integration, and system-level validation.

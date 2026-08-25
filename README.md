@@ -51,6 +51,7 @@ StarryOS controller                         Zephyr executor
 - [总体架构与设计](very_special-成果材料/00-总体架构与设计.md)
 - [Task 1 实时调度](very_special-成果材料/01-Task1-实时调度设计与结果.md)、[Task 2 通信协议与吞吐](very_special-成果材料/02-Task2-双Guest通信设计与结果.md)、[Task 3 推理控制](very_special-成果材料/03-Task3-推理控制设计与结果.md)
 - [实现范围与源码对应](very_special-成果材料/09-任务要求与实现覆盖.md)
+- [上游贡献与 StarryOS 完善](very_special-成果材料/11-上游贡献与StarryOS完善.md)：两个已合并修复及一个等待人工审查的 syscall PR
 - [证据与日志索引](very_special-成果材料/07-证据索引与验收状态.md)：原始串口、CSV/JSON、pcap、图片、视频和 SHA-256 的位置
 - 实板结果目录：[Task 1](results/task1/board-20260825/)、[Task 2](results/task2/board-20260825/)、[Task 3](results/task3/board-20260825/)
 - [最短复现导航](very_special-成果材料/10-复现导航.md)与[脚本说明](scripts/competition/README-task123.md)

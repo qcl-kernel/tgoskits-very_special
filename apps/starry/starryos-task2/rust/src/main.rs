@@ -42,16 +42,16 @@ enum InferenceRejection {
     DeadlineExceeded {
         infer_us: u64,
     },
-    #[cfg(all(target_arch = "aarch64", target_os = "linux"))]
+    #[cfg(all(feature = "ncnn", target_arch = "aarch64", target_os = "linux"))]
     NoDetection {
         infer_us: u64,
     },
-    #[cfg(all(target_arch = "aarch64", target_os = "linux"))]
+    #[cfg(all(feature = "ncnn", target_arch = "aarch64", target_os = "linux"))]
     RuntimeError {
         code: i32,
         infer_us: u64,
     },
-    #[cfg(not(all(target_arch = "aarch64", target_os = "linux")))]
+    #[cfg(not(all(feature = "ncnn", target_arch = "aarch64", target_os = "linux")))]
     UnsupportedPlatform,
     Perception {
         reason: PerceptionRejectReason,
@@ -67,10 +67,10 @@ impl InferenceRejection {
             Self::DeadlineExceeded { infer_us } | Self::Perception { infer_us, .. } => {
                 Some(infer_us)
             }
-            #[cfg(all(target_arch = "aarch64", target_os = "linux"))]
+            #[cfg(all(feature = "ncnn", target_arch = "aarch64", target_os = "linux"))]
             Self::NoDetection { infer_us } | Self::RuntimeError { infer_us, .. } => Some(infer_us),
             Self::InjectedInvalidOutput | Self::WorkerDisconnected => None,
-            #[cfg(not(all(target_arch = "aarch64", target_os = "linux")))]
+            #[cfg(not(all(feature = "ncnn", target_arch = "aarch64", target_os = "linux")))]
             Self::UnsupportedPlatform => None,
         }
     }
@@ -834,13 +834,13 @@ fn run_inference_with_input(
     }
     let (raw_detection, infer_us) = ncnn::infer(MODEL_PARAM_PATH, MODEL_BIN_PATH, input_path)
         .map_err(|error| match error {
-            #[cfg(all(target_arch = "aarch64", target_os = "linux"))]
+            #[cfg(all(feature = "ncnn", target_arch = "aarch64", target_os = "linux"))]
             ncnn::Error::NoDetection { infer_us } => InferenceRejection::NoDetection { infer_us },
-            #[cfg(all(target_arch = "aarch64", target_os = "linux"))]
+            #[cfg(all(feature = "ncnn", target_arch = "aarch64", target_os = "linux"))]
             ncnn::Error::Runtime { code, infer_us } => {
                 InferenceRejection::RuntimeError { code, infer_us }
             }
-            #[cfg(not(all(target_arch = "aarch64", target_os = "linux")))]
+            #[cfg(not(all(feature = "ncnn", target_arch = "aarch64", target_os = "linux")))]
             ncnn::Error::UnsupportedPlatform => InferenceRejection::UnsupportedPlatform,
         })?;
     let detection = YoloDetection {

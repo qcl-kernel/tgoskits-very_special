@@ -7,6 +7,10 @@ build = "build.rs"
 
 [workspace]
 
+[features]
+default = ["ncnn"]
+ncnn = []
+
 [dependencies]
 task2-net-protocol = { path = "../../../../components/task2-net-protocol" }
 task3-model = { path = "../../../../components/task3-model" }

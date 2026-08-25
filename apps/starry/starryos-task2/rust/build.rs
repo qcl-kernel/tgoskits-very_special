@@ -4,6 +4,10 @@ fn main() {
     println!("cargo:rerun-if-env-changed=NCNN_PREFIX");
     println!("cargo:rerun-if-changed=src/ncnn/adapter.cc");
 
+    if env::var_os("CARGO_FEATURE_NCNN").is_none() {
+        return;
+    }
+
     let target_arch = env::var("CARGO_CFG_TARGET_ARCH").expect("Cargo must set target arch");
     let target_os = env::var("CARGO_CFG_TARGET_OS").expect("Cargo must set target OS");
     if target_arch != "aarch64" || target_os != "linux" {

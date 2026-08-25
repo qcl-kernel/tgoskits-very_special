@@ -14,15 +14,15 @@ pub struct Detection {
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum Error {
-    #[cfg(all(target_arch = "aarch64", target_os = "linux"))]
+    #[cfg(all(feature = "ncnn", target_arch = "aarch64", target_os = "linux"))]
     NoDetection { infer_us: u64 },
-    #[cfg(all(target_arch = "aarch64", target_os = "linux"))]
+    #[cfg(all(feature = "ncnn", target_arch = "aarch64", target_os = "linux"))]
     Runtime { code: i32, infer_us: u64 },
-    #[cfg(not(all(target_arch = "aarch64", target_os = "linux")))]
+    #[cfg(not(all(feature = "ncnn", target_arch = "aarch64", target_os = "linux")))]
     UnsupportedPlatform,
 }
 
-#[cfg(all(target_arch = "aarch64", target_os = "linux"))]
+#[cfg(all(feature = "ncnn", target_arch = "aarch64", target_os = "linux"))]
 unsafe extern "C" {
     fn task3_ncnn_infer(
         param_path: *const std::ffi::c_char,
@@ -33,7 +33,7 @@ unsafe extern "C" {
     ) -> i32;
 }
 
-#[cfg(all(target_arch = "aarch64", target_os = "linux"))]
+#[cfg(all(feature = "ncnn", target_arch = "aarch64", target_os = "linux"))]
 pub fn infer(
     param_path: &CStr,
     model_path: &CStr,
@@ -65,7 +65,7 @@ pub fn infer(
     }
 }
 
-#[cfg(not(all(target_arch = "aarch64", target_os = "linux")))]
+#[cfg(not(all(feature = "ncnn", target_arch = "aarch64", target_os = "linux")))]
 pub fn infer(
     _param_path: &CStr,
     _model_path: &CStr,

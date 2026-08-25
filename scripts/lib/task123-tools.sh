@@ -18,6 +18,37 @@ task123_source_revision() {
     return 1
 }
 
+# Verify that a pinned external source tree still matches the source identity
+# accepted by the reproduction workflow. Git checkouts use their index; source
+# archives use the checksum manifest created by prepare-task123-deps.sh.
+task123_source_is_pristine() {
+    local source="$1"
+    local manifest="$source/.task123-tree-sha256"
+
+    if [[ ! -d "$source" ]]; then
+        printf 'error: external source directory is missing: %s\n' "$source" >&2
+        return 1
+    fi
+    if [[ -e "$source/.git" ]]; then
+        if [[ -n "$(git -C "$source" status --porcelain=v1 --untracked-files=normal)" ]]; then
+            printf 'error: external Git source has local modifications: %s\n' \
+                "$source" >&2
+            return 1
+        fi
+        return 0
+    fi
+    if [[ ! -f "$manifest" ]]; then
+        printf 'error: external archive source has no integrity manifest: %s\n' \
+            "$source" >&2
+        return 1
+    fi
+    if ! (cd "$source" && sha256sum --quiet -c .task123-tree-sha256); then
+        printf 'error: external archive source differs from its prepared content: %s\n' \
+            "$source" >&2
+        return 1
+    fi
+}
+
 discover_task123_cross_root() {
     if [[ -n "${CROSS_ROOT:-}" ]]; then
         printf '%s\n' "$CROSS_ROOT"
@@ -110,7 +141,7 @@ acquire_task123_qemu_slot() {
 # runtime artifacts. Unix-domain socket paths are length-limited, so the
 # system temporary directory is preferable to a potentially deep workspace.
 create_task123_runtime_dir() {
-    local runtime_parent="${TASK123_RUNTIME_PARENT:-${TMPDIR:-/tmp}}"
+    local runtime_parent="${1:-${TASK123_RUNTIME_PARENT:-${TMPDIR:-/tmp}}}"
     local runtime_dir
 
     mkdir -p "$runtime_parent"

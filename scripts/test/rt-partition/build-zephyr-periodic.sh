@@ -43,6 +43,10 @@ fi
         "$zephyr_revision" "${zephyr_source_revision:-unknown}" >&2
     exit 1
 }
+task123_source_is_pristine "$zephyr_base" || {
+    printf 'error: refusing to build from a modified Zephyr source; use a clean ZEPHYR_BASE\n' >&2
+    exit 1
+}
 [[ "$memory_base" =~ ^0x[0-9a-fA-F]+$ && "$memory_size" =~ ^0x[0-9a-fA-F]+$ ]] || {
     printf 'error: Zephyr memory base and size must be hexadecimal\n' >&2
     exit 2
@@ -118,7 +122,7 @@ fi
 mkdir -p "$build_dir/Kconfig"
 printf 'set(kconfig_env_dirs)\n' > "$build_dir/Kconfig/kconfig_module_dirs.cmake"
 
-ZEPHYR_BASE="$zephyr_base" cmake -S "$app_dir" -B "$build_dir" -G Ninja \
+ZEPHYR_BASE="$zephyr_base" cmake --fresh -S "$app_dir" -B "$build_dir" -G Ninja \
     -DBOARD="$zephyr_board" \
     -DBUILD_VERSION="$zephyr_source_revision" \
     -DUSER_CACHE_DIR="$build_dir/user-cache" \

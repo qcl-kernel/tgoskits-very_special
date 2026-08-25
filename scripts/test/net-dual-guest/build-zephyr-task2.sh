@@ -93,6 +93,10 @@ if [[ "$zephyr_source_revision" != "$zephyr_revision" ]]; then
         "$zephyr_revision" "${zephyr_source_revision:-unknown}" >&2
     exit 1
 fi
+if ! task123_source_is_pristine "$zephyr_base"; then
+    printf 'error: refusing to build from a modified Zephyr source; use a clean ZEPHYR_BASE\n' >&2
+    exit 1
+fi
 if [[ -n "$extra_overlay" && ! -f "$extra_overlay" ]]; then
     printf 'error: Zephyr extra overlay does not exist: %s\n' "$extra_overlay" >&2
     exit 1
@@ -123,7 +127,7 @@ fi
 mkdir -p "$build_dir/Kconfig"
 printf 'set(kconfig_env_dirs)\n' > "$build_dir/Kconfig/kconfig_module_dirs.cmake"
 
-ZEPHYR_BASE="$zephyr_base" cmake -S "$source_dir" -B "$build_dir" -G Ninja \
+ZEPHYR_BASE="$zephyr_base" cmake --fresh -S "$source_dir" -B "$build_dir" -G Ninja \
     -DBOARD=qemu_cortex_a53 \
     -DBUILD_VERSION="$zephyr_source_revision" \
     -DUSER_CACHE_DIR="$build_dir/user-cache" \

@@ -20,6 +20,7 @@ serial_socket_timeout="${STARRY_TASK23_SERIAL_SOCKET_TIMEOUT:-300}"
 task_scope="${STARRY_TASK23_SCOPE:-integrated}"
 runtime_dir="$repo_root/tmp/net-dual-guest"
 socket_dir=""
+rootfs_dir=""
 qemu_sock=""
 serial_sock=""
 capture_prefix=""
@@ -154,7 +155,8 @@ fi
 rootfs="${STARRY_TASK23_ROOTFS:-$repo_root/tmp/axbuild/rootfs/rootfs-aarch64-alpine.img}"
 endpoint="$repo_root/target/starryos-task2-rust/aarch64-unknown-linux-musl/release/starryos-task2-endpoint"
 endpoint_script="$repo_root/apps/starry/starryos-task2/t2n1-run.sh"
-yolo_assets="$repo_root/tmp/task3-yolo/ncnn-model"
+yolo_assets="${TASK3_YOLO_ASSETS:-${TASK3_NCNN_MODEL_DIR:-$repo_root/tmp/task3-yolo/ncnn-model}}"
+yolo_assets="$(realpath -m "$yolo_assets")"
 yolo_param="$yolo_assets/yolo11n.ncnn.param"
 yolo_model="$yolo_assets/yolo11n.ncnn.bin"
 yolo_input="$yolo_assets/input.ppm"
@@ -236,10 +238,6 @@ if [[ "$task_scope" == integrated ]]; then
     } >> "$output_dir/rootfs-content-hashes.txt"
 fi
 
-socket_dir="$(create_task123_runtime_dir)"
-qemu_sock="$socket_dir/qmp.sock"
-serial_sock="$socket_dir/serial.sock"
-
 stop_owned_run() {
     if [[ -n "$run_pid" && -S "$qemu_sock" ]]; then
         python3 "$repo_root/scripts/test/net-dual-guest/qmp_link.py" "$qemu_sock" quit \
@@ -252,8 +250,17 @@ stop_owned_run() {
     if [[ -n "$socket_dir" && -d "$socket_dir" ]]; then
         remove_task123_runtime_dir "$socket_dir"
     fi
+    if [[ -n "$rootfs_dir" && -d "$rootfs_dir" ]]; then
+        remove_task123_runtime_dir "$rootfs_dir"
+    fi
 }
 trap stop_owned_run EXIT
+
+socket_dir="$(create_task123_runtime_dir)"
+rootfs_parent="${TASK123_ROOTFS_RUNTIME_PARENT:-$repo_root/tmp/task123-runtime}"
+rootfs_dir="$(create_task123_runtime_dir "$rootfs_parent")"
+qemu_sock="$socket_dir/qmp.sock"
+serial_sock="$socket_dir/serial.sock"
 
 runtime_rtos_vm_config="$output_dir/rtos.runtime.toml"
 python3 "$repo_root/scripts/test/net-dual-guest/render_vm_entry.py" \
@@ -265,7 +272,7 @@ python3 "$repo_root/scripts/test/net-dual-guest/render_vm_entry.py" \
 # The outer StarryOS filesystem is writable.  Every AxVisor run therefore gets
 # a disposable copy: a timeout or forced QEMU exit must not corrupt the clean
 # image used by later scenarios.
-runtime_rootfs="$socket_dir/rootfs.img"
+runtime_rootfs="$rootfs_dir/rootfs.img"
 cp --reflink=auto --sparse=always "$rootfs" "$runtime_rootfs"
 runtime_qemu_config="$output_dir/qemu.runtime.toml"
 python3 "$repo_root/scripts/test/net-dual-guest/render_qemu_runtime.py" \
@@ -367,6 +374,8 @@ python3 "$repo_root/scripts/test/net-dual-guest/render_qemu_runtime.py" \
         printf 'cmd rt stat\n'
         printf 'expect 30 RT vCPU wait counters:\n'
     fi
+    printf 'cmd virtnet capture off\n'
+    printf 'expect 20 virtnet: capture OFF\n'
     printf 'dump-pcap %s\n' "$capture_prefix"
     printf 'qmp-quit %s\n' "$qemu_sock"
 } > "$steps"

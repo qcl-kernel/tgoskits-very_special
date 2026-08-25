@@ -1,4 +1,5 @@
 import importlib.util
+import hashlib
 import json
 import os
 import subprocess
@@ -26,7 +27,19 @@ VM_SPEC.loader.exec_module(VM_MODULE)
 
 class Task123RuntimeIsolationTest(unittest.TestCase):
     def test_public_full_suite_is_exactly_the_ten_behavioral_scenarios(self) -> None:
-        expected = [
+        listed_expected = [
+            "task1-scheduler-ab",
+            "task2-normal",
+            "task2-drop-ack",
+            "task2-retry-exhausted",
+            "task2-blackout",
+            "task2-out-of-order",
+            "task2-invalid-parameter",
+            "task3-yolo-smoke",
+            "task3-model-rejected",
+            "task23-integrated",
+        ]
+        full_expected = [
             "task3-yolo-smoke",
             "task1-scheduler-ab",
             "task2-normal",
@@ -47,15 +60,17 @@ class Task123RuntimeIsolationTest(unittest.TestCase):
         ).stdout
         scenario_block = listed.split("Scenarios:\n", 1)[1].split("\nGates:\n", 1)[0]
         listed_scenarios = [
-            line.split()[0] for line in scenario_block.splitlines() if line.strip()
+            line.split()[0]
+            for line in scenario_block.splitlines()
+            if line.strip().startswith("task")
         ]
-        self.assertEqual(listed_scenarios, expected)
+        self.assertEqual(listed_scenarios, listed_expected)
 
         entrypoint = ENTRYPOINT.read_text()
         full_suite = entrypoint.split("        full)\n", 1)[1].split(
             "            ;;", 1
         )[0]
-        positions = [full_suite.index(scenario) for scenario in expected]
+        positions = [full_suite.index(scenario) for scenario in full_expected]
         self.assertEqual(positions, sorted(positions))
         self.assertNotIn("ci-contracts", full_suite)
 
@@ -93,6 +108,19 @@ class Task123RuntimeIsolationTest(unittest.TestCase):
             "mode=%s.*safe_observed=true recovered=true\\n' \"$run_mode\"",
             runner,
         )
+
+    def test_capture_is_stopped_before_streaming_the_pcap(self) -> None:
+        runner = SCENARIO_RUNNER.read_text()
+        closing_steps = runner.split(
+            "    printf 'send-until 10 1 \\\\x18h axvisor:/\\\\$\\n'\n",
+            1,
+        )[1]
+
+        capture_off = closing_steps.index("cmd virtnet capture off")
+        capture_off_ack = closing_steps.index("virtnet: capture OFF")
+        dump_pcap = closing_steps.index("dump-pcap %s")
+        self.assertLess(capture_off, capture_off_ack)
+        self.assertLess(capture_off_ack, dump_pcap)
 
     def test_drop_ack_keeps_starry_attached_until_retransmit_line_is_complete(self) -> None:
         runner = SCENARIO_RUNNER.read_text()
@@ -250,7 +278,10 @@ class Task123RuntimeIsolationTest(unittest.TestCase):
             )
 
         self.assertNotEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertIn("aarch64-linux-musl-g++ was not found", result.stderr)
+        self.assertIn(
+            "aarch64-linux-musl-g++ was not found",
+            result.stdout + result.stderr,
+        )
 
     def test_task3_runners_do_not_use_global_process_or_tmp_cleanup(self) -> None:
         runners = [
@@ -289,6 +320,7 @@ class Task123RuntimeIsolationTest(unittest.TestCase):
         initramfs_builder = (ROOT / "build-linux-initramfs.sh").read_text()
         ncnn_smoke = (REPO / "scripts/task3/run-ncnn-smoke.sh").read_text()
         rt_tools = (REPO / "scripts/test/rt-partition/build-rt-tools.sh").read_text()
+        scenario_runner = SCENARIO_RUNNER.read_text()
 
         self.assertIn(
             'YOLO_AB_OUT_DIR="$ab_model_dir"',
@@ -300,6 +332,14 @@ class Task123RuntimeIsolationTest(unittest.TestCase):
         )
         self.assertIn('"$model_dir/yolo11n.ncnn.param"', ncnn_smoke)
         self.assertIn('"$model_dir/yolo11n.ncnn.bin"', ncnn_smoke)
+        self.assertIn(
+            'yolo_assets="${TASK3_YOLO_ASSETS:-${TASK3_NCNN_MODEL_DIR:-',
+            scenario_runner,
+        )
+        self.assertNotIn(
+            'yolo_assets="$repo_root/tmp/task3-yolo/ncnn-model"',
+            scenario_runner,
+        )
         self.assertNotIn(
             '"$repo_root/tmp/task3-yolo/ncnn-model/yolo11n.ncnn.param"',
             ncnn_smoke,
@@ -350,8 +390,45 @@ class Task123RuntimeIsolationTest(unittest.TestCase):
         self.assertIn('measurement_timeout_sec="${STARRY_TASK1_MEASUREMENT_TIMEOUT_SEC:-$((guest_duration_sec * 4 + 600))}"', runner)
         self.assertIn('qemu_timeout_sec="${STARRY_TASK1_QEMU_TIMEOUT_SEC:-$((guest_duration_sec * 4 + 900))}"', runner)
         self.assertIn('ZEPHYR_DUMP_GATED=1', matrix)
+        full_build = ENTRYPOINT.read_text().split("build_full() {", 1)[1].split(
+            "new_evidence_path() {", 1
+        )[0]
+        self.assertIn('ZEPHYR_START_GATED=1', full_build)
+        self.assertIn('ZEPHYR_DUMP_GATED=1', full_build)
         self.assertIn("PERIODIC LATENCY SAMPLING COMPLETE", runner)
         self.assertIn("PERIODIC LATENCY CHUNK end=", runner)
+
+    def test_task2_only_endpoint_build_does_not_require_ncnn_assets(self) -> None:
+        manifest = (REPO / "apps/starry/starryos-task2/rust/Cargo.toml").read_text()
+        build_script = (REPO / "apps/starry/starryos-task2/rust/build.rs").read_text()
+        prebuild = (REPO / "apps/starry/starryos-task2/prebuild.sh").read_text()
+
+        self.assertIn("[features]", manifest)
+        self.assertIn('ncnn = []', manifest)
+        self.assertIn('CARGO_FEATURE_NCNN', build_script)
+        self.assertIn(
+            'build_scope="${STARRY_TASK23_BUILD_SCOPE:-${STARRY_TASK23_SCOPE:-integrated}}"',
+            prebuild,
+        )
+        self.assertIn('--no-default-features', prebuild)
+        self.assertIn('if [[ "$build_scope" == integrated ]]', prebuild)
+
+    def test_zephyr_builders_always_start_from_a_fresh_cmake_cache(self) -> None:
+        builders = (
+            REPO / "scripts/test/rt-partition/build-zephyr-periodic.sh",
+            ROOT / "build-zephyr-task2.sh",
+        )
+        for builder in builders:
+            source = builder.read_text()
+            self.assertIn("cmake --fresh -S", source, str(builder))
+            self.assertIn("task123_source_is_pristine", source, str(builder))
+
+    def test_large_runtime_rootfs_is_kept_out_of_the_socket_directory(self) -> None:
+        runner = SCENARIO_RUNNER.read_text()
+
+        self.assertIn('rootfs_dir="$(create_task123_runtime_dir "$rootfs_parent")"', runner)
+        self.assertIn('runtime_rootfs="$rootfs_dir/rootfs.img"', runner)
+        self.assertIn('remove_task123_runtime_dir "$rootfs_dir"', runner)
 
     def test_p1_comparison_default_rootfs_is_an_image_not_a_child_path(self) -> None:
         runner = (REPO / "scripts/test/rt-partition/run-p1-comparison.sh").read_text()
@@ -477,6 +554,65 @@ class Task123RuntimeIsolationTest(unittest.TestCase):
                 0,
                 acquired.stdout + acquired.stderr,
             )
+
+    def test_external_source_integrity_rejects_modified_trees(self) -> None:
+        helper = REPO / "scripts/lib/task123-tools.sh"
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            git_source = root / "git-source"
+            git_source.mkdir()
+            subprocess.run(["git", "init", "-q"], cwd=git_source, check=True)
+            (git_source / "source.txt").write_text("clean\n")
+            subprocess.run(["git", "add", "source.txt"], cwd=git_source, check=True)
+            subprocess.run(
+                [
+                    "git",
+                    "-c",
+                    "user.name=Task123 Test",
+                    "-c",
+                    "user.email=task123@example.invalid",
+                    "commit",
+                    "-qm",
+                    "fixture",
+                ],
+                cwd=git_source,
+                check=True,
+            )
+            self._assert_external_source_integrity(helper, git_source, True)
+            (git_source / "source.txt").write_text("modified\n")
+            self._assert_external_source_integrity(helper, git_source, False)
+
+            archive_source = root / "archive-source"
+            archive_source.mkdir()
+            (archive_source / "source.txt").write_text("clean\n")
+            digest = hashlib.sha256(b"clean\n").hexdigest()
+            (archive_source / ".task123-tree-sha256").write_text(
+                f"{digest}  ./source.txt\n"
+            )
+            self._assert_external_source_integrity(helper, archive_source, True)
+            (archive_source / "source.txt").write_text("modified\n")
+            self._assert_external_source_integrity(helper, archive_source, False)
+
+    def _assert_external_source_integrity(
+        self, helper: Path, source: Path, expected: bool
+    ) -> None:
+        result = subprocess.run(
+            [
+                "bash",
+                "-c",
+                'source "$1"; task123_source_is_pristine "$2"',
+                "bash",
+                str(helper),
+                str(source),
+            ],
+            text=True,
+            capture_output=True,
+        )
+        self.assertEqual(
+            result.returncode == 0,
+            expected,
+            result.stdout + result.stderr,
+        )
 
     def test_dirty_source_identity_records_patch_and_untracked_hashes(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

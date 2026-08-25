@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Judge-facing entrypoint for the Task 1-3 QEMU acceptance scenarios.
+# Reproduction entrypoint for Task 1-3 QEMU and physical-board scenarios.
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 source "$repo_root/scripts/lib/task123-tools.sh"
@@ -28,27 +28,36 @@ EOF
 list_scenarios() {
     cat <<'EOF'
 Scenarios:
-  task3-yolo-smoke         Fresh AArch64 ncnn binary performs real YOLO inference
+  Task 1:
   task1-scheduler-ab       Same dual-Guest load under RR and FP-RR schedulers
+
+  Task 2:
   task2-normal             Model-independent CONTROL -> RTOS STATUS/ACK
-  task23-integrated        YOLO -> CONTROL -> RTOS STATUS/ACK, with two pcaps
   task2-drop-ack           One lost ACK, retransmission and duplicate suppression
   task2-retry-exhausted    Bounded retries, Safe state and recovery
   task2-blackout           Link blackout, Safe state and post-blackout recovery
   task2-out-of-order       Reject an out-of-order CONTROL frame and recover
   task2-invalid-parameter  Reject an invalid control value and recover
+
+  Task 3:
+  task3-yolo-smoke         Fresh AArch64 ncnn binary performs real YOLO inference
   task3-model-rejected     Invalid model output enters the defined Safe path
+
+  Cross-task integration:
+  task23-integrated        YOLO -> CONTROL -> RTOS STATUS/ACK, with two pcaps
 
 Gates:
   ci-contracts             Task 2/3 Rust and Python contract/regression gate
 
-Suites:
+Task-specific suites (recommended for separate evidence):
   task1       RR versus FP-RR scheduler A/B
   task2       Normal control loop plus all protocol fault scenarios
   task3       Real YOLO smoke and rejected-output safety
+
+Automation-only suites:
   quick       ci-contracts + task3-yolo-smoke
   acceptance  task1-scheduler-ab + normal + blackout + model-rejected
-  full        all ten behavioral scenarios
+  full        combined regression across task-specific and cross-task scenarios
   video       short evidence order used by the recommended recording script
 
 Physical-board commands (RAM-only; never flash or erase):
@@ -220,7 +229,13 @@ EOF
     fi
     if [[ -n "$zephyr_base" ]] &&
         [[ "$(zephyr_source_revision "$zephyr_base")" == "$zephyr_revision" ]]; then
-        printf '  [OK]      Zephyr source %s\n' "$zephyr_revision"
+        if task123_source_is_pristine "$zephyr_base" >/dev/null 2>&1; then
+            printf '  [OK]      Zephyr source %s\n' "$zephyr_revision"
+        else
+            printf '  [DIRTY]   Zephyr source differs from its pinned content: %s\n' \
+                "$zephyr_base"
+            failures=$((failures + 1))
+        fi
     else
         printf '  [MISSING] pinned Zephyr source; set ZEPHYR_BASE (commit %s)\n' "$zephyr_revision"
         failures=$((failures + 1))
@@ -336,6 +351,7 @@ EOF
 
     fresh_output_dir "$repo_root/tmp/starry-task1-periodic"
     ZEPHYR_BASE="$zephyr_base" \
+        ZEPHYR_START_GATED=1 ZEPHYR_DUMP_GATED=1 \
         OUT_DIR="$repo_root/tmp/starry-task1-periodic" \
         BUILD_DIR="$repo_root/tmp/starry-task1-periodic/cargo-target" \
         "$repo_root/scripts/test/rt-partition/build-zephyr-periodic.sh"
@@ -522,7 +538,7 @@ board_task1_matrix() {
     local default_artifacts output_root
     case "$topology" in
     communication-share)
-        default_artifacts="$repo_root/results/task1/board-20260825/communication-share-sustained-v8/artifacts"
+        default_artifacts="$repo_root/very_special-成果材料/board-fits/task1"
         ;;
     ai-share)
         default_artifacts="$repo_root/results/task1/board-20260825/ai-share-6000-v1/artifacts"
@@ -561,7 +577,7 @@ board_task1_matrix() {
 
 board_task2_throughput() {
     local runs="${TASK123_BOARD_RUNS:-3}" transactions="${TASK123_TASK2_TRANSACTIONS:-200}" run
-    local fit="${TASK123_BOARD_TASK2_FIT:-$repo_root/results/task2/board-20260825/bounded-200/artifacts/axvisor-task123-zephyr-fp-rr.fit}"
+    local fit="${TASK123_BOARD_TASK2_FIT:-$repo_root/very_special-成果材料/board-fits/task2/axvisor-task123-zephyr-fp-rr.fit}"
     local output_root="${TASK123_BOARD_OUTPUT_DIR:-$repo_root/results/task2/board-$(date +%Y%m%d)/bounded-$transactions}"
     require_positive_integer TASK123_BOARD_RUNS "$runs"
     require_positive_integer TASK123_TASK2_TRANSACTIONS "$transactions"
@@ -578,8 +594,8 @@ board_task2_throughput() {
 
 board_task3_matrix() {
     local runs="${TASK123_BOARD_RUNS:-3}" run mode fit end_regex
-    local fixed_artifacts="${TASK123_TASK3_FIXED_ARTIFACT_DIR:-$repo_root/results/task3/board-20260825/fresh-build-v2/fixed/artifacts}"
-    local rknn_artifacts="${TASK123_TASK3_RKNN_ARTIFACT_DIR:-$repo_root/results/task3/board-20260825/fresh-build-v2/rknn/artifacts}"
+    local fixed_artifacts="${TASK123_TASK3_FIXED_ARTIFACT_DIR:-$repo_root/very_special-成果材料/board-fits/task3/fixed}"
+    local rknn_artifacts="${TASK123_TASK3_RKNN_ARTIFACT_DIR:-$repo_root/very_special-成果材料/board-fits/task3/rknn}"
     local output_root="${TASK123_BOARD_OUTPUT_DIR:-$repo_root/results/task3/board-$(date +%Y%m%d)/fixed-vs-rknn}"
     require_positive_integer TASK123_BOARD_RUNS "$runs"
     mkdir -p "$output_root"

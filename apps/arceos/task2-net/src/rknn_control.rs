@@ -1,10 +1,15 @@
 //! Strict parser for the experiment-local RKNN-to-T2N1 event record.
 
-use std::{fs, string::String};
+use std::{
+    fs::{self, File},
+    io::Write,
+    string::String,
+};
 
 use task3_model::perception::YoloDetection;
 
-pub(crate) const RECORD_VERSION: u16 = 2;
+pub(crate) const RECORD_VERSION: u16 = 3;
+pub(crate) const ACK_VERSION: u16 = 1;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub(crate) enum EventKind {
@@ -27,6 +32,17 @@ pub(crate) struct Event {
 pub(crate) fn read(path: &str) -> Result<Event, &'static str> {
     let contents = fs::read_to_string(path).map_err(|_| "event record is unavailable")?;
     parse(&contents)
+}
+
+/// Atomically acknowledges an RKNN generation after its T2N1 STATUS arrives.
+pub(crate) fn acknowledge(path: &str, generation: u64) -> Result<(), &'static str> {
+    let temporary_path = format!("{path}.tmp");
+    let mut file = File::create(&temporary_path).map_err(|_| "failed to create RKNN ack")?;
+    writeln!(file, "version={ACK_VERSION} generation={generation}")
+        .map_err(|_| "failed to write RKNN ack")?;
+    file.sync_all().map_err(|_| "failed to sync RKNN ack")?;
+    drop(file);
+    fs::rename(&temporary_path, path).map_err(|_| "failed to publish RKNN ack")
 }
 
 pub(crate) fn parse(contents: &str) -> Result<Event, &'static str> {
@@ -199,7 +215,7 @@ fn reject_detection_fields(
 mod tests {
     use super::*;
 
-    const DETECTION: &str = "version=2 generation=7 event_index=3 event_id=road-0385 \
+    const DETECTION: &str = "version=3 generation=7 event_index=3 event_id=road-0385 \
                              kind=detection infer_start_ns=100 infer_end_ns=140 class=2 \
                              confidence_milli=901 center_x_milli=480 center_y_milli=510 \
                              area_milli=80";
@@ -226,7 +242,7 @@ mod tests {
     fn parses_fixed_and_reset_records() {
         assert!(matches!(
             parse(
-                "version=2 generation=1 event_index=1 event_id=road-0375 kind=fixed \
+                "version=3 generation=1 event_index=1 event_id=road-0375 kind=fixed \
                  infer_start_ns=10 infer_end_ns=10 target=500"
             )
             .unwrap()
@@ -235,7 +251,7 @@ mod tests {
         ));
         assert!(matches!(
             parse(
-                "version=2 generation=11 event_index=11 event_id=explicit-reset kind=reset \
+                "version=3 generation=11 event_index=11 event_id=explicit-reset kind=reset \
                  infer_start_ns=20 infer_end_ns=20"
             )
             .unwrap()
@@ -251,5 +267,31 @@ mod tests {
         assert!(parse(&DETECTION.replace(" event_id=road-0385", "")).is_err());
         assert!(parse(&DETECTION.replace("center_y_milli=510", "center_y_milli=1001")).is_err());
         assert!(parse(&DETECTION.replace("infer_end_ns=140", "infer_end_ns=99")).is_err());
+    }
+
+    #[test]
+    fn atomically_publishes_the_status_ack_generation() {
+        let path = std::env::temp_dir().join(format!(
+            "task3-rknn-ack-{}-{}",
+            std::process::id(),
+            monotonic_test_nonce()
+        ));
+        let path_text = path.to_str().unwrap();
+
+        acknowledge(path_text, 7).unwrap();
+
+        assert_eq!(
+            fs::read_to_string(&path).unwrap(),
+            "version=1 generation=7\n"
+        );
+        assert!(!path.with_extension("tmp").exists());
+        fs::remove_file(path).unwrap();
+    }
+
+    fn monotonic_test_nonce() -> u128 {
+        std::time::SystemTime::now()
+            .duration_since(std::time::UNIX_EPOCH)
+            .unwrap()
+            .as_nanos()
     }
 }

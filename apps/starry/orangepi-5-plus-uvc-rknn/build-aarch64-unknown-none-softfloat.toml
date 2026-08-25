@@ -8,7 +8,8 @@ features = [
   "ax-driver/rockchip-soc",
   "ax-driver/rockchip-dwc-xhci",
   "ax-driver/rockchip-sdhci",
+  "ax-driver/virtio-net",
   "rknpu",
 ]
 log = "Warn"
-max_cpu_num = 1
+max_cpu_num = 2

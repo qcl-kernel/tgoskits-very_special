@@ -210,6 +210,13 @@ fn parse_run_mode() -> Result<RunMode, String> {
 }
 
 fn report_experiment_ready(mode: RunMode, samples: &[ImageSample]) {
+    if mode.is_task2_only() {
+        println!(
+            "TASK2_CONTROLLER_READY mode={} source=frozen-control",
+            mode.name()
+        );
+        return;
+    }
     if mode == RunMode::Manual {
         println!(
             "TASK3_EXPERIMENT_READY run_mode=manual source=manual frozen_target={CONTROL_TARGET} \
@@ -391,7 +398,13 @@ impl ControlLoop {
         self.pending_send = false;
 
         if !self.fault_injected
-            && matches!(self.mode, RunMode::OutOfOrder | RunMode::InvalidParameter)
+            && matches!(
+                self.mode,
+                RunMode::OutOfOrder
+                    | RunMode::InvalidParameter
+                    | RunMode::Task2OutOfOrder
+                    | RunMode::Task2InvalidParameter
+            )
         {
             return self.send_fault(socket, peer, outbound, now_ms);
         }
@@ -442,7 +455,11 @@ impl ControlLoop {
         self.inference_worker = None;
         if self.discard_inference_result {
             self.discard_inference_result = false;
-            println!("TASK3_INFER_DISCARDED reason=protocol_safe elapsed_ms={now_ms}");
+            if self.mode.is_task2_only() {
+                println!("TASK2_CONTROL_DISCARDED reason=protocol_safe elapsed_ms={now_ms}");
+            } else {
+                println!("TASK3_INFER_DISCARDED reason=protocol_safe elapsed_ms={now_ms}");
+            }
             self.start_inference(now_ms);
             return Ok(());
         }
@@ -484,6 +501,12 @@ impl ControlLoop {
                  elapsed_ms={now_ms}",
                 inference.infer_us, self.request_id
             );
+        } else if self.mode.is_task2_only() {
+            println!(
+                "TASK2_CONTROL_INPUT source=frozen-control target={} request={} \
+                 elapsed_ms={now_ms}",
+                inference.control_value, self.request_id
+            );
         } else {
             println!(
                 "TASK3_MANUAL_INPUT source=manual target={} infer_us=0 request={} \
@@ -491,7 +514,9 @@ impl ControlLoop {
                 inference.control_value, self.request_id
             );
         }
-        report_detection(&inference, self.request_id);
+        if !self.mode.is_task2_only() {
+            report_detection(&inference, self.request_id);
+        }
 
         let mut payload = [0u8; 12];
         let command = ControlMessage::new(
@@ -548,6 +573,11 @@ impl ControlLoop {
         if self.mode.requires_model() {
             println!(
                 "TASK3_INFER_STARTED model=yolo11n.ncnn request={} elapsed_ms={now_ms}",
+                self.request_id
+            );
+        } else if self.mode.is_task2_only() {
+            println!(
+                "TASK2_CONTROL_PREPARED request={} target={CONTROL_TARGET} elapsed_ms={now_ms}",
                 self.request_id
             );
         } else {
@@ -777,7 +807,7 @@ fn make_control_decision(
     current_target: i32,
     sample: Option<ImageSample>,
 ) -> Result<InferenceOutput, InferenceRejection> {
-    if mode == RunMode::Manual {
+    if mode == RunMode::Manual || mode.is_task2_only() {
         return Ok(InferenceOutput {
             detection: None,
             control_value: CONTROL_TARGET,
@@ -817,6 +847,7 @@ fn run_inference_with_input(
         class_id: raw_detection.class_id,
         confidence_milli: raw_detection.confidence_milli,
         center_x_milli: raw_detection.center_x_milli,
+        center_y_milli: raw_detection.center_y_milli,
         area_milli: raw_detection.area_milli,
     };
     validate_detection(detection, infer_us, current_target, mode)
@@ -852,9 +883,10 @@ fn encode_fault_frame(
     output: &mut [u8; MAX_DATAGRAM_LEN],
 ) -> Result<Option<(usize, SequenceNumber)>, String> {
     let sequence = match mode {
-        RunMode::OutOfOrder => SequenceNumber::from_wire(2),
-        RunMode::InvalidParameter => SequenceNumber::FIRST,
+        RunMode::OutOfOrder | RunMode::Task2OutOfOrder => SequenceNumber::from_wire(2),
+        RunMode::InvalidParameter | RunMode::Task2InvalidParameter => SequenceNumber::FIRST,
         RunMode::Normal
+        | RunMode::Task2
         | RunMode::ModelOnly
         | RunMode::Manual
         | RunMode::Yolo
@@ -862,18 +894,19 @@ fn encode_fault_frame(
     };
     let mut payload = [0u8; 12];
     match mode {
-        RunMode::OutOfOrder => {
+        RunMode::OutOfOrder | RunMode::Task2OutOfOrder => {
             ControlMessage::new(ControlAction::SetOutput, CONTROL_TARGET, request_id)
                 .map_err(|error| format!("fault control construction error={error}"))?
                 .encode(&mut payload)
                 .map_err(|error| format!("fault control encoding error={error}"))?;
         }
-        RunMode::InvalidParameter => {
+        RunMode::InvalidParameter | RunMode::Task2InvalidParameter => {
             payload[0] = ControlAction::SetOutput as u8;
             payload[4..8].copy_from_slice(&(ControlMessage::MAX_OUTPUT_VALUE + 1).to_be_bytes());
             payload[8..12].copy_from_slice(&request_id.to_be_bytes());
         }
         RunMode::Normal
+        | RunMode::Task2
         | RunMode::ModelOnly
         | RunMode::Manual
         | RunMode::Yolo
@@ -930,6 +963,15 @@ mod tests {
     fn parses_supported_run_modes() {
         assert_eq!(RunMode::parse(None), Ok(RunMode::Normal));
         assert_eq!(RunMode::parse(Some("normal")), Ok(RunMode::Normal));
+        assert_eq!(RunMode::parse(Some("task2")), Ok(RunMode::Task2));
+        assert_eq!(
+            RunMode::parse(Some("task2-out-of-order")),
+            Ok(RunMode::Task2OutOfOrder)
+        );
+        assert_eq!(
+            RunMode::parse(Some("task2-invalid-parameter")),
+            Ok(RunMode::Task2InvalidParameter)
+        );
         assert_eq!(RunMode::parse(Some("manual")), Ok(RunMode::Manual));
         assert_eq!(RunMode::parse(Some("yolo")), Ok(RunMode::Yolo));
         assert_eq!(
@@ -948,11 +990,18 @@ mod tests {
     }
 
     #[test]
+    fn task2_mode_does_not_require_model_assets() {
+        assert!(!RunMode::Task2.requires_model());
+        assert!(!RunMode::Task2.is_ab_experiment());
+    }
+
+    #[test]
     fn validates_yolo_detection_before_control() {
         let detection = YoloDetection {
             class_id: 75,
             confidence_milli: 843,
             center_x_milli: 421,
+            center_y_milli: 500,
             area_milli: 63,
         };
 

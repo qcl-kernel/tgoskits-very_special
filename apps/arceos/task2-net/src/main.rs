@@ -89,6 +89,48 @@ const SEND_P1_PROBE: bool = option_env!("TASK2_SEND_P1_PROBE").is_some();
 // stays available so the Task-2 evidence remains reproducible.
 const TASK3_CONTROL: bool = option_env!("TASK3_CONTROL_LOOP").is_some();
 
+const fn parse_benchmark_count(value: &str) -> u32 {
+    let bytes = value.as_bytes();
+    let mut index = 0;
+    let mut count = 0u32;
+    while index < bytes.len() {
+        let digit = bytes[index];
+        if !digit.is_ascii_digit() {
+            panic!("TASK2_BENCHMARK_COUNT must be a positive integer");
+        }
+        count = match count.checked_mul(10) {
+            Some(value) => value,
+            None => panic!("TASK2_BENCHMARK_COUNT is too large"),
+        };
+        count = match count.checked_add((digit - b'0') as u32) {
+            Some(value) => value,
+            None => panic!("TASK2_BENCHMARK_COUNT is too large"),
+        };
+        index += 1;
+    }
+    if count == 0 {
+        panic!("TASK2_BENCHMARK_COUNT must be a positive integer");
+    }
+    count
+}
+
+const TASK2_BENCHMARK_COUNT: Option<u32> = match option_env!("TASK2_BENCHMARK_COUNT") {
+    Some(value) => Some(parse_benchmark_count(value)),
+    None => None,
+};
+const CONTROL_LOOP: bool = TASK3_CONTROL || TASK2_BENCHMARK_COUNT.is_some();
+
+const fn benchmark_target() -> u32 {
+    match TASK2_BENCHMARK_COUNT {
+        Some(target) => target,
+        None => 0,
+    }
+}
+
+const fn benchmark_should_finish(target: u32, statuses: u32, pending_frame: bool) -> bool {
+    target > 0 && statuses == target && !pending_frame
+}
+
 // Legacy build-time switch retained for existing `TASK3_AI=1` artifacts.  New
 // builds should use TASK3_MODEL=cnn|yolo explicitly.
 const TASK3_AI: bool = option_env!("TASK3_AI").is_some();
@@ -101,6 +143,11 @@ const TASK3_MODEL_PATH: &str = match option_env!("TASK3_MODEL_PATH") {
 const TASK3_RKNN_CONTROL_PATH: &str = match option_env!("TASK3_RKNN_CONTROL_PATH") {
     Some(path) => path,
     None => "/run/rknn-control.txt",
+};
+#[cfg(not(feature = "arceos"))]
+const TASK3_RKNN_ACK_PATH: &str = match option_env!("TASK3_RKNN_ACK_PATH") {
+    Some(path) => path,
+    None => "/run/rknn-control.ack",
 };
 const TASK3_NCNN_PARAM_PATH: &[u8] = b"/usr/share/task3-yolo/yolo11n.ncnn.param\0";
 const TASK3_NCNN_MODEL_PATH: &[u8] = b"/usr/share/task3-yolo/yolo11n.ncnn.bin\0";
@@ -181,7 +228,7 @@ impl ModelKind {
             Self::Cnn => "embedded:task3-model/model.json",
             Self::Yolo => "manifest:yolo11n.ncnn",
             Self::FixedPerception => "manifest:task3-continuous-scene",
-            Self::Rknn => "external:rknn-control-v2",
+            Self::Rknn => "external:rknn-control-v3",
         }
     }
 }
@@ -274,6 +321,8 @@ struct SceneCommand {
 struct PendingScene {
     event_index: usize,
     event_id: &'static str,
+    #[cfg(not(feature = "arceos"))]
+    generation: u64,
     inference_start_ns: u64,
 }
 
@@ -346,10 +395,16 @@ fn run() -> Result<(), &'static str> {
 
     println!("TASK2_READY role={ROLE} local={LOCAL_IP}:{LOCAL_PORT} peer={PEER_IP}:{LOCAL_PORT}");
     if ROLE == "controller" {
-        if TASK3_CONTROL {
+        if CONTROL_LOOP {
+            if let Some(transaction_count) = TASK2_BENCHMARK_COUNT {
+                println!(
+                    "TASK2_BENCHMARK_BEGIN transactions={} protocol=T2N1 mode=stop-and-wait",
+                    transaction_count
+                );
+            }
             if model == ModelKind::Yolo {
                 report_yolo_model_ready(yolo_policy, "control-loop");
-            } else {
+            } else if TASK3_CONTROL {
                 println!(
                     "TASK3_MODEL_READY model={} version={} sha256={} path={} mode=bounded-contract",
                     model.name(),
@@ -360,7 +415,7 @@ fn run() -> Result<(), &'static str> {
             }
             control
                 .send_next(&socket, &peer, &mut endpoint, &mut outbound, now_ms(&start))
-                .map_err(|_| "failed to send first Task-3 control")?;
+                .map_err(|_| "failed to send first control-loop command")?;
         } else {
             send_control(&socket, &peer, &mut endpoint, &mut outbound, now_ms(&start))?;
         }
@@ -396,7 +451,7 @@ fn run() -> Result<(), &'static str> {
                         .map_err(|_| "failed to send protocol response")?;
                     flush_network();
                 }
-                if TASK3_CONTROL && ROLE == "controller" {
+                if CONTROL_LOOP && ROLE == "controller" {
                     handle_receive_event_task3(
                         result.event,
                         &socket,
@@ -420,7 +475,7 @@ fn run() -> Result<(), &'static str> {
                     && endpoint.state() == EndpointState::Active
                 {
                     println!("TASK2_RECOVERED state=Active elapsed_ms={now}");
-                    if TASK3_CONTROL && ROLE == "controller" {
+                    if CONTROL_LOOP && ROLE == "controller" {
                         // A pure request-response loop would stall after link
                         // recovery: the peer only answers a CONTROL, but a new
                         // CONTROL is only sent on STATUS delivery.  Resend the
@@ -439,6 +494,39 @@ fn run() -> Result<(), &'static str> {
             Err(_) => return Err("UDP receive failed"),
         }
 
+        if TASK3_CONTROL
+            && ROLE == "controller"
+            && control.scene_complete
+            && control.model != ModelKind::Rknn
+        {
+            return Ok(());
+        }
+        if ROLE == "controller"
+            && benchmark_should_finish(
+                benchmark_target(),
+                control.sample_count,
+                endpoint.has_pending_frame(),
+            )
+        {
+            let elapsed_ms = now.max(1);
+            let throughput_milli_tps = u64::from(control.sample_count) * 1_000_000 / elapsed_ms;
+            println!(
+                "TASK2_BENCHMARK_COMPLETE transactions={} statuses={} acks={} retransmissions={} \
+                 elapsed_ms={} throughput_milli_tps={}",
+                benchmark_target(),
+                control.sample_count,
+                control.ack_count,
+                control.retransmissions,
+                elapsed_ms,
+                throughput_milli_tps
+            );
+            println!(
+                "TASK2_BENCHMARK_END transactions={} pending=0 errors=0",
+                benchmark_target()
+            );
+            return Ok(());
+        }
+
         let poll = endpoint
             .poll(now, &mut outbound)
             .map_err(|_| "protocol timer failed")?;
@@ -448,6 +536,7 @@ fn run() -> Result<(), &'static str> {
             flush_network();
         }
         if let PollEvent::Retransmit { sequence, attempt } = poll.event {
+            control.retransmissions = control.retransmissions.saturating_add(1);
             println!(
                 "TASK2_RETRANSMIT seq={} attempt={}",
                 sequence.get(),
@@ -463,7 +552,7 @@ fn run() -> Result<(), &'static str> {
                 endpoint.state(),
                 poll.event
             );
-            if TASK3_CONTROL && ROLE == "controller" {
+            if CONTROL_LOOP && ROLE == "controller" {
                 // Entering Safe means the outstanding request can never
                 // complete: RetryExhausted has dropped the protocol pending
                 // frame, and HeartbeatTimeout means no STATUS is coming for
@@ -475,7 +564,7 @@ fn run() -> Result<(), &'static str> {
                 control.cancel_yolo_inference(now);
             }
         }
-        if TASK3_CONTROL && ROLE == "controller" && !control.pending_send {
+        if CONTROL_LOOP && ROLE == "controller" && !control.pending_send {
             control.send_next_or_defer(&socket, &peer, &mut endpoint, &mut outbound, now)?;
         }
         #[cfg(feature = "arceos")]
@@ -585,6 +674,8 @@ struct Controller {
     last_state: i32,
     prev_output: i32,
     sample_count: u32,
+    ack_count: u32,
+    retransmissions: u32,
     pending_send: bool,
     last_target: i32,
     #[cfg(not(feature = "arceos"))]
@@ -593,6 +684,7 @@ struct Controller {
     #[cfg(not(feature = "arceos"))]
     video_safety: task3_model::video_safety::VideoSafetyController,
     pending_scene: Option<PendingScene>,
+    scene_complete: bool,
     #[cfg(not(feature = "arceos"))]
     yolo_worker: Option<YoloInferenceWorker>,
 }
@@ -665,6 +757,8 @@ impl Controller {
             last_state: 300,
             prev_output: 0,
             sample_count: 0,
+            ack_count: 0,
+            retransmissions: 0,
             pending_send: false,
             // The archived fixture manifest evaluates each image from the
             // contract's frozen current_target=500.  Keeping the replay
@@ -680,6 +774,7 @@ impl Controller {
                 task3_model::video_safety::VideoSafetyPolicy::task3_default(),
             ),
             pending_scene: None,
+            scene_complete: false,
             #[cfg(not(feature = "arceos"))]
             yolo_worker: None,
         }
@@ -1015,6 +1110,11 @@ impl Controller {
         if self.request_in_flight || endpoint.state() != EndpointState::Active {
             return Ok(());
         }
+        if TASK2_BENCHMARK_COUNT
+            .is_some_and(|transaction_count| self.sample_count >= transaction_count)
+        {
+            return Ok(());
+        }
         if now_ms < self.next_send_at_ms {
             return Ok(());
         }
@@ -1088,13 +1188,19 @@ impl Controller {
         flush_network();
         self.request_in_flight = true;
         self.request_sent_at_ms = now_ms;
-        self.next_send_at_ms = now_ms + scenario::MIN_CYCLE_MS;
+        self.next_send_at_ms = if TASK2_BENCHMARK_COUNT.is_some() {
+            now_ms
+        } else {
+            now_ms + scenario::MIN_CYCLE_MS
+        };
         self.pending_send = false;
         if let Some(scene) = scene {
             self.scene_event_cursor += 1;
             self.pending_scene = Some(PendingScene {
                 event_index: scene.event_index,
                 event_id: scene.event_id,
+                #[cfg(not(feature = "arceos"))]
+                generation: scene.generation,
                 inference_start_ns: scene.inference_start_ns,
             });
             println!(
@@ -1112,6 +1218,13 @@ impl Controller {
                 scene.inference_start_ns,
                 scene.inference_end_ns,
                 transmission.sequence().get()
+            );
+        } else if TASK2_BENCHMARK_COUNT.is_some() {
+            println!(
+                "TASK2_BENCHMARK_CONTROL_SENT elapsed_ms={now_ms} request={} seq={} value={}",
+                self.request_id,
+                transmission.sequence().get(),
+                output
             );
         } else {
             println!(
@@ -1154,6 +1267,9 @@ impl Controller {
     }
 
     fn on_status(&mut self, status: &StatusMessage, now_ms: u64) -> Result<(), &'static str> {
+        if status.last_control_request() != self.request_id {
+            return Err("STATUS request does not match CONTROL");
+        }
         self.request_in_flight = false;
         self.sample_count = self.sample_count.wrapping_add(1);
         let state = status
@@ -1181,6 +1297,16 @@ impl Controller {
                 status_ns,
                 end_to_end_us
             );
+            #[cfg(not(feature = "arceos"))]
+            if self.model == ModelKind::Rknn && scene.event_index != 11 {
+                rknn_control::acknowledge(TASK3_RKNN_ACK_PATH, scene.generation)?;
+                println!(
+                    "TASK3_RKNN_ACK generation={} event_index={} request={} elapsed_ms={now_ms}",
+                    scene.generation,
+                    scene.event_index,
+                    status.last_control_request()
+                );
+            }
             if scene.event_index == SCENE_EVENT_IDS.len() {
                 println!(
                     "TASK3_EXPERIMENT_COMPLETE source={} events={} statuses={} elapsed_ms={now_ms}",
@@ -1188,7 +1314,18 @@ impl Controller {
                     SCENE_EVENT_IDS.len(),
                     self.sample_count
                 );
+                self.scene_complete = true;
             }
+        } else if TASK2_BENCHMARK_COUNT.is_some() {
+            println!(
+                "TASK2_BENCHMARK_STATUS_RECEIVED elapsed_ms={now_ms} request={} sample={} \
+                 rtt_ms={} state={:?} value={}",
+                status.last_control_request(),
+                self.sample_count,
+                rtt_ms,
+                status.state(),
+                state
+            );
         } else {
             println!(
                 "TASK3_STATUS_RECEIVED elapsed_ms={now_ms} request={} value={} state={} sample={} \
@@ -1232,6 +1369,7 @@ fn handle_receive_event_task3(
             );
         }
         ReceiveEvent::Acknowledged { sequence } => {
+            control.ack_count = control.ack_count.saturating_add(1);
             println!("TASK2_ACK seq={}", sequence.get());
             if control.pending_send {
                 control.pending_send = false;
@@ -1569,6 +1707,25 @@ fn is_would_block(error: &std::io::Error) -> bool {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn benchmark_count_accepts_positive_decimal_values() {
+        assert_eq!(parse_benchmark_count("1"), 1);
+        assert_eq!(parse_benchmark_count("200"), 200);
+    }
+
+    #[test]
+    #[should_panic(expected = "positive integer")]
+    fn benchmark_count_rejects_zero() {
+        parse_benchmark_count("0");
+    }
+
+    #[test]
+    fn benchmark_finishes_only_after_final_status_ack() {
+        assert!(!benchmark_should_finish(200, 199, false));
+        assert!(!benchmark_should_finish(200, 200, true));
+        assert!(benchmark_should_finish(200, 200, false));
+    }
 
     #[test]
     fn execution_mode_defaults_to_the_network_endpoint() {

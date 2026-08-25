@@ -6,6 +6,9 @@ const INSTALLED_INPUT_DIR: &str = "/usr/share/task3-yolo/task3-ab";
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub(crate) enum RunMode {
     Normal,
+    Task2,
+    Task2OutOfOrder,
+    Task2InvalidParameter,
     ModelOnly,
     Manual,
     Yolo,
@@ -18,27 +21,30 @@ impl RunMode {
     pub(crate) fn parse(value: Option<&str>) -> Result<Self, &'static str> {
         match value {
             None | Some("normal") => Ok(Self::Normal),
+            Some("task2") => Ok(Self::Task2),
+            Some("task2-out-of-order") => Ok(Self::Task2OutOfOrder),
+            Some("task2-invalid-parameter") => Ok(Self::Task2InvalidParameter),
             Some("model-only") => Ok(Self::ModelOnly),
             Some("manual") => Ok(Self::Manual),
             Some("yolo") => Ok(Self::Yolo),
             Some("out-of-order") => Ok(Self::OutOfOrder),
             Some("invalid-parameter") => Ok(Self::InvalidParameter),
             Some("model-rejected") => Ok(Self::ModelRejected),
-            Some(_) => Err(
-                "mode must be normal, model-only, manual, yolo, out-of-order, invalid-parameter, \
-                 or model-rejected",
-            ),
+            Some(_) => Err("mode must be normal, task2, task2-out-of-order, \
+                            task2-invalid-parameter, model-only, manual, yolo, out-of-order, \
+                            invalid-parameter, or model-rejected"),
         }
     }
 
     pub(crate) const fn name(self) -> &'static str {
         match self {
             Self::Normal => "normal",
+            Self::Task2 => "task2",
+            Self::Task2OutOfOrder | Self::OutOfOrder => "out-of-order",
+            Self::Task2InvalidParameter | Self::InvalidParameter => "invalid-parameter",
             Self::ModelOnly => "model-only",
             Self::Manual => "manual",
             Self::Yolo => "yolo",
-            Self::OutOfOrder => "out-of-order",
-            Self::InvalidParameter => "invalid-parameter",
             Self::ModelRejected => "model-rejected",
         }
     }
@@ -48,7 +54,17 @@ impl RunMode {
     }
 
     pub(crate) const fn requires_model(self) -> bool {
-        !matches!(self, Self::Manual)
+        !matches!(
+            self,
+            Self::Task2 | Self::Task2OutOfOrder | Self::Task2InvalidParameter | Self::Manual
+        )
+    }
+
+    pub(crate) const fn is_task2_only(self) -> bool {
+        matches!(
+            self,
+            Self::Task2 | Self::Task2OutOfOrder | Self::Task2InvalidParameter
+        )
     }
 }
 

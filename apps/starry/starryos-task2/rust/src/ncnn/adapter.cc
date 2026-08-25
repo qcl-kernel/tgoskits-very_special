@@ -14,6 +14,7 @@ struct Task3NcnnDetection {
     uint16_t class_id;
     uint16_t confidence_milli;
     uint16_t center_x_milli;
+    uint16_t center_y_milli;
     uint16_t area_milli;
 };
 }
@@ -150,11 +151,13 @@ extern "C" int task3_ncnn_infer(
     }
     if (best_row < 0 || best_score <= 0.f) return 1;
     const float center_x = output_values[best_row] / 640.f;
+    const float center_y = output_values[rows + best_row] / 640.f;
     const float box_width = output_values[2 * rows + best_row] / 640.f;
     const float box_height = output_values[3 * rows + best_row] / 640.f;
     detection->class_id = static_cast<uint16_t>(best_class);
     detection->confidence_milli = milli(best_score);
     detection->center_x_milli = milli(center_x);
+    detection->center_y_milli = milli(center_y);
     detection->area_milli = milli(box_width * box_height);
     return 0;
 }

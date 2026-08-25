@@ -40,6 +40,7 @@ struct Options {
     const char *expected_path = NULL;
     const char *write_expected_path = NULL;
     const char *control_output_path = NULL;
+    const char *control_ack_path = NULL;
 };
 
 struct MemoryStats {
@@ -106,6 +107,7 @@ static void print_usage(const char *argv0)
     printf("  --write-expected <PATH>        write validation expected file for maintenance\n");
     printf("  --validation-loops <N>         repeat fixed-image validation N times [default: 1]\n");
     printf("  --control-output <PATH>        atomically publish each validated RKNN decision\n");
+    printf("  --control-ack <PATH>           wait for STATUS acknowledgement before publishing the next decision\n");
 }
 
 static bool parse_int_arg(const char *name, const char *value, int *out)
@@ -248,6 +250,9 @@ static bool parse_args(int argc, char **argv, Options *options)
         } else if (strcmp(arg, "--control-output") == 0 && value != NULL) {
             options->control_output_path = value;
             ++i;
+        } else if (strcmp(arg, "--control-ack") == 0 && value != NULL) {
+            options->control_ack_path = value;
+            ++i;
         } else if (strcmp(arg, "--profile") == 0) {
             options->profile = true;
         } else if (strcmp(arg, "--profile-frames") == 0) {
@@ -265,8 +270,13 @@ static bool parse_args(int argc, char **argv, Options *options)
     }
     if (options->validate_list_path == NULL &&
         (options->expected_path != NULL || options->write_expected_path != NULL ||
-         options->control_output_path != NULL || options->validation_loops != 1)) {
-        printf("--expected, --write-expected, --control-output, and --validation-loops require --validate-list\n");
+         options->control_output_path != NULL || options->control_ack_path != NULL ||
+         options->validation_loops != 1)) {
+        printf("--expected, --write-expected, --control-output, --control-ack, and --validation-loops require --validate-list\n");
+        return false;
+    }
+    if ((options->control_output_path == NULL) != (options->control_ack_path == NULL)) {
+        printf("--control-output and --control-ack must be configured together\n");
         return false;
     }
     if (options->validation_loops <= 0) {
@@ -505,7 +515,7 @@ static bool publish_control_decision(const Options &options, uint64_t generation
     }
     if (best == NULL) {
         fprintf(file,
-                "version=2 generation=%llu event_index=%d event_id=%s kind=no_detection infer_start_ns=%llu infer_end_ns=%llu\n",
+                "version=3 generation=%llu event_index=%d event_id=%s kind=no_detection infer_start_ns=%llu infer_end_ns=%llu\n",
                 (unsigned long long)generation, image_index + 1, event_id.c_str(),
                 (unsigned long long)inference_start_ns, (unsigned long long)inference_end_ns);
     } else {
@@ -518,7 +528,7 @@ static bool publish_control_decision(const Options &options, uint64_t generation
         int area_milli = std::max(0, std::min(1000,
             (int)((int64_t)width * height * 1000 / ((int64_t)image_width * image_height))));
         fprintf(file,
-                "version=2 generation=%llu event_index=%d event_id=%s kind=detection infer_start_ns=%llu infer_end_ns=%llu class=%d confidence_milli=%d center_x_milli=%d center_y_milli=%d area_milli=%d\n",
+                "version=3 generation=%llu event_index=%d event_id=%s kind=detection infer_start_ns=%llu infer_end_ns=%llu class=%d confidence_milli=%d center_x_milli=%d center_y_milli=%d area_milli=%d\n",
                 (unsigned long long)generation, image_index + 1, event_id.c_str(),
                 (unsigned long long)inference_start_ns, (unsigned long long)inference_end_ns,
                 best->cls_id, best->score_q10000 / 10, center_x_milli, center_y_milli,
@@ -539,11 +549,44 @@ static bool publish_control_decision(const Options &options, uint64_t generation
                (unsigned long long)generation, options.control_output_path);
         return false;
     }
-    printf("RKNN_CONTROL_EVENT version=2 generation=%llu image=%d event_id=%s kind=%s infer_start_ns=%llu infer_end_ns=%llu\n",
+    printf("RKNN_CONTROL_EVENT version=3 generation=%llu image=%d event_id=%s kind=%s infer_start_ns=%llu infer_end_ns=%llu\n",
            (unsigned long long)generation, image_index, event_id.c_str(),
            best != NULL ? "detection" : "no_detection",
            (unsigned long long)inference_start_ns, (unsigned long long)inference_end_ns);
     return true;
+}
+
+static bool wait_for_control_ack(const Options &options, uint64_t expected_generation)
+{
+    if (options.control_ack_path == NULL) {
+        return true;
+    }
+    const uint64_t deadline_ns = monotonic_ns() + 30000000000ULL;
+    while (g_running && monotonic_ns() < deadline_ns) {
+        FILE *file = fopen(options.control_ack_path, "r");
+        if (file != NULL) {
+            unsigned version = 0;
+            unsigned long long generation = 0;
+            char trailing = '\0';
+            int fields = fscanf(file, "version=%u generation=%llu %c", &version, &generation,
+                                &trailing);
+            fclose(file);
+            if (fields == 2 && version == 1 && generation == expected_generation) {
+                printf("RKNN_CONTROL_ACK generation=%llu\n",
+                       (unsigned long long)expected_generation);
+                return true;
+            }
+            if (fields == 2 && generation > expected_generation) {
+                printf("RKNN_CONTROL_ACK_FAIL expected=%llu observed=%llu reason=future_generation\n",
+                       (unsigned long long)expected_generation, generation);
+                return false;
+            }
+        }
+        usleep(10000);
+    }
+    printf("RKNN_CONTROL_ACK_TIMEOUT generation=%llu timeout_ms=30000\n",
+           (unsigned long long)expected_generation);
+    return false;
 }
 
 static int run_validation(const Options &options, rknn_app_context_t *app_ctx)
@@ -695,6 +738,10 @@ static int run_validation(const Options &options, rknn_app_context_t *app_ctx)
             free(image.virt_addr);
             return 1;
         }
+        if (!wait_for_control_ack(options, generation)) {
+            free(image.virt_addr);
+            return 1;
+        }
 
         free(image.virt_addr);
       }
@@ -720,7 +767,7 @@ static int run_validation(const Options &options, rknn_app_context_t *app_ctx)
     // The T2N1 consumer must finish the last CONTROL/STATUS exchange before
     // StarryOS emits its child-exit log on the shared debug UART.
     if (options.control_output_path != NULL) {
-        sleep(2);
+        sleep(1);
     }
     return 0;
 }
@@ -740,7 +787,7 @@ int main(int argc, char **argv)
 
     printf("YOLOv8 UVC RKNN Benchmark\n");
     printf("=========================\n");
-    printf("model=%s label=%s device=%d size=%dx%d fps=%d duration=%d infer_every=%d report_interval=%d min_confidence=%d core_mask=%s profile=%d profile_frames=%d validate_list=%s expected=%s write_expected=%s validation_loops=%d control_output=%s\n",
+    printf("model=%s label=%s device=%d size=%dx%d fps=%d duration=%d infer_every=%d report_interval=%d min_confidence=%d core_mask=%s profile=%d profile_frames=%d validate_list=%s expected=%s write_expected=%s validation_loops=%d control_output=%s control_ack=%s\n",
            options.model_path,
            options.label_path,
            options.device,
@@ -758,7 +805,8 @@ int main(int argc, char **argv)
            options.expected_path != NULL ? options.expected_path : "none",
            options.write_expected_path != NULL ? options.write_expected_path : "none",
            options.validation_loops,
-           options.control_output_path != NULL ? options.control_output_path : "none");
+           options.control_output_path != NULL ? options.control_output_path : "none",
+           options.control_ack_path != NULL ? options.control_ack_path : "none");
 
     int ret = init_post_process(options.label_path);
     if (ret != 0) {

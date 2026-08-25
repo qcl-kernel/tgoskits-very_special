@@ -242,4 +242,12 @@ mod test_runtime {
             }
         }
     }
+
+    #[cfg(feature = "rknpu")]
+    #[test]
+    fn rknpu_feature_includes_scmi_clock_provider() {
+        let provider_lookup = crate::soc::scmi::clock_rate;
+
+        assert_eq!(core::mem::size_of_val(&provider_lookup), 0);
+    }
 }

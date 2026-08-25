@@ -54,7 +54,12 @@ sg2002-dwc2 = ["usb", "dep:sg200x-bsp"]
 xhci-mmio = ["usb"]
 xhci-pci = ["usb", "pci"]
 serial = ["dep:rdif-serial", "dep:some-serial"]
-rknpu = ["rockchip-pm", "rockchip-soc", "dep:rockchip-npu"]
+rknpu = [
+    "rockchip-pm",
+    "rockchip-soc",
+    "dep:arm-scmi-rs",
+    "dep:rockchip-npu",
+]
 rga = ["rockchip-pm", "rockchip-soc", "dep:rockchip-rga"]
 jpeg = ["rockchip-pm", "rockchip-soc", "dep:rockchip-jpeg"]
 jpu-selftest = ["jpeg"]

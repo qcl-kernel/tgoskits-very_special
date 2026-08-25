@@ -139,7 +139,7 @@ QEMU 中没有 RK3588 NPU，因而在 StarryOS AArch64 Guest 内用静态 ncnn �
 - `task23-integrated`：真实 YOLO -> CONTROL -> Zephyr ACK/STATUS，并保存双 pcap；
 - `task3-model-rejected`：注入非法模型输出，必须在 CONTROL 前被拒绝并进入定义的 Safe 路径。
 
-`suite task3` 只运行 `task3-yolo-smoke` 和 `task3-model-rejected`。联合正常闭环需要显式运行 `task23-integrated`，或通过 `suite acceptance/full` 覆盖。
+`suite task3` 只运行 `task3-yolo-smoke` 和 `task3-model-rejected`。联合正常闭环需要显式运行 `task23-integrated`，并写入独立证据目录。
 
 ## 已完成验证
 

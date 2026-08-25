@@ -1,15 +1,27 @@
-# Task 1–3 一键复现入口
+# Task 1–3 分任务复现入口
 
-所有命令都从仓库根目录执行。复现者不需要理解内部几十个实验脚本，只使用：
+所有命令都从仓库根目录执行。首次统一准备环境与产物：
 
 ```bash
+scripts/competition/task123.sh prepare
 scripts/competition/task123.sh doctor
 scripts/competition/task123.sh --list
 scripts/competition/task123.sh build full
-scripts/competition/task123.sh suite acceptance
 ```
 
-`doctor` 只检查和给出安装提示，不会静默安装系统软件。`build full` 可以复用已下载的源码、模型、rootfs 和工具链，但会删除本项目固定输出目录内的 ncnn、Zephyr、StarryOS、AxVisor 编译结果并从当前 checkout 重新生成。运行证据默认写入 `tmp/competition-task123/evidence/`，每个场景保存 commit、日志、pcap、命令和哈希。
+准备完成后按 Task 1、Task 2、Task 3 分别运行：
+
+```bash
+scripts/competition/task123.sh suite task1
+scripts/competition/task123.sh suite task2
+scripts/competition/task123.sh suite task3
+```
+
+`prepare` 下载并校验固定的 AArch64 musl 工具链和 Zephyr 源码，默认解压到
+仓库内被忽略的 `.deps/task123/`；后续 `doctor` 和 `build` 会自动发现它们，
+无需再次设置 `CROSS_ROOT` 或 `ZEPHYR_BASE`。
+`doctor` 只检查和给出安装提示，不会静默安装系统软件；它还会拒绝本地修改过的
+Zephyr 树。`build full` 可以复用已下载的源码、模型、rootfs 和工具链，但会删除本项目固定输出目录内的 ncnn、Zephyr、StarryOS、AxVisor 编译结果并从当前 checkout 重新生成。运行证据默认写入 `tmp/competition-task123/evidence/`。三个 suite 分别创建 `suite-task1`、`suite-task2`、`suite-task3` 证据目录，不会把不同任务的数据混在一起；每个场景保存 commit、日志、pcap、命令和哈希。
 
 ## 下载依赖
 
@@ -23,60 +35,67 @@ git clone https://github.com/Tencent/ncnn.git \
 git -C tmp/competition-task123/downloads/ncnn checkout \
   946fe3fb14a8dff8c06df763f67be522167b2f00
 
-git clone https://github.com/zephyrproject-rtos/zephyr.git \
-  tmp/competition-task123/downloads/zephyr-dccb09599635bdff17633fa7e9dab014b91dce90
-git -C tmp/competition-task123/downloads/zephyr-dccb09599635bdff17633fa7e9dab014b91dce90 \
-  checkout dccb09599635bdff17633fa7e9dab014b91dce90
 ```
 
 另外准备：
 
 - pnnx Linux `20260526`，并设置 `PNNX=/path/to/pnnx`；
 - YOLO11n ONNX，SHA256 必须是 `634279b40c07c6391472c51ad45b81ebc48706a9a1fe72dd3396322acd0c053b`，设置 `YOLO_ONNX=/path/to/yolo11n.onnx`；
-- AArch64 musl 工具链，设置 `CROSS_ROOT=/path/to/aarch64-linux-musl-cross`，或把其 `bin` 加入 `PATH`；
-- 如果源码没有放在上述默认位置，设置 `NCNN_SOURCE` 和 `ZEPHYR_BASE`。
+- `prepare` 已提供 AArch64 musl 工具链与固定 Zephyr 源码；若改用自备副本，
+  再设置 `CROSS_ROOT` 或 `ZEPHYR_BASE`；
+- 如果 ncnn 源码没有放在上述默认位置，设置 `NCNN_SOURCE`。
 
 可复制的相对路径配置示例：
 
 ```bash
-export CROSS_ROOT="$PWD/tmp/competition-task123/downloads/aarch64-linux-musl-cross"
 export NCNN_SOURCE="$PWD/tmp/competition-task123/downloads/ncnn"
-export ZEPHYR_BASE="$PWD/tmp/competition-task123/downloads/zephyr-dccb09599635bdff17633fa7e9dab014b91dce90"
 export PNNX="$PWD/tmp/competition-task123/downloads/pnnx-20260526-linux/pnnx"
 export YOLO_ONNX="$PWD/tmp/competition-task123/downloads/yolo11n.onnx"
 ```
 
-## 推荐验收顺序
-
-时间有限时运行：
+如果需要显式指定 `prepare` 生成的目录，可使用：
 
 ```bash
-scripts/competition/task123.sh build full
-scripts/competition/task123.sh suite acceptance
+export CROSS_ROOT="$PWD/.deps/task123/aarch64-linux-musl-cross"
+export ZEPHYR_BASE="$PWD/.deps/task123/zephyr-dccb09599635bdff17633fa7e9dab014b91dce90"
 ```
 
-`acceptance` 包含 Task 1 调度器 A/B、Task 2 无模型正常链路和 blackout、Task 2/3 联合正常闭环，以及 Task 3 模型输出拒绝。全部十个行为场景使用：
+## 分任务验收顺序
+
+构建完成后，按希望核验的任务单独执行。每个入口只汇总本任务的数据：
 
 ```bash
-scripts/competition/task123.sh suite full
+# Task 1：4 组运行——空载 RR、空载 FP-RR、压力 RR、压力 FP-RR
+scripts/competition/task123.sh suite task1
+
+# Task 2：6 个 Task2-only 正常/故障通信场景
+scripts/competition/task123.sh suite task2
+
+# Task 3：2 个场景——真实 YOLO smoke、非法模型输出拒绝
+scripts/competition/task123.sh suite task3
 ```
 
-十个行为场景严格为：
+各命令分别以 `TASK123_SUITE_PASS name=task1`、`name=task2` 或 `name=task3`
+结束。Task 2 的六个场景均使用真正的 Task2-only 模式：不要求或加载 YOLO，且
+验证器拒绝任何 Task 3 模型活动。
 
-1. `task3-yolo-smoke`
-2. `task1-scheduler-ab`
-3. `task2-normal`
-4. `task23-integrated`
-5. `task2-drop-ack`
-6. `task2-retry-exhausted`
-7. `task2-blackout`
-8. `task2-out-of-order`
-9. `task2-invalid-parameter`
-10. `task3-model-rejected`
+Task 2+3 的真实联合闭环单独运行，不并入 Task 2 或 Task 3 的独立统计：
 
-`ci-contracts` 是独立 gate，不计入十个行为场景。`suite task2` 的六个场景均使用真正的 Task2-only 模式：不要求或加载 YOLO，且验证器拒绝任何 Task 3 模型活动。联合正常闭环是 `task23-integrated`。
+```bash
+scripts/competition/task123.sh run task23-integrated
+```
 
-单个失败不会被包装成成功。脚本非零退出，失败现场保留在输出目录。每次 QEMU 运行通过 `mktemp` 获得独占的短路径目录，serial/QMP socket 与临时 rootfs 只由该次运行清理；所有提交内路径均从仓库根目录解析。每次双 Guest 运行会复制一个临时 rootfs，结束后删除，避免超时退出污染后续场景的基础镜像或其他并发任务。
+QEMU TCG 用于功能、故障和同平台调度机制对照，其绝对推理时间不代表
+RK3588 NPU 性能。仓库中的 `very_special-成果材料/board-fits/` 只供物理板
+RAM 启动，不作为 QEMU suite 的预编译替代品。
+
+`suite acceptance` 和 `suite full` 仅保留给自动化回归使用，不是人工核验的推荐入口。
+`ci-contracts` 也是独立 gate。单独构建 Task 2 endpoint 时可设置
+`STARRY_TASK23_BUILD_SCOPE=task2`（也兼容 `STARRY_TASK23_SCOPE=task2`），此时不
+检查、链接或安装 ncnn/YOLO；默认的 `build full` 仍使用 `integrated`。模型目录可
+通过 `TASK3_YOLO_ASSETS` 覆盖；`TASK3_NCNN_MODEL_DIR` 作为兼容字段继续可用。
+
+单个失败不会被包装成成功。脚本非零退出，失败现场保留在输出目录。每次 QEMU 运行通过 `mktemp` 获得独占目录：serial/QMP socket 保留在短路径临时目录，较大的临时 rootfs 默认放在仓库 `tmp/task123-runtime/`，两者都只由该次运行清理；可分别用 `TASK123_RUNTIME_PARENT` 和 `TASK123_ROOTFS_RUNTIME_PARENT` 覆盖。所有提交内路径均从仓库根目录解析。每次双 Guest 运行会复制一个临时 rootfs，结束后删除，避免超时退出污染后续场景的基础镜像或其他并发任务。
 
 高内存 QEMU 运行还通过 `TASK123_QEMU_LOCK_FILE` 串行化，等待上限由 `TASK123_QEMU_LOCK_TIMEOUT_SEC` 设置。这避免在内存受限主机上同时启动两个 `-m 8g` QEMU，防止 swap 耗尽造成的串口 watchdog 假超时。
 
@@ -87,10 +106,11 @@ scripts/competition/task123.sh suite full
 - `Competition: Run Task 3`
 - `Competition: Run Full Validation`
 
-对应命令分别是 `suite task1`、`suite task2`、`suite task3` 和 `suite full`。
+前三项是人工核验的推荐入口，分别对应 `suite task1`、`suite task2`、
+`suite task3`；`suite full` 只用于可选的自动化回归。
 这些入口只调用同一个配置与证据实现，不复制工具链路径或场景参数。
 
-## 物理板一键入口
+## 物理板分任务入口
 
 `task123.sh --list` 同时列出 RAM-only 实板命令。它们统一使用
 `scripts/board/atk-dlrk3588-ram-boot.sh` 的 `fastboot stage`，不会调用
@@ -152,7 +172,7 @@ Demo 录制可设置 `TASK123_BROWSER`、`TASK123_FFMPEG`、`TASK123_DEMO_FRAMES
 ATK-DLRK3588 host DTB；构建目录保存 DTB、BusyBox、RKNN runtime、模型、输入图片、cpio
 和 FIT 的 SHA-256。
 
-宿主机可覆盖字段、板卡字段、协议固定值、Guest 内路径和历史 Task 3 入口的完整
+宿主机可覆盖字段、板卡字段、协议固定值、Guest 内路径和 Task 3 兼容入口的完整
 梳理见 [`TASK123-CONFIG-AUDIT.md`](TASK123-CONFIG-AUDIT.md)。正式场景默认拒绝
 dirty worktree；仅在显式设置 `ALLOW_DIRTY=1` 时允许运行，并把 patch 与未跟踪
 文件哈希写入证据目录，防止把未提交修复误写成当前 HEAD 的证据。

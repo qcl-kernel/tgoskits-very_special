@@ -53,21 +53,40 @@ StarryOS controller                         Zephyr executor
 - [实现范围与源码对应](very_special-成果材料/07-任务要求与实现覆盖.md)
 - [上游贡献与 StarryOS 完善](very_special-成果材料/08-上游贡献与StarryOS完善.md)：两个已合并修复及一个等待人工审查的 syscall PR
 - [证据与演示索引](very_special-成果材料/06-证据与演示索引.md)：原始串口、CSV/JSON、pcap、图片、视频和 SHA-256 的位置
+- [实板 RAM 启动 FIT](very_special-成果材料/board-fits/README.md)：Task 1 RR/FP-RR、Task 2 吞吐量与 Task 3 固定/RKNN 产物
 - 实板结果目录：[Task 1](results/task1/board-20260825/)、[Task 2](results/task2/board-20260825/)、[Task 3](results/task3/board-20260825/)
 - [复现与配置指南](very_special-成果材料/05-复现与配置指南.md)与[脚本说明](scripts/competition/README-task123.md)
 
-所有命令从仓库根目录执行；先检查环境并查看可用入口：
+所有命令从仓库根目录执行。首次统一检查环境并构建：
 
 ```bash
+scripts/competition/task123.sh prepare
 scripts/competition/task123.sh doctor
-scripts/competition/task123.sh --list
-scripts/competition/task123.sh suite full
+scripts/competition/task123.sh build full
 ```
+
+然后按任务分别运行，三条命令不会把数据写入同一个结果目录：
+
+```bash
+# Task 1：空载/压力下的 RR 与 FP-RR 调度矩阵
+scripts/competition/task123.sh suite task1
+
+# Task 2：正常链路及五类通信故障
+scripts/competition/task123.sh suite task2
+
+# Task 3：真实 YOLO smoke 与非法模型输出拒绝
+scripts/competition/task123.sh suite task3
+```
+
+每项分别输出 `TASK123_SUITE_PASS name=task1|task2|task3`，证据分别保存在
+独立的 `suite-task1`、`suite-task2`、`suite-task3` 目录。Task 2+3 联合闭环另用
+`scripts/competition/task123.sh run task23-integrated`，不混入任一任务的独立结果。
 
 实板可分别运行 `board task1-communication`、`board task2-throughput` 和
 `board task3-matrix`。脚本只使用 RAM-only `fastboot stage`；仅当终端出现
 `BOARD_RESET_REQUIRED` 时按一次板卡 RST。更详细的依赖、参数和核验标志见
 [复现与配置指南](very_special-成果材料/05-复现与配置指南.md)。
+仓库内 FIT 仅用于实板 RAM 启动；QEMU 仍按上述三个 suite 分别构建与运行。
 
 ## 1. Introduction
 

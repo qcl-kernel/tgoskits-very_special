@@ -51,19 +51,23 @@ Task 1、Task 2、Task 3 共同闭合以下因果链，而不是三个孤立演�
 - [01-Task1-实时调度设计与结果.md](01-Task1-实时调度设计与结果.md)：实时机制、原生 RTOS、QEMU 与实板数据。
 - [02-Task2-双Guest通信设计与结果.md](02-Task2-双Guest通信设计与结果.md)：协议字段、事务时序、可靠性、隔离与吞吐量。
 - [03-Task3-推理控制设计与结果.md](03-Task3-推理控制设计与结果.md)：AGV 场景、模型、安全状态机和端到端结果。
-- [04-QEMU十场景完整验证.md](04-QEMU十场景完整验证.md)：可重复的功能和故障注入场景。
+- [04-QEMU分任务验证.md](04-QEMU分任务验证.md)：Task 1–3 分开运行的功能和故障注入场景。
 - [05-复现与配置指南.md](05-复现与配置指南.md)：唯一复现入口，集中说明命令、参数、成功标志和排障。
 - [06-证据与演示索引.md](06-证据与演示索引.md)：原始证据位置、核验方法和演示组织方式。
+- [board-fits/README.md](board-fits/README.md)：可直接 RAM 启动的正式实板 FIT、哈希和冻结拓扑。
 - [07-任务要求与实现覆盖.md](07-任务要求与实现覆盖.md)：官网要求与设计、代码、配置和结果的完整对应。
 - [08-上游贡献与StarryOS完善.md](08-上游贡献与StarryOS完善.md)：两个已合并上游修复，以及等待人工审查的 syscall 工作与状态边界。
 
 官网任务原文：<https://opencamp.cn/qcl/camp/OpenRace2026/stage/1>。
 
-## 一键入口
+## 分任务入口
 
 ```bash
 scripts/competition/task123.sh doctor
 scripts/competition/task123.sh --list
+scripts/competition/task123.sh suite task1
+scripts/competition/task123.sh suite task2
+scripts/competition/task123.sh suite task3
 scripts/competition/task123.sh run task23-integrated
 ```
 

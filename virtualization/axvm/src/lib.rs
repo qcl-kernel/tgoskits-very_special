@@ -44,6 +44,9 @@ mod vm;
 mod vmexit_stats;
 
 #[cfg(all(test, not(target_arch = "aarch64")))]
+#[path = "arch/aarch64/vtimer/activation.rs"]
+mod aarch64_vtimer_activation_tests;
+#[cfg(all(test, not(target_arch = "aarch64")))]
 #[path = "arch/aarch64/wfi.rs"]
 mod aarch64_wfi_tests;
 pub mod config;

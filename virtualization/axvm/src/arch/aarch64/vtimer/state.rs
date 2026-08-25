@@ -13,6 +13,7 @@ use arm_vcpu::{ArmTimerKind, ArmTimerSnapshot};
 use arm_vgic::{GicVcpuId, PpiId, VgicCore, VgicResult};
 use ax_std::os::arceos::sync::IrqSafeMutex;
 
+use super::activation::{HostActivationDisposition, host_activation_disposition};
 use crate::{
     arch::aarch64::gic::AxvmVgicBackend,
     host::{HostCpu, HostTime, default_host},
@@ -26,6 +27,18 @@ struct HostTimerActivation {
     token: usize,
     owner_cpu: usize,
     accepted_ns: u64,
+}
+
+#[derive(Clone, Copy)]
+struct PublishedTimerLevels {
+    virtual_timer: bool,
+    physical_timer: bool,
+}
+
+impl PublishedTimerLevels {
+    const fn any_asserted(self) -> bool {
+        self.virtual_timer || self.physical_timer
+    }
 }
 
 /// Bridges one vCPU's canonical timer contexts into its private VGIC lines.
@@ -134,8 +147,24 @@ impl Aarch64TimerBinding {
     /// Publishes the current timer output levels before VGIC state is saved.
     pub(in crate::arch::aarch64) fn synchronize(&self, snapshot: ArmTimerSnapshot) -> VgicResult {
         self.invalidate_wait();
-        self.publish_levels(snapshot, physical_counter())
-            .map(|_| ())
+        let levels = match self.publish_levels(snapshot, physical_counter()) {
+            Ok(levels) => levels,
+            Err(error) => {
+                if let Err(retire_error) = self.retire_host_activation() {
+                    warn!(
+                        "failed to retire host timer PPI after timer-level publication failed: \
+                         {retire_error}"
+                    );
+                }
+                return Err(error);
+            }
+        };
+        if host_activation_disposition(levels.virtual_timer)
+            == HostActivationDisposition::RetireImmediately
+        {
+            self.retire_host_activation()?;
+        }
+        Ok(())
     }
 
     /// Re-evaluates both timers and arms the earliest wakeup for guest WFI.
@@ -147,7 +176,7 @@ impl Aarch64TimerBinding {
         crate::runtime::vcpus::note_vtimer_arm(vcpu_id);
         self.invalidate_wait();
         let now_counter = physical_counter();
-        if self.publish_levels(snapshot, now_counter)? {
+        if self.publish_levels(snapshot, now_counter)?.any_asserted() {
             crate::runtime::vcpus::note_vtimer_immediate(vcpu_id);
             return Ok(());
         }
@@ -256,13 +285,16 @@ impl Aarch64TimerBinding {
         &self,
         snapshot: ArmTimerSnapshot,
         physical_counter: u64,
-    ) -> VgicResult<bool> {
+    ) -> VgicResult<PublishedTimerLevels> {
         let virtual_level = snapshot.irq_asserted(ArmTimerKind::Virtual, physical_counter);
         let physical_level = snapshot.irq_asserted(ArmTimerKind::Physical, physical_counter);
         let controller = self.vgic.controller();
         controller.set_ppi_level(self.vcpu, self.virtual_ppi, virtual_level)?;
         controller.set_ppi_level(self.vcpu, self.physical_ppi, physical_level)?;
-        Ok(virtual_level || physical_level)
+        Ok(PublishedTimerLevels {
+            virtual_timer: virtual_level,
+            physical_timer: physical_level,
+        })
     }
 
     pub(in crate::arch::aarch64) fn retire_host_activation(&self) -> VgicResult {

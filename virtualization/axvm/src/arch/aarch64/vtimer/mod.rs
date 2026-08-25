@@ -1,5 +1,6 @@
 //! AArch64 architectural timer binding.
 
+mod activation;
 mod host_ppi;
 mod state;
 

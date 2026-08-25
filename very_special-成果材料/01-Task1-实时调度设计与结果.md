@@ -88,7 +88,28 @@ FP-RR 的两个目标：高优先级 RTOS 可抢占，低优先级通信 Guest �
 - 为 vIRQ 使用有界队列和 retry slot，处理 GIC LR 竞争，不用无界分配或静默丢边沿。
 - 把唤醒、通知、IPI 和 host IRQ 完成动作移出宽锁临界区，限制 IRQ/调度关键路径的阻塞来源。
 
-相关机制详见 [`docs/design/task1-realtime-design.md`](../docs/design/task1-realtime-design.md)、[`docs/design/axvisor-aarch64-generic-timer.md`](../docs/design/axvisor-aarch64-generic-timer.md) 和 [06-CNTV定时器激活泄漏修复与实板验证.md](06-CNTV定时器激活泄漏修复与实板验证.md)。
+相关机制详见 [`docs/design/task1-realtime-design.md`](../docs/design/task1-realtime-design.md)
+和 [`docs/design/axvisor-aarch64-generic-timer.md`](../docs/design/axvisor-aarch64-generic-timer.md)。
+
+### CNTV 激活所有权修复
+
+共享 pCPU 的 10 ms 周期中断曾在启动后停止推进。诊断发现，host CNTV 已经
+acknowledge，但 Guest virtual timer 尚未 asserted 的早返回分支没有 retire host
+token，使 GIC 一直保留 active 状态，后续定时器边沿无法再次送达。
+
+```text
+Host CNTV acknowledged
+          |
+          +-- Guest timer asserted --> 注入或排队 vIRQ --> retire host token
+          +-- not asserted ------------------------------> 立即 retire
+          +-- LR 暂不可用 ----------> bounded retry ----> 成功后清理状态
+```
+
+修复把 acknowledge、pending/retry 和 retire 变成显式状态转换，并保证先完成
+GIC deactivate/EOI，再释放 IRQ context 与抢占 guard。确定性回归覆盖未
+asserted、单次注入、LR 暂不可用、retry 成功和重复边沿。实板诊断中，修复前
+对应 pCPU 的 timer IRQ 停在 `432`；修复后两次分别推进到 `117117` 和 `30020`，
+Zephyr 均完整输出 300 个周期样本。正式 3+3 长运行结果在下文统一报告。
 
 ## 多核 Guest 与资源配置
 

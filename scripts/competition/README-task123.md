@@ -159,8 +159,8 @@ dirty worktree；仅在显式设置 `ALLOW_DIRTY=1` 时允许运行，并把 pat
 
 AI vCPU 与 RTOS 共核的 `task1-ai` 只保留为非正式消融兼容入口，默认拒绝运行。
 只有明确进行并单独标记消融实验时才可设置 `TASK123_ALLOW_AI_SHARE_ABLATION=1`；
-其结果不得进入正式统计、报告或 Demo。完整启动、证据和排障导航见
-[`very_special-成果材料/10-复现导航.md`](../../very_special-成果材料/10-复现导航.md)。
+其结果不得进入正式统计、报告或 Demo。完整启动、配置、成功标志和排障顺序见
+[`very_special-成果材料/05-复现与配置指南.md`](../../very_special-成果材料/05-复现与配置指南.md)。
 
 ## 录屏建议（8–12 分钟）
 

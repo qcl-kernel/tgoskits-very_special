@@ -62,7 +62,7 @@ Physical-board commands (RAM-only; never flash or erase):
   demo-video              Render dashboards and record indexed MP4 replays
 
 Run parameters are environment variables documented in
-scripts/competition/README-task123.md and very_special-成果材料/05-复现入口与配置审计.md.
+scripts/competition/README-task123.md and very_special-成果材料/05-复现与配置指南.md.
 EOF
 }
 

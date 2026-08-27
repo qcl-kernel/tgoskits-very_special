@@ -34,7 +34,8 @@ CPU+ncnn 平均推理约 `1.622 s`，RKNN/NPU 约 `50.1 ms`，呈现约 `32.4x`
 | --- | --- | --- |
 | Task 1 实时底座 | bounded FP-RR、唤醒抢占、IRQ-tail、CNTV 所有权、vIRQ retry、CPU 亲和性和锁边界 | 正式实板 P99 `0.621 -> 0.278 ms`，降低 55.3%；P99.9 `7.816 -> 0.748 ms` |
 | Task 2 可靠通信 | 双 VirtIO-net、L2/UDP/IP、T2N1、ACK/超时/重传/去重/乱序处理、Safe/恢复 | 3×200 共 600/600 完整事务，0 重传、0 协议错误，31.834 transaction/s |
-| Task 3 AI 控制 | 正式实板使用 RKNN/RK3588 NPU；实板和 QEMU 的 ncnn/CPU 路径分别作为可行性参考与可移植替身；另有 CARLA 五场景 A/B 仿真、安全校验、Stop 锁存、显式 Reset 和 Zephyr 状态回传 | 正式实板固定基线组 66.7% 正确、RKNN 组 100%；CARLA 固定基线 5/5 碰撞、YOLO 闭环 5/5 零碰撞 |
+| Task 3 AI 控制 | 正式实板使用 RKNN/RK3588 NPU；实板和 QEMU 的 ncnn/CPU 路径分别作为可行性参考与可移植替身；包含安全校验、Stop 锁存、显式 Reset 和 Zephyr 状态回传 | 正式实板固定基线组 66.7% 正确、RKNN 组 100% |
+| CARLA 综合仿真 | CARLA 0.9.16 五场景 A/B、车辆与行人安全距离、停车确认、Reset 与恢复行驶 | 固定基线 5/5 碰撞、YOLO 闭环 5/5 零碰撞；10 条视频使用同一 B站多 P 链接 |
 | 平台与工程 | StarryOS、Zephyr、RT-Thread 兼容路径、QEMU、RK3588 实板、RAM-only 启动、一键入口、CSV/JSON/pcap/SHA-256 | 功能、故障注入、实板性能和证据重放均有独立入口 |
 
 Task 1、Task 2、Task 3 共同闭合以下因果链，而不是三个孤立演示：
@@ -57,6 +58,7 @@ Task 1、Task 2、Task 3 共同闭合以下因果链，而不是三个孤立演�
 - [board-fits/README.md](board-fits/README.md)：可直接 RAM 启动的正式实板 FIT、哈希和冻结拓扑。
 - [07-任务要求与实现覆盖.md](07-任务要求与实现覆盖.md)：官网要求与设计、代码、配置和结果的完整对应。
 - [08-上游贡献与StarryOS完善.md](08-上游贡献与StarryOS完善.md)：两个已合并上游修复，以及等待人工审查的 syscall 工作与状态边界。
+- [09-CARLA仿真与视频演示.md](09-CARLA仿真与视频演示.md)：仿真软件选型、五场景 A/B 设计、数据叠加、结果和统一视频链接。
 
 官网任务原文：<https://opencamp.cn/qcl/camp/OpenRace2026/stage/1>。
 

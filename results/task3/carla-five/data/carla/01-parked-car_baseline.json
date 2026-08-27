@@ -1,0 +1,6033 @@
+{
+  "scenario": "01-parked-car",
+  "title": "场景1 · 晴天直路静止汽车",
+  "mode": "baseline",
+  "weather": "ClearNoon",
+  "events": [
+    {
+      "t": 0.033,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.327
+    },
+    {
+      "t": 4.067,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.769
+    }
+  ],
+  "samples": [
+    {
+      "t": 0.033,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.327,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.067,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.653,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.1,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.98,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.133,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.307,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.167,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.633,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.2,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.96,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.233,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 2.287,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.267,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 2.613,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.3,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 2.94,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.333,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.267,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.367,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.593,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.4,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 2.758,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.433,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.443,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.467,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.703,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.5,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.161,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.533,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.235,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.567,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.259,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.6,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.253,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.633,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.316,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.667,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.858,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.7,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.385,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.733,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.792,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.767,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 2.116,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.8,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 2.372,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.833,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 2.602,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.867,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 2.812,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.9,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.008,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.933,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.192,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.967,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.367,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.0,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.535,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.033,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.699,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.067,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.858,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.1,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.015,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.133,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.17,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.167,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.323,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.2,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.475,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.233,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.626,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.267,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.776,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.3,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.925,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.333,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.073,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.367,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.22,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.4,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.329,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.433,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.354,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.467,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.413,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.5,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.493,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.533,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.589,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.567,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.697,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.6,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.816,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.633,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.942,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.667,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 6.074,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.7,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 6.21,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.733,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 6.349,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.767,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 6.491,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.8,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 6.634,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.833,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 6.778,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.867,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 6.923,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.9,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 7.069,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.933,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 7.214,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 1.967,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 7.36,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.0,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 7.505,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.033,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 7.65,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.067,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 7.794,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.1,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 7.939,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.133,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 8.082,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.167,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 8.226,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.2,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 8.369,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.233,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 8.512,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.267,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 8.654,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.3,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 8.797,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.333,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 8.94,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.367,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 9.084,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.4,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 9.228,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.433,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 9.369,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.467,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 9.508,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.5,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 9.644,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.533,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 9.778,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.567,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 9.911,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.6,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 10.041,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.633,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 10.17,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.667,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 10.297,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.7,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 10.422,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.733,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 10.546,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.767,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 10.669,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.8,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 10.79,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.833,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 10.911,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.867,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 11.03,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.9,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 11.149,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.933,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 11.267,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 2.967,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 11.384,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.0,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 11.501,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.033,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 11.617,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.067,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 11.732,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.1,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 11.847,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.133,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 11.961,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.167,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 12.074,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.2,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 12.187,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.233,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 12.3,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.267,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 12.412,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.3,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 12.523,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.333,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 12.634,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.367,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 12.744,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.4,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 12.854,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.433,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 12.963,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.467,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.072,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.5,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.18,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.533,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.288,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.567,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.395,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.6,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.501,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.633,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.607,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.667,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.713,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.7,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.818,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.733,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.922,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.767,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.026,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.8,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.13,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.833,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.233,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.867,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.336,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.9,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.438,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.933,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.539,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 3.967,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.64,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 4.0,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.741,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 4.033,
+      "state": "RUN",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.841,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 4.067,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.769,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.1,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.577,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.133,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.314,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.167,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.178,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.2,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.015,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.233,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.861,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.267,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.763,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.3,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.75,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.333,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.803,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.367,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.911,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.4,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.056,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.433,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.224,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.467,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.158,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.5,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.027,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.533,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.822,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.567,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 2.537,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.6,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.105,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.633,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.555,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.667,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.917,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.7,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.215,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.733,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.469,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.767,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.691,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.8,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.178,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.833,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.483,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.867,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.743,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.9,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.97,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.933,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.174,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 4.967,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.361,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.0,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.536,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.033,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.703,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.067,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.595,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.1,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.705,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.133,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.813,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.167,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.92,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.2,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.026,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.233,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.126,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.267,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.173,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.3,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.201,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.333,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.249,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.367,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.305,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.4,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.371,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.433,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.445,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.467,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.525,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.5,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.61,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.533,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.701,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.567,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.794,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.6,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.889,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.633,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.984,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.667,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 6.098,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.7,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 6.176,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.733,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 6.301,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.767,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 6.387,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.8,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 6.484,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.833,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 6.577,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.867,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 6.678,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.9,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 6.776,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.933,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 6.873,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 5.967,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 6.97,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.0,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 7.068,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.033,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 7.195,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.067,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 7.249,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.1,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 7.356,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.133,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 7.479,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.167,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 7.56,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.2,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 7.669,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.233,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 7.774,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.267,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 7.884,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.3,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 8.008,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.333,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 8.101,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.367,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 8.207,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.4,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 8.316,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.433,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 8.426,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.467,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 8.541,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.5,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 8.67,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.533,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 8.777,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.567,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 8.845,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.6,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 8.951,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.633,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 9.071,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.667,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 9.185,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.7,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 9.308,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.733,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 9.43,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.767,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 9.569,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.8,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 9.706,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.833,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 9.839,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.867,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 9.971,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.9,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 10.1,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.933,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 10.228,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 6.967,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 10.354,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.0,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 10.479,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.033,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 10.603,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.067,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 10.726,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.1,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 10.847,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.133,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 10.967,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.167,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 11.087,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.2,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 11.206,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.233,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 11.323,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.267,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 11.44,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.3,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 11.557,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.333,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 11.673,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.367,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 11.788,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.4,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 11.902,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.433,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 12.016,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.467,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 12.129,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.5,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 12.242,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.533,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 12.354,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.567,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 12.466,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.6,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 12.577,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.633,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 12.688,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.667,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 12.798,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.7,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 12.907,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.733,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.016,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.767,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.125,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.8,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.232,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.833,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.34,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.867,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.447,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.9,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.553,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.933,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.659,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 7.967,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.764,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.0,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.869,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.033,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 13.973,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.067,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.077,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.1,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.18,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.133,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.283,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.167,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.385,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.2,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.487,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.233,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.589,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.267,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.689,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.3,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.79,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.333,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.89,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.367,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 14.989,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.4,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 15.088,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.433,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 15.186,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.467,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 15.284,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.5,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 15.382,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.533,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 15.479,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.567,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 15.575,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.6,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 15.671,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.633,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 15.767,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.667,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 15.862,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.7,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 15.957,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.733,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 16.051,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.767,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 16.145,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.8,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 16.238,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.833,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 16.331,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.867,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 16.424,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.9,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 16.516,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.933,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 16.607,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 8.967,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 16.698,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.0,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 16.789,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.033,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 16.879,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.067,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 16.969,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.1,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 17.058,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.133,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 17.147,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.167,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 17.236,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.2,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 17.324,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.233,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 17.411,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.267,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 17.499,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.3,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 17.586,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.333,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 17.672,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.367,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 17.758,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.4,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 17.844,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.433,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 17.929,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.467,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 18.013,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.5,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 18.098,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.533,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 18.182,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.567,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 18.265,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.6,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 18.348,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.633,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 18.431,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.667,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 18.514,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.7,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 18.595,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.733,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 18.677,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.767,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 18.758,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.8,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 18.839,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.833,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 18.919,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.867,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 18.999,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.9,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 19.079,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.933,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 19.158,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 9.967,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 19.237,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.0,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 19.316,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.033,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 19.394,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.067,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 19.471,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.1,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 19.549,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.133,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 19.626,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.167,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 19.702,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.2,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 19.779,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.233,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 19.854,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.267,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 19.93,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.3,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 20.005,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.333,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 20.08,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.367,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 20.154,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.4,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 20.228,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.433,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 20.302,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.467,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 20.375,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.5,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 20.448,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.533,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 20.521,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.567,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 20.593,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.6,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 20.665,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.633,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 20.737,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.667,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 20.808,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.7,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 20.879,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.733,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 20.95,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.767,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 21.02,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.8,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 21.09,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.833,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 21.16,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.867,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 21.229,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.9,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 21.298,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.933,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 21.366,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 10.967,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 21.435,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.0,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 21.503,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.033,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 21.57,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.067,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 21.637,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.1,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 21.704,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.133,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 21.771,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.167,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 21.837,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.2,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 21.903,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.233,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 21.969,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.267,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 22.034,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.3,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 22.099,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.333,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 22.164,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.367,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 22.229,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.4,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 22.293,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.433,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 22.357,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.467,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 22.42,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.5,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 22.483,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.533,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 22.546,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.567,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 22.609,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.6,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 22.671,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.633,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 22.733,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.667,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 22.795,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.7,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 22.856,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.733,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 22.917,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.767,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 22.978,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.8,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 23.039,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.833,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 23.099,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.867,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 23.159,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.9,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 23.219,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.933,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 23.278,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 11.967,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 23.337,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.0,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 23.396,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.033,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 23.454,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.067,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 23.513,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.1,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 23.571,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.133,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 23.628,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.167,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 23.686,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.2,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 23.743,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.233,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 23.8,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.267,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 23.856,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.3,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 23.913,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.333,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 23.969,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.367,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.024,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.4,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.08,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.433,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.135,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.467,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.19,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.5,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.244,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.533,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.299,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.567,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.353,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.6,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.407,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.633,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.46,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.667,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.514,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.7,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.567,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.733,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.62,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.767,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.642,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.8,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.692,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.833,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.747,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.867,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.801,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.9,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.848,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.933,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.897,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 12.967,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.948,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.0,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 24.999,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.033,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.05,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.067,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.102,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.1,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.153,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.133,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.203,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.167,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.253,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.2,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.303,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.233,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.353,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.267,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.402,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.3,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.451,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.333,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.5,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.367,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.549,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.4,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.597,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.433,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.645,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.467,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.693,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.5,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.74,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.533,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.788,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.567,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.835,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.6,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.882,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.633,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.928,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.667,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 25.975,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.7,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 26.021,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.733,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 26.067,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.767,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 26.113,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.8,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 26.158,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.833,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 26.215,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.867,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 26.244,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.9,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 26.281,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.933,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 26.324,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 13.967,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 26.327,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.0,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 26.366,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.033,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 26.407,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.067,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 26.45,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.1,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 26.495,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.133,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 26.543,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.167,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 26.586,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.2,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.557,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.233,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.309,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.267,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.203,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.3,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.124,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.333,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.029,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.367,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.775,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.4,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.685,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.433,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.663,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.467,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.671,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.5,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.701,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.533,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.749,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.567,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.471,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.6,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.328,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.633,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.36,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.667,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 2.527,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.7,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.051,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.733,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.497,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.767,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.491,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.8,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 2.38,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.833,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.101,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.867,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 3.68,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.9,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.146,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.933,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.524,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 14.967,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 4.836,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.0,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.102,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.033,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.33,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.067,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.527,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.1,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.605,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.133,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 5.695,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.167,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.303,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.2,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 1.534,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.233,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.571,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.267,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.269,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.3,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.092,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.333,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.059,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.367,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.039,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.4,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.04,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.433,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.039,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.467,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.037,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.5,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.037,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.533,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.035,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.567,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.032,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.6,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.03,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.633,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.025,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.667,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.025,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.7,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.023,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.733,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.021,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.767,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.021,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.8,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.02,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.833,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.02,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.867,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.02,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.9,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.933,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 15.967,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.0,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.033,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.067,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.1,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.133,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.167,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.2,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.233,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.267,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.3,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.333,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.367,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.4,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.433,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.467,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.5,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.533,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.567,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.6,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.633,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.667,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.7,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.733,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.767,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.8,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.833,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.867,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.9,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.933,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 16.967,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.0,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.033,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.067,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.1,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.133,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.167,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.2,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.233,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.267,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.3,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.333,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.367,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.4,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.433,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.467,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.5,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.533,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.567,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.6,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.633,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.667,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.7,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.733,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.767,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.8,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.833,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.867,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.9,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.933,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 17.967,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.0,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.033,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.067,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.1,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.133,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.167,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.2,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.233,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.267,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.3,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.333,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.367,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.4,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.433,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.467,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.5,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.533,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.567,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.6,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.633,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.667,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.7,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.733,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.767,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.8,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.833,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.867,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.9,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.933,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 18.967,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.0,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.033,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.067,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.1,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.133,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.167,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.2,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.233,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.267,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.3,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.333,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.018,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.367,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.02,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.4,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.02,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.433,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.467,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.5,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.02,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.533,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.567,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.021,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.6,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.016,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.633,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.02,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.667,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.7,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.733,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.767,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.8,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.833,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.867,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.9,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.933,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 19.967,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    },
+    {
+      "t": 20.0,
+      "state": "COLLIDED",
+      "action": "SetOutput(500)",
+      "speed_mps": 0.019,
+      "distance_estimate_m": null,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 1
+    }
+  ],
+  "collisions": 1,
+  "collision_events": 199,
+  "minimum_person_clearance_m": null,
+  "person_clearance_pass": true,
+  "video": "/home/huhu/tgoskits-very_special/tmp/task123-video-storyboard/sim/out/carla_five_scenarios/01-parked-car_baseline.mp4",
+  "board_reference": {
+    "inference_ms": 62.6,
+    "control_status_ms": 55.0,
+    "inference_status_ms": 255.2,
+    "source": "本次真实 RK3588 / RKNN / T2N1 / Zephyr"
+  }
+}

@@ -23,6 +23,9 @@ pub struct VideoSafetyPolicy {
     pub danger_x_max_milli: u16,
     pub danger_y_min_milli: u16,
     pub danger_y_max_milli: u16,
+    /// Minimum normalized vehicle box area for an immediate collision hazard.
+    /// `None` preserves the original vehicle-tracking policy.
+    pub vehicle_hazard_area_min_milli: Option<u16>,
     pub max_consecutive_misses: u16,
 }
 
@@ -34,7 +37,16 @@ impl VideoSafetyPolicy {
             danger_x_max_milli: 650,
             danger_y_min_milli: 300,
             danger_y_max_milli: 1000,
+            vehicle_hazard_area_min_milli: None,
             max_consecutive_misses: 3,
+        }
+    }
+
+    /// Policy used by the five CARLA safety demonstrations.
+    pub const fn carla_five_scenes() -> Self {
+        Self {
+            vehicle_hazard_area_min_milli: Some(10),
+            ..Self::task3_default()
         }
     }
 }
@@ -173,11 +185,17 @@ impl VideoSafetyController {
         if matches!(detection.class_id, COCO_KNIFE | COCO_SCISSORS) {
             return true;
         }
-        detection.class_id == COCO_PERSON
-            && (self.policy.danger_x_min_milli..=self.policy.danger_x_max_milli)
-                .contains(&detection.center_x_milli)
+        let in_danger_zone = (self.policy.danger_x_min_milli..=self.policy.danger_x_max_milli)
+            .contains(&detection.center_x_milli)
             && (self.policy.danger_y_min_milli..=self.policy.danger_y_max_milli)
-                .contains(&detection.center_y_milli)
+                .contains(&detection.center_y_milli);
+        detection.class_id == COCO_PERSON && in_danger_zone
+            || is_vehicle(detection.class_id)
+                && in_danger_zone
+                && self
+                    .policy
+                    .vehicle_hazard_area_min_milli
+                    .is_some_and(|minimum| detection.area_milli >= minimum)
     }
 
     fn hold_or_stop(&mut self, reason: HoldReason) -> SceneDecision {
@@ -279,6 +297,27 @@ mod tests {
             SceneDecision::Hold {
                 reason: HoldReason::NonTrackingClass(COCO_PERSON),
                 consecutive_misses: 1,
+                ..
+            }
+        ));
+    }
+
+    #[test]
+    fn carla_policy_stops_for_a_close_vehicle_without_changing_the_default_policy() {
+        let close_vehicle = detection(COCO_CAR, 500, 600);
+        let mut default_controller =
+            VideoSafetyController::new(500, VideoSafetyPolicy::task3_default());
+        assert!(matches!(
+            default_controller.update(SceneInput::Detection(close_vehicle)),
+            SceneDecision::Track { .. }
+        ));
+
+        let mut carla_controller =
+            VideoSafetyController::new(500, VideoSafetyPolicy::carla_five_scenes());
+        assert!(matches!(
+            carla_controller.update(SceneInput::Detection(close_vehicle)),
+            SceneDecision::Stop {
+                newly_latched: true,
                 ..
             }
         ));

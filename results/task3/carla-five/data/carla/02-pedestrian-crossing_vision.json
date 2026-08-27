@@ -1,0 +1,4047 @@
+{
+  "scenario": "02-pedestrian-crossing",
+  "title": "场景2 · 斑马线行人横穿",
+  "mode": "vision",
+  "weather": "CloudyNoon",
+  "events": [
+    {
+      "t": 0.033,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.327
+    },
+    {
+      "t": 3.033,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 7.169
+    },
+    {
+      "t": 5.267,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.064
+    },
+    {
+      "t": 7.267,
+      "state": "RESET",
+      "action": "Reset",
+      "speed_mps": 0.0
+    },
+    {
+      "t": 7.3,
+      "state": "RESUME",
+      "action": "SetOutput",
+      "speed_mps": 0.079
+    },
+    {
+      "t": 7.333,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.093
+    }
+  ],
+  "samples": [
+    {
+      "t": 0.033,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.327,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.067,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.653,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": null,
+      "detections": 0,
+      "collision_count": 0
+    },
+    {
+      "t": 0.1,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.98,
+      "distance_estimate_m": 28.611,
+      "host_onnx_inference_ms": 26.266,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 0.133,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 1.307,
+      "distance_estimate_m": 27.681,
+      "host_onnx_inference_ms": 22.711,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 0.167,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 1.633,
+      "distance_estimate_m": 26.145,
+      "host_onnx_inference_ms": 21.185,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 0.2,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 1.96,
+      "distance_estimate_m": 27.67,
+      "host_onnx_inference_ms": 23.609,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 0.233,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.287,
+      "distance_estimate_m": 27.594,
+      "host_onnx_inference_ms": 23.241,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 0.267,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.613,
+      "distance_estimate_m": 28.09,
+      "host_onnx_inference_ms": 23.605,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 0.3,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.94,
+      "distance_estimate_m": 27.669,
+      "host_onnx_inference_ms": 24.319,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 0.333,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.267,
+      "distance_estimate_m": 28.03,
+      "host_onnx_inference_ms": 23.521,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 0.367,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.593,
+      "distance_estimate_m": 27.272,
+      "host_onnx_inference_ms": 23.68,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 0.4,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.758,
+      "distance_estimate_m": 28.345,
+      "host_onnx_inference_ms": 23.767,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 0.433,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 1.443,
+      "distance_estimate_m": 29.996,
+      "host_onnx_inference_ms": 23.676,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 0.467,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.703,
+      "distance_estimate_m": 29.883,
+      "host_onnx_inference_ms": 24.552,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 0.5,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.161,
+      "distance_estimate_m": 29.399,
+      "host_onnx_inference_ms": 24.129,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 0.533,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.235,
+      "distance_estimate_m": 29.234,
+      "host_onnx_inference_ms": 24.41,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 0.567,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.259,
+      "distance_estimate_m": 30.265,
+      "host_onnx_inference_ms": 24.617,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 0.6,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.253,
+      "distance_estimate_m": 30.312,
+      "host_onnx_inference_ms": 24.162,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 0.633,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.231,
+      "distance_estimate_m": 29.636,
+      "host_onnx_inference_ms": 22.736,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 0.667,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.203,
+      "distance_estimate_m": 30.588,
+      "host_onnx_inference_ms": 23.197,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 0.7,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.174,
+      "distance_estimate_m": 29.667,
+      "host_onnx_inference_ms": 24.118,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 0.733,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.145,
+      "distance_estimate_m": 30.125,
+      "host_onnx_inference_ms": 23.606,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 0.767,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.12,
+      "distance_estimate_m": 28.719,
+      "host_onnx_inference_ms": 24.368,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 0.8,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.414,
+      "distance_estimate_m": 28.962,
+      "host_onnx_inference_ms": 24.817,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 0.833,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.916,
+      "distance_estimate_m": 29.297,
+      "host_onnx_inference_ms": 24.754,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 0.867,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 1.344,
+      "distance_estimate_m": 28.923,
+      "host_onnx_inference_ms": 24.858,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 0.9,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 1.663,
+      "distance_estimate_m": 30.547,
+      "host_onnx_inference_ms": 21.323,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 0.933,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 1.923,
+      "distance_estimate_m": 30.415,
+      "host_onnx_inference_ms": 23.593,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 0.967,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.12,
+      "distance_estimate_m": 29.608,
+      "host_onnx_inference_ms": 24.636,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 1.0,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.291,
+      "distance_estimate_m": 17.72,
+      "host_onnx_inference_ms": 24.526,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 1.033,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.445,
+      "distance_estimate_m": 29.83,
+      "host_onnx_inference_ms": 24.762,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 1.067,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.585,
+      "distance_estimate_m": 17.59,
+      "host_onnx_inference_ms": 24.414,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 1.1,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.701,
+      "distance_estimate_m": 29.213,
+      "host_onnx_inference_ms": 21.457,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 1.133,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.812,
+      "distance_estimate_m": 29.826,
+      "host_onnx_inference_ms": 23.554,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 1.167,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.932,
+      "distance_estimate_m": 29.785,
+      "host_onnx_inference_ms": 23.986,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 1.2,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.054,
+      "distance_estimate_m": 28.501,
+      "host_onnx_inference_ms": 23.911,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 1.233,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.169,
+      "distance_estimate_m": 28.765,
+      "host_onnx_inference_ms": 23.957,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 1.267,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.278,
+      "distance_estimate_m": 28.487,
+      "host_onnx_inference_ms": 23.814,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 1.3,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.384,
+      "distance_estimate_m": 17.352,
+      "host_onnx_inference_ms": 24.616,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 1.333,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.487,
+      "distance_estimate_m": 28.606,
+      "host_onnx_inference_ms": 24.674,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 1.367,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.589,
+      "distance_estimate_m": 28.831,
+      "host_onnx_inference_ms": 23.925,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 1.4,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.689,
+      "distance_estimate_m": 28.513,
+      "host_onnx_inference_ms": 24.328,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 1.433,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.787,
+      "distance_estimate_m": 28.38,
+      "host_onnx_inference_ms": 24.152,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 1.467,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.883,
+      "distance_estimate_m": 28.188,
+      "host_onnx_inference_ms": 24.399,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 1.5,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.979,
+      "distance_estimate_m": 27.897,
+      "host_onnx_inference_ms": 24.178,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 1.533,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.073,
+      "distance_estimate_m": 27.77,
+      "host_onnx_inference_ms": 23.647,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 1.567,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.167,
+      "distance_estimate_m": 28.028,
+      "host_onnx_inference_ms": 24.503,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 1.6,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.26,
+      "distance_estimate_m": 27.57,
+      "host_onnx_inference_ms": 23.905,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 1.633,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.352,
+      "distance_estimate_m": 27.412,
+      "host_onnx_inference_ms": 24.323,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 1.667,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.443,
+      "distance_estimate_m": 27.862,
+      "host_onnx_inference_ms": 24.403,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 1.7,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.534,
+      "distance_estimate_m": 26.625,
+      "host_onnx_inference_ms": 21.657,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 1.733,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.624,
+      "distance_estimate_m": 27.107,
+      "host_onnx_inference_ms": 24.561,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 1.767,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.713,
+      "distance_estimate_m": 25.85,
+      "host_onnx_inference_ms": 24.242,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 1.8,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.801,
+      "distance_estimate_m": 26.375,
+      "host_onnx_inference_ms": 24.302,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 1.833,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.889,
+      "distance_estimate_m": 25.914,
+      "host_onnx_inference_ms": 24.175,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 1.867,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.976,
+      "distance_estimate_m": 17.258,
+      "host_onnx_inference_ms": 25.864,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 1.9,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.052,
+      "distance_estimate_m": 25.709,
+      "host_onnx_inference_ms": 25.735,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 1.933,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.139,
+      "distance_estimate_m": 25.491,
+      "host_onnx_inference_ms": 25.402,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 1.967,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.144,
+      "distance_estimate_m": 25.678,
+      "host_onnx_inference_ms": 25.452,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 2.0,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.148,
+      "distance_estimate_m": 17.089,
+      "host_onnx_inference_ms": 25.054,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 2.033,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.163,
+      "distance_estimate_m": 17.552,
+      "host_onnx_inference_ms": 25.04,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 2.067,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.19,
+      "distance_estimate_m": 25.482,
+      "host_onnx_inference_ms": 24.436,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 2.1,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.228,
+      "distance_estimate_m": 25.376,
+      "host_onnx_inference_ms": 24.751,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 2.133,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.274,
+      "distance_estimate_m": 23.971,
+      "host_onnx_inference_ms": 25.176,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 2.167,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.326,
+      "distance_estimate_m": 24.496,
+      "host_onnx_inference_ms": 24.912,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 2.2,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.385,
+      "distance_estimate_m": 24.619,
+      "host_onnx_inference_ms": 24.691,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 2.233,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.447,
+      "distance_estimate_m": 24.504,
+      "host_onnx_inference_ms": 24.825,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 2.267,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.513,
+      "distance_estimate_m": 24.005,
+      "host_onnx_inference_ms": 24.26,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 2.3,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.581,
+      "distance_estimate_m": 24.774,
+      "host_onnx_inference_ms": 24.22,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 2.333,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.651,
+      "distance_estimate_m": 24.541,
+      "host_onnx_inference_ms": 24.267,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 2.367,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.722,
+      "distance_estimate_m": 25.566,
+      "host_onnx_inference_ms": 24.859,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 2.4,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.794,
+      "distance_estimate_m": 24.334,
+      "host_onnx_inference_ms": 24.941,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 2.433,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.868,
+      "distance_estimate_m": 23.384,
+      "host_onnx_inference_ms": 24.912,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 2.467,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.941,
+      "distance_estimate_m": 29.945,
+      "host_onnx_inference_ms": 24.651,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 2.5,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.015,
+      "distance_estimate_m": 24.562,
+      "host_onnx_inference_ms": 24.134,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 2.533,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.089,
+      "distance_estimate_m": 23.475,
+      "host_onnx_inference_ms": 23.812,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 2.567,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.163,
+      "distance_estimate_m": 23.012,
+      "host_onnx_inference_ms": 23.958,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 2.6,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.237,
+      "distance_estimate_m": 22.82,
+      "host_onnx_inference_ms": 24.526,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 2.633,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.31,
+      "distance_estimate_m": 23.03,
+      "host_onnx_inference_ms": 24.805,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 2.667,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.384,
+      "distance_estimate_m": 23.977,
+      "host_onnx_inference_ms": 24.49,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 2.7,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.457,
+      "distance_estimate_m": 23.505,
+      "host_onnx_inference_ms": 24.547,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 2.733,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.53,
+      "distance_estimate_m": 22.107,
+      "host_onnx_inference_ms": 24.822,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 2.767,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.602,
+      "distance_estimate_m": 25.628,
+      "host_onnx_inference_ms": 24.195,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 2.8,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.675,
+      "distance_estimate_m": 24.166,
+      "host_onnx_inference_ms": 24.414,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 2.833,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.746,
+      "distance_estimate_m": 22.92,
+      "host_onnx_inference_ms": 23.971,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 2.867,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.818,
+      "distance_estimate_m": 21.663,
+      "host_onnx_inference_ms": 24.211,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 2.9,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.889,
+      "distance_estimate_m": 21.888,
+      "host_onnx_inference_ms": 24.548,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 2.933,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.959,
+      "distance_estimate_m": 21.589,
+      "host_onnx_inference_ms": 23.9,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 2.967,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 7.03,
+      "distance_estimate_m": 20.987,
+      "host_onnx_inference_ms": 25.468,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 3.0,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 7.099,
+      "distance_estimate_m": 20.927,
+      "host_onnx_inference_ms": 25.363,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 3.033,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 7.169,
+      "distance_estimate_m": 13.528,
+      "host_onnx_inference_ms": 25.286,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 3.067,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 7.225,
+      "distance_estimate_m": 20.783,
+      "host_onnx_inference_ms": 24.759,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 3.1,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 7.237,
+      "distance_estimate_m": 12.61,
+      "host_onnx_inference_ms": 25.236,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 3.133,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 7.202,
+      "distance_estimate_m": 12.255,
+      "host_onnx_inference_ms": 25.441,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 3.167,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 7.126,
+      "distance_estimate_m": 12.481,
+      "host_onnx_inference_ms": 25.082,
+      "detections": 7,
+      "collision_count": 0
+    },
+    {
+      "t": 3.2,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 7.018,
+      "distance_estimate_m": 11.965,
+      "host_onnx_inference_ms": 24.666,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 3.233,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 6.885,
+      "distance_estimate_m": 11.935,
+      "host_onnx_inference_ms": 25.344,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 3.267,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 6.739,
+      "distance_estimate_m": 11.597,
+      "host_onnx_inference_ms": 25.317,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 3.3,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 6.585,
+      "distance_estimate_m": 11.621,
+      "host_onnx_inference_ms": 25.306,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 3.333,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 6.423,
+      "distance_estimate_m": 11.45,
+      "host_onnx_inference_ms": 25.729,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 3.367,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 6.257,
+      "distance_estimate_m": 11.226,
+      "host_onnx_inference_ms": 25.318,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 3.4,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 6.089,
+      "distance_estimate_m": 11.217,
+      "host_onnx_inference_ms": 25.249,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 3.433,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 5.919,
+      "distance_estimate_m": 11.089,
+      "host_onnx_inference_ms": 25.095,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 3.467,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 5.749,
+      "distance_estimate_m": 11.02,
+      "host_onnx_inference_ms": 24.495,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 3.5,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 5.579,
+      "distance_estimate_m": 10.8,
+      "host_onnx_inference_ms": 24.671,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 3.533,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 5.41,
+      "distance_estimate_m": 10.372,
+      "host_onnx_inference_ms": 24.934,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 3.567,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 5.031,
+      "distance_estimate_m": 10.278,
+      "host_onnx_inference_ms": 25.172,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 3.6,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 4.136,
+      "distance_estimate_m": 9.911,
+      "host_onnx_inference_ms": 24.663,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 3.633,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 3.237,
+      "distance_estimate_m": 9.907,
+      "host_onnx_inference_ms": 24.871,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 3.667,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 2.341,
+      "distance_estimate_m": 9.913,
+      "host_onnx_inference_ms": 25.353,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 3.7,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 1.449,
+      "distance_estimate_m": 9.736,
+      "host_onnx_inference_ms": 25.017,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 3.733,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.567,
+      "distance_estimate_m": 9.48,
+      "host_onnx_inference_ms": 22.406,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 3.767,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.0,
+      "distance_estimate_m": 9.612,
+      "host_onnx_inference_ms": 22.207,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 3.8,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.003,
+      "distance_estimate_m": 9.495,
+      "host_onnx_inference_ms": 22.058,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 3.833,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.123,
+      "distance_estimate_m": 9.609,
+      "host_onnx_inference_ms": 25.47,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 3.867,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.24,
+      "distance_estimate_m": 9.602,
+      "host_onnx_inference_ms": 25.371,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 3.9,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.341,
+      "distance_estimate_m": 9.46,
+      "host_onnx_inference_ms": 25.147,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 3.933,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.0,
+      "distance_estimate_m": 9.301,
+      "host_onnx_inference_ms": 22.601,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 3.967,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.075,
+      "distance_estimate_m": 9.336,
+      "host_onnx_inference_ms": 24.06,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 4.0,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.096,
+      "distance_estimate_m": 9.359,
+      "host_onnx_inference_ms": 24.987,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 4.033,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.082,
+      "distance_estimate_m": 9.537,
+      "host_onnx_inference_ms": 24.214,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 4.067,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.12,
+      "distance_estimate_m": 9.347,
+      "host_onnx_inference_ms": 24.299,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 4.1,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.173,
+      "distance_estimate_m": 9.282,
+      "host_onnx_inference_ms": 24.531,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 4.133,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.219,
+      "distance_estimate_m": 9.277,
+      "host_onnx_inference_ms": 25.127,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 4.167,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.294,
+      "distance_estimate_m": 9.537,
+      "host_onnx_inference_ms": 25.554,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 4.2,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.301,
+      "distance_estimate_m": 9.523,
+      "host_onnx_inference_ms": 24.965,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 4.233,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.0,
+      "distance_estimate_m": 9.336,
+      "host_onnx_inference_ms": 24.333,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 4.267,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.079,
+      "distance_estimate_m": 9.361,
+      "host_onnx_inference_ms": 24.057,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 4.3,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.092,
+      "distance_estimate_m": 9.452,
+      "host_onnx_inference_ms": 24.252,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 4.333,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.074,
+      "distance_estimate_m": 9.399,
+      "host_onnx_inference_ms": 25.186,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 4.367,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.136,
+      "distance_estimate_m": 9.237,
+      "host_onnx_inference_ms": 24.64,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 4.4,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.168,
+      "distance_estimate_m": 9.241,
+      "host_onnx_inference_ms": 23.846,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 4.433,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.251,
+      "distance_estimate_m": 9.39,
+      "host_onnx_inference_ms": 25.72,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 4.467,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.257,
+      "distance_estimate_m": 9.386,
+      "host_onnx_inference_ms": 24.737,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 4.5,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.338,
+      "distance_estimate_m": 9.369,
+      "host_onnx_inference_ms": 25.06,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 4.533,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.0,
+      "distance_estimate_m": 9.255,
+      "host_onnx_inference_ms": 24.578,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 4.567,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.079,
+      "distance_estimate_m": 9.095,
+      "host_onnx_inference_ms": 24.647,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 4.6,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.08,
+      "distance_estimate_m": 9.5,
+      "host_onnx_inference_ms": 24.346,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 4.633,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.045,
+      "distance_estimate_m": 9.407,
+      "host_onnx_inference_ms": 24.391,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 4.667,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.131,
+      "distance_estimate_m": 9.46,
+      "host_onnx_inference_ms": 24.438,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 4.7,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.142,
+      "distance_estimate_m": 9.673,
+      "host_onnx_inference_ms": 24.925,
+      "detections": 7,
+      "collision_count": 0
+    },
+    {
+      "t": 4.733,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.173,
+      "distance_estimate_m": 9.72,
+      "host_onnx_inference_ms": 24.791,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 4.767,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.285,
+      "distance_estimate_m": 9.328,
+      "host_onnx_inference_ms": 24.249,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 4.8,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.298,
+      "distance_estimate_m": 9.101,
+      "host_onnx_inference_ms": 24.95,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 4.833,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.343,
+      "distance_estimate_m": 9.091,
+      "host_onnx_inference_ms": 24.646,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 4.867,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.0,
+      "distance_estimate_m": 9.694,
+      "host_onnx_inference_ms": 22.26,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 4.9,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.079,
+      "distance_estimate_m": 9.932,
+      "host_onnx_inference_ms": 25.956,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 4.933,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.097,
+      "distance_estimate_m": 9.581,
+      "host_onnx_inference_ms": 24.65,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 4.967,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.083,
+      "distance_estimate_m": 9.027,
+      "host_onnx_inference_ms": 25.324,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 5.0,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.161,
+      "distance_estimate_m": 9.194,
+      "host_onnx_inference_ms": 25.1,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 5.033,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.226,
+      "distance_estimate_m": 9.385,
+      "host_onnx_inference_ms": 25.589,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 5.067,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.244,
+      "distance_estimate_m": 9.526,
+      "host_onnx_inference_ms": 25.091,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 5.1,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.318,
+      "distance_estimate_m": 8.938,
+      "host_onnx_inference_ms": 25.356,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 5.133,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.0,
+      "distance_estimate_m": 10.164,
+      "host_onnx_inference_ms": 25.814,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 5.167,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.078,
+      "distance_estimate_m": 10.365,
+      "host_onnx_inference_ms": 22.955,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 5.2,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.079,
+      "distance_estimate_m": 9.895,
+      "host_onnx_inference_ms": 24.104,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 5.233,
+      "state": "STOP",
+      "action": "Stop",
+      "speed_mps": 0.105,
+      "distance_estimate_m": 10.087,
+      "host_onnx_inference_ms": 22.185,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 5.267,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.064,
+      "distance_estimate_m": 10.139,
+      "host_onnx_inference_ms": 22.336,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 5.3,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.196,
+      "distance_estimate_m": 9.625,
+      "host_onnx_inference_ms": 22.891,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 5.333,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.207,
+      "distance_estimate_m": 9.374,
+      "host_onnx_inference_ms": 22.749,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 5.367,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.244,
+      "distance_estimate_m": 9.07,
+      "host_onnx_inference_ms": 24.252,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 5.4,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.316,
+      "distance_estimate_m": 10.089,
+      "host_onnx_inference_ms": 24.85,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 5.433,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.0,
+      "distance_estimate_m": 11.265,
+      "host_onnx_inference_ms": 25.324,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 5.467,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.079,
+      "distance_estimate_m": 9.847,
+      "host_onnx_inference_ms": 25.032,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 5.5,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.08,
+      "distance_estimate_m": 10.063,
+      "host_onnx_inference_ms": 25.305,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 5.533,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.036,
+      "distance_estimate_m": 22.357,
+      "host_onnx_inference_ms": 22.508,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 5.567,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.143,
+      "distance_estimate_m": 22.332,
+      "host_onnx_inference_ms": 22.118,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 5.6,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.195,
+      "distance_estimate_m": 22.276,
+      "host_onnx_inference_ms": 25.872,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 5.633,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.248,
+      "distance_estimate_m": 22.536,
+      "host_onnx_inference_ms": 22.849,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 5.667,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.275,
+      "distance_estimate_m": 22.37,
+      "host_onnx_inference_ms": 22.838,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 5.7,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.297,
+      "distance_estimate_m": 22.189,
+      "host_onnx_inference_ms": 24.019,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 5.733,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.351,
+      "distance_estimate_m": 22.05,
+      "host_onnx_inference_ms": 24.619,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 5.767,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.0,
+      "distance_estimate_m": 22.343,
+      "host_onnx_inference_ms": 24.28,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 5.8,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.079,
+      "distance_estimate_m": 22.503,
+      "host_onnx_inference_ms": 24.246,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 5.833,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.098,
+      "distance_estimate_m": 22.62,
+      "host_onnx_inference_ms": 24.889,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 5.867,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.084,
+      "distance_estimate_m": 22.504,
+      "host_onnx_inference_ms": 24.262,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 5.9,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.168,
+      "distance_estimate_m": 22.238,
+      "host_onnx_inference_ms": 24.841,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 5.933,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.213,
+      "distance_estimate_m": 22.41,
+      "host_onnx_inference_ms": 24.534,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 5.967,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.237,
+      "distance_estimate_m": 22.258,
+      "host_onnx_inference_ms": 25.228,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 6.0,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.27,
+      "distance_estimate_m": 22.355,
+      "host_onnx_inference_ms": 25.726,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 6.033,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.325,
+      "distance_estimate_m": 22.473,
+      "host_onnx_inference_ms": 22.017,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 6.067,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.0,
+      "distance_estimate_m": 22.65,
+      "host_onnx_inference_ms": 25.465,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 6.1,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.079,
+      "distance_estimate_m": 22.83,
+      "host_onnx_inference_ms": 25.258,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 6.133,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.087,
+      "distance_estimate_m": 22.441,
+      "host_onnx_inference_ms": 23.219,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 6.167,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.118,
+      "distance_estimate_m": 22.389,
+      "host_onnx_inference_ms": 23.843,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 6.2,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.083,
+      "distance_estimate_m": 22.385,
+      "host_onnx_inference_ms": 25.333,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 6.233,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.18,
+      "distance_estimate_m": 22.357,
+      "host_onnx_inference_ms": 24.927,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 6.267,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.222,
+      "distance_estimate_m": 22.415,
+      "host_onnx_inference_ms": 24.707,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 6.3,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.281,
+      "distance_estimate_m": 22.224,
+      "host_onnx_inference_ms": 25.052,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 6.333,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.319,
+      "distance_estimate_m": 22.312,
+      "host_onnx_inference_ms": 25.868,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 6.367,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.0,
+      "distance_estimate_m": 22.33,
+      "host_onnx_inference_ms": 25.565,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 6.4,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.079,
+      "distance_estimate_m": 22.287,
+      "host_onnx_inference_ms": 25.982,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 6.433,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.082,
+      "distance_estimate_m": 22.352,
+      "host_onnx_inference_ms": 25.772,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 6.467,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.048,
+      "distance_estimate_m": 22.332,
+      "host_onnx_inference_ms": 25.776,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 6.5,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.166,
+      "distance_estimate_m": 22.322,
+      "host_onnx_inference_ms": 25.282,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 6.533,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.188,
+      "distance_estimate_m": 22.469,
+      "host_onnx_inference_ms": 26.025,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 6.567,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.245,
+      "distance_estimate_m": 22.431,
+      "host_onnx_inference_ms": 25.486,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 6.6,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.32,
+      "distance_estimate_m": 22.338,
+      "host_onnx_inference_ms": 24.455,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 6.633,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.0,
+      "distance_estimate_m": 22.594,
+      "host_onnx_inference_ms": 25.045,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 6.667,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.078,
+      "distance_estimate_m": 22.356,
+      "host_onnx_inference_ms": 25.238,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 6.7,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.078,
+      "distance_estimate_m": 22.19,
+      "host_onnx_inference_ms": 25.467,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 6.733,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.092,
+      "distance_estimate_m": 22.14,
+      "host_onnx_inference_ms": 24.969,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 6.767,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.056,
+      "distance_estimate_m": 22.204,
+      "host_onnx_inference_ms": 25.075,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 6.8,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.19,
+      "distance_estimate_m": 22.281,
+      "host_onnx_inference_ms": 25.337,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 6.833,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.173,
+      "distance_estimate_m": 22.075,
+      "host_onnx_inference_ms": 24.55,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 6.867,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.264,
+      "distance_estimate_m": 22.104,
+      "host_onnx_inference_ms": 25.717,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 6.9,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.287,
+      "distance_estimate_m": 22.036,
+      "host_onnx_inference_ms": 25.866,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 6.933,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.309,
+      "distance_estimate_m": 22.326,
+      "host_onnx_inference_ms": 26.603,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 6.967,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.0,
+      "distance_estimate_m": 22.134,
+      "host_onnx_inference_ms": 25.728,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 7.0,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.079,
+      "distance_estimate_m": 23.381,
+      "host_onnx_inference_ms": 23.287,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 7.033,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.093,
+      "distance_estimate_m": 22.246,
+      "host_onnx_inference_ms": 22.876,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 7.067,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.108,
+      "distance_estimate_m": 22.077,
+      "host_onnx_inference_ms": 24.263,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 7.1,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.155,
+      "distance_estimate_m": 22.133,
+      "host_onnx_inference_ms": 25.74,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 7.133,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.218,
+      "distance_estimate_m": 22.247,
+      "host_onnx_inference_ms": 24.303,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 7.167,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.218,
+      "distance_estimate_m": 22.26,
+      "host_onnx_inference_ms": 24.59,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 7.2,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.295,
+      "distance_estimate_m": 22.373,
+      "host_onnx_inference_ms": 25.395,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 7.233,
+      "state": "CONFIRM",
+      "action": "SetOutput",
+      "speed_mps": 0.301,
+      "distance_estimate_m": 22.625,
+      "host_onnx_inference_ms": 25.165,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 7.267,
+      "state": "RESET",
+      "action": "Reset",
+      "speed_mps": 0.0,
+      "distance_estimate_m": 22.542,
+      "host_onnx_inference_ms": 25.654,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 7.3,
+      "state": "RESUME",
+      "action": "SetOutput",
+      "speed_mps": 0.079,
+      "distance_estimate_m": 22.541,
+      "host_onnx_inference_ms": 25.347,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 7.333,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.093,
+      "distance_estimate_m": 22.656,
+      "host_onnx_inference_ms": 25.436,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 7.367,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.143,
+      "distance_estimate_m": 22.332,
+      "host_onnx_inference_ms": 25.728,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 7.4,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.226,
+      "distance_estimate_m": 22.352,
+      "host_onnx_inference_ms": 25.694,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 7.433,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.313,
+      "distance_estimate_m": 22.473,
+      "host_onnx_inference_ms": 25.114,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 7.467,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.412,
+      "distance_estimate_m": 22.491,
+      "host_onnx_inference_ms": 25.412,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 7.5,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.456,
+      "distance_estimate_m": 22.475,
+      "host_onnx_inference_ms": 24.981,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 7.533,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.613,
+      "distance_estimate_m": 22.435,
+      "host_onnx_inference_ms": 25.426,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 7.567,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.694,
+      "distance_estimate_m": 22.472,
+      "host_onnx_inference_ms": 25.262,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 7.6,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.817,
+      "distance_estimate_m": 22.379,
+      "host_onnx_inference_ms": 25.192,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 7.633,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 0.934,
+      "distance_estimate_m": 22.307,
+      "host_onnx_inference_ms": 25.484,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 7.667,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 1.056,
+      "distance_estimate_m": 21.898,
+      "host_onnx_inference_ms": 25.088,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 7.7,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 1.168,
+      "distance_estimate_m": 21.671,
+      "host_onnx_inference_ms": 26.141,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 7.733,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 1.268,
+      "distance_estimate_m": 21.627,
+      "host_onnx_inference_ms": 23.385,
+      "detections": 9,
+      "collision_count": 0
+    },
+    {
+      "t": 7.767,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 1.382,
+      "distance_estimate_m": 21.613,
+      "host_onnx_inference_ms": 21.867,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 7.8,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 1.511,
+      "distance_estimate_m": 21.288,
+      "host_onnx_inference_ms": 21.953,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 7.833,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 1.637,
+      "distance_estimate_m": 21.208,
+      "host_onnx_inference_ms": 24.562,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 7.867,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 1.761,
+      "distance_estimate_m": 21.382,
+      "host_onnx_inference_ms": 25.118,
+      "detections": 7,
+      "collision_count": 0
+    },
+    {
+      "t": 7.9,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 1.883,
+      "distance_estimate_m": 21.472,
+      "host_onnx_inference_ms": 25.294,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 7.933,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.004,
+      "distance_estimate_m": 21.203,
+      "host_onnx_inference_ms": 24.244,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 7.967,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.123,
+      "distance_estimate_m": 21.261,
+      "host_onnx_inference_ms": 25.122,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 8.0,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.245,
+      "distance_estimate_m": 21.31,
+      "host_onnx_inference_ms": 25.331,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 8.033,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.344,
+      "distance_estimate_m": 20.553,
+      "host_onnx_inference_ms": 24.946,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 8.067,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.444,
+      "distance_estimate_m": 21.022,
+      "host_onnx_inference_ms": 24.502,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 8.1,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.548,
+      "distance_estimate_m": 20.872,
+      "host_onnx_inference_ms": 25.866,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 8.133,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.654,
+      "distance_estimate_m": 20.594,
+      "host_onnx_inference_ms": 26.331,
+      "detections": 7,
+      "collision_count": 0
+    },
+    {
+      "t": 8.167,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.761,
+      "distance_estimate_m": 20.452,
+      "host_onnx_inference_ms": 26.664,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 8.2,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.869,
+      "distance_estimate_m": 20.516,
+      "host_onnx_inference_ms": 26.276,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 8.233,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 2.977,
+      "distance_estimate_m": 20.557,
+      "host_onnx_inference_ms": 24.329,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 8.267,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.087,
+      "distance_estimate_m": 20.262,
+      "host_onnx_inference_ms": 25.558,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 8.3,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.195,
+      "distance_estimate_m": 20.341,
+      "host_onnx_inference_ms": 24.878,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 8.333,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.301,
+      "distance_estimate_m": 20.353,
+      "host_onnx_inference_ms": 23.418,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 8.367,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.406,
+      "distance_estimate_m": 20.007,
+      "host_onnx_inference_ms": 23.911,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 8.4,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.509,
+      "distance_estimate_m": 20.38,
+      "host_onnx_inference_ms": 24.901,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 8.433,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.61,
+      "distance_estimate_m": 19.848,
+      "host_onnx_inference_ms": 25.299,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 8.467,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.709,
+      "distance_estimate_m": 19.572,
+      "host_onnx_inference_ms": 25.461,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 8.5,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.807,
+      "distance_estimate_m": 19.879,
+      "host_onnx_inference_ms": 25.401,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 8.533,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.903,
+      "distance_estimate_m": 19.685,
+      "host_onnx_inference_ms": 25.435,
+      "detections": 7,
+      "collision_count": 0
+    },
+    {
+      "t": 8.567,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 3.998,
+      "distance_estimate_m": 19.855,
+      "host_onnx_inference_ms": 25.286,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 8.6,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.092,
+      "distance_estimate_m": 19.069,
+      "host_onnx_inference_ms": 25.596,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 8.633,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.186,
+      "distance_estimate_m": 18.942,
+      "host_onnx_inference_ms": 25.21,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 8.667,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.279,
+      "distance_estimate_m": 18.856,
+      "host_onnx_inference_ms": 25.905,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 8.7,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.37,
+      "distance_estimate_m": 18.396,
+      "host_onnx_inference_ms": 24.697,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 8.733,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.462,
+      "distance_estimate_m": 18.27,
+      "host_onnx_inference_ms": 24.67,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 8.767,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.552,
+      "distance_estimate_m": 18.544,
+      "host_onnx_inference_ms": 25.511,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 8.8,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.642,
+      "distance_estimate_m": 18.2,
+      "host_onnx_inference_ms": 26.08,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 8.833,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.731,
+      "distance_estimate_m": 17.938,
+      "host_onnx_inference_ms": 26.005,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 8.867,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.819,
+      "distance_estimate_m": 17.931,
+      "host_onnx_inference_ms": 26.458,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 8.9,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.907,
+      "distance_estimate_m": 17.936,
+      "host_onnx_inference_ms": 25.452,
+      "detections": 9,
+      "collision_count": 0
+    },
+    {
+      "t": 8.933,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 4.994,
+      "distance_estimate_m": 17.619,
+      "host_onnx_inference_ms": 22.446,
+      "detections": 8,
+      "collision_count": 0
+    },
+    {
+      "t": 8.967,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.08,
+      "distance_estimate_m": 17.667,
+      "host_onnx_inference_ms": 25.474,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 9.0,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.163,
+      "distance_estimate_m": 17.506,
+      "host_onnx_inference_ms": 25.065,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 9.033,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.154,
+      "distance_estimate_m": 17.467,
+      "host_onnx_inference_ms": 25.925,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 9.067,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.158,
+      "distance_estimate_m": 16.811,
+      "host_onnx_inference_ms": 25.453,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 9.1,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.173,
+      "distance_estimate_m": 16.808,
+      "host_onnx_inference_ms": 24.923,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 9.133,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.201,
+      "distance_estimate_m": 16.339,
+      "host_onnx_inference_ms": 24.762,
+      "detections": 7,
+      "collision_count": 0
+    },
+    {
+      "t": 9.167,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.239,
+      "distance_estimate_m": 16.273,
+      "host_onnx_inference_ms": 22.121,
+      "detections": 7,
+      "collision_count": 0
+    },
+    {
+      "t": 9.2,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.286,
+      "distance_estimate_m": 16.603,
+      "host_onnx_inference_ms": 22.078,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 9.233,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.339,
+      "distance_estimate_m": 15.896,
+      "host_onnx_inference_ms": 24.405,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 9.267,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.397,
+      "distance_estimate_m": 15.732,
+      "host_onnx_inference_ms": 24.803,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 9.3,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.46,
+      "distance_estimate_m": 15.31,
+      "host_onnx_inference_ms": 24.901,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 9.333,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.525,
+      "distance_estimate_m": 15.492,
+      "host_onnx_inference_ms": 24.702,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 9.367,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.594,
+      "distance_estimate_m": 15.228,
+      "host_onnx_inference_ms": 25.396,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 9.4,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.664,
+      "distance_estimate_m": 15.166,
+      "host_onnx_inference_ms": 25.55,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 9.433,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.735,
+      "distance_estimate_m": 14.96,
+      "host_onnx_inference_ms": 22.975,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 9.467,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.807,
+      "distance_estimate_m": 14.739,
+      "host_onnx_inference_ms": 22.023,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 9.5,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.881,
+      "distance_estimate_m": 14.537,
+      "host_onnx_inference_ms": 23.603,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 9.533,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.954,
+      "distance_estimate_m": 14.535,
+      "host_onnx_inference_ms": 24.957,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 9.567,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.028,
+      "distance_estimate_m": 14.672,
+      "host_onnx_inference_ms": 24.823,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 9.6,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.102,
+      "distance_estimate_m": 14.513,
+      "host_onnx_inference_ms": 24.539,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 9.633,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.176,
+      "distance_estimate_m": 14.311,
+      "host_onnx_inference_ms": 25.122,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 9.667,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.25,
+      "distance_estimate_m": 14.11,
+      "host_onnx_inference_ms": 21.794,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 9.7,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.323,
+      "distance_estimate_m": 13.9,
+      "host_onnx_inference_ms": 22.582,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 9.733,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.397,
+      "distance_estimate_m": 13.488,
+      "host_onnx_inference_ms": 25.288,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 9.767,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.47,
+      "distance_estimate_m": 13.372,
+      "host_onnx_inference_ms": 26.447,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 9.8,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.543,
+      "distance_estimate_m": 12.892,
+      "host_onnx_inference_ms": 26.357,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 9.833,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.615,
+      "distance_estimate_m": 12.616,
+      "host_onnx_inference_ms": 23.249,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 9.867,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.687,
+      "distance_estimate_m": 12.618,
+      "host_onnx_inference_ms": 23.131,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 9.9,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.759,
+      "distance_estimate_m": 12.455,
+      "host_onnx_inference_ms": 24.278,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 9.933,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.83,
+      "distance_estimate_m": 12.116,
+      "host_onnx_inference_ms": 24.892,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 9.967,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.897,
+      "distance_estimate_m": 11.935,
+      "host_onnx_inference_ms": 25.106,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 10.0,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.944,
+      "distance_estimate_m": 11.64,
+      "host_onnx_inference_ms": 26.423,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 10.033,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.961,
+      "distance_estimate_m": 11.389,
+      "host_onnx_inference_ms": 25.432,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 10.067,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.935,
+      "distance_estimate_m": 11.231,
+      "host_onnx_inference_ms": 25.474,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 10.1,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.884,
+      "distance_estimate_m": 10.791,
+      "host_onnx_inference_ms": 24.353,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 10.133,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.812,
+      "distance_estimate_m": 10.605,
+      "host_onnx_inference_ms": 22.911,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 10.167,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.726,
+      "distance_estimate_m": 10.4,
+      "host_onnx_inference_ms": 24.493,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 10.2,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.628,
+      "distance_estimate_m": 10.085,
+      "host_onnx_inference_ms": 25.487,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 10.233,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.52,
+      "distance_estimate_m": 9.895,
+      "host_onnx_inference_ms": 24.82,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 10.267,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.405,
+      "distance_estimate_m": 9.713,
+      "host_onnx_inference_ms": 25.19,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 10.3,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.285,
+      "distance_estimate_m": 9.329,
+      "host_onnx_inference_ms": 22.37,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 10.333,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.159,
+      "distance_estimate_m": 9.212,
+      "host_onnx_inference_ms": 24.183,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 10.367,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.029,
+      "distance_estimate_m": 33.665,
+      "host_onnx_inference_ms": 24.872,
+      "detections": 7,
+      "collision_count": 0
+    },
+    {
+      "t": 10.4,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.908,
+      "distance_estimate_m": 32.217,
+      "host_onnx_inference_ms": 25.226,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 10.433,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.819,
+      "distance_estimate_m": 32.581,
+      "host_onnx_inference_ms": 24.675,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 10.467,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.756,
+      "distance_estimate_m": 33.045,
+      "host_onnx_inference_ms": 25.191,
+      "detections": 7,
+      "collision_count": 0
+    },
+    {
+      "t": 10.5,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.716,
+      "distance_estimate_m": 31.645,
+      "host_onnx_inference_ms": 25.405,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 10.533,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.698,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 26.691,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 10.567,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.696,
+      "distance_estimate_m": 31.032,
+      "host_onnx_inference_ms": 26.307,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 10.6,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.71,
+      "distance_estimate_m": 32.011,
+      "host_onnx_inference_ms": 26.095,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 10.633,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.736,
+      "distance_estimate_m": 31.374,
+      "host_onnx_inference_ms": 22.882,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 10.667,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.771,
+      "distance_estimate_m": 30.616,
+      "host_onnx_inference_ms": 24.121,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 10.7,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.816,
+      "distance_estimate_m": 31.744,
+      "host_onnx_inference_ms": 25.033,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 10.733,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.866,
+      "distance_estimate_m": 31.152,
+      "host_onnx_inference_ms": 24.928,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 10.767,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.922,
+      "distance_estimate_m": 30.443,
+      "host_onnx_inference_ms": 23.077,
+      "detections": 8,
+      "collision_count": 0
+    },
+    {
+      "t": 10.8,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 5.982,
+      "distance_estimate_m": 30.792,
+      "host_onnx_inference_ms": 25.831,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 10.833,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.045,
+      "distance_estimate_m": 29.733,
+      "host_onnx_inference_ms": 26.738,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 10.867,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.11,
+      "distance_estimate_m": 31.175,
+      "host_onnx_inference_ms": 26.309,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 10.9,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.178,
+      "distance_estimate_m": 29.797,
+      "host_onnx_inference_ms": 26.841,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 10.933,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.246,
+      "distance_estimate_m": 30.975,
+      "host_onnx_inference_ms": 25.783,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 10.967,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.316,
+      "distance_estimate_m": 30.069,
+      "host_onnx_inference_ms": 26.232,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 11.0,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.386,
+      "distance_estimate_m": 29.595,
+      "host_onnx_inference_ms": 26.609,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 11.033,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.457,
+      "distance_estimate_m": 29.049,
+      "host_onnx_inference_ms": 22.379,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 11.067,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.528,
+      "distance_estimate_m": 29.739,
+      "host_onnx_inference_ms": 25.539,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 11.1,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.599,
+      "distance_estimate_m": 28.356,
+      "host_onnx_inference_ms": 26.279,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 11.133,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.67,
+      "distance_estimate_m": 27.305,
+      "host_onnx_inference_ms": 23.043,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 11.167,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.741,
+      "distance_estimate_m": 27.842,
+      "host_onnx_inference_ms": 23.2,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 11.2,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.812,
+      "distance_estimate_m": 30.834,
+      "host_onnx_inference_ms": 22.938,
+      "detections": 7,
+      "collision_count": 0
+    },
+    {
+      "t": 11.233,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.882,
+      "distance_estimate_m": 27.084,
+      "host_onnx_inference_ms": 22.086,
+      "detections": 7,
+      "collision_count": 0
+    },
+    {
+      "t": 11.267,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 6.953,
+      "distance_estimate_m": 49.152,
+      "host_onnx_inference_ms": 22.555,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 11.3,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 7.023,
+      "distance_estimate_m": 26.997,
+      "host_onnx_inference_ms": 22.67,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 11.333,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 7.092,
+      "distance_estimate_m": 26.607,
+      "host_onnx_inference_ms": 25.125,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 11.367,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 7.162,
+      "distance_estimate_m": 26.354,
+      "host_onnx_inference_ms": 25.935,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 11.4,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 7.23,
+      "distance_estimate_m": 25.723,
+      "host_onnx_inference_ms": 25.786,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 11.433,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 7.299,
+      "distance_estimate_m": 25.358,
+      "host_onnx_inference_ms": 23.177,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 11.467,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 7.367,
+      "distance_estimate_m": 24.919,
+      "host_onnx_inference_ms": 23.716,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 11.5,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 7.435,
+      "distance_estimate_m": 24.971,
+      "host_onnx_inference_ms": 24.399,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 11.533,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 7.502,
+      "distance_estimate_m": 24.163,
+      "host_onnx_inference_ms": 25.884,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 11.567,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 7.569,
+      "distance_estimate_m": 25.233,
+      "host_onnx_inference_ms": 25.958,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 11.6,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 7.636,
+      "distance_estimate_m": 25.017,
+      "host_onnx_inference_ms": 26.05,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 11.633,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 7.702,
+      "distance_estimate_m": 24.154,
+      "host_onnx_inference_ms": 26.237,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 11.667,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 7.767,
+      "distance_estimate_m": 24.478,
+      "host_onnx_inference_ms": 25.642,
+      "detections": 4,
+      "collision_count": 0
+    },
+    {
+      "t": 11.7,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 7.833,
+      "distance_estimate_m": 23.218,
+      "host_onnx_inference_ms": 24.79,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 11.733,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 7.898,
+      "distance_estimate_m": 23.373,
+      "host_onnx_inference_ms": 25.105,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 11.767,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 7.962,
+      "distance_estimate_m": 23.859,
+      "host_onnx_inference_ms": 24.861,
+      "detections": 5,
+      "collision_count": 0
+    },
+    {
+      "t": 11.8,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 8.026,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 24.872,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 11.833,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 8.09,
+      "distance_estimate_m": 22.405,
+      "host_onnx_inference_ms": 25.357,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 11.867,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 8.153,
+      "distance_estimate_m": 22.158,
+      "host_onnx_inference_ms": 24.978,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 11.9,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 8.216,
+      "distance_estimate_m": 21.746,
+      "host_onnx_inference_ms": 25.31,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 11.933,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 8.278,
+      "distance_estimate_m": 21.35,
+      "host_onnx_inference_ms": 24.905,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 11.967,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 8.34,
+      "distance_estimate_m": 21.772,
+      "host_onnx_inference_ms": 24.837,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 12.0,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 8.402,
+      "distance_estimate_m": 21.617,
+      "host_onnx_inference_ms": 24.838,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 12.033,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 8.463,
+      "distance_estimate_m": 21.429,
+      "host_onnx_inference_ms": 25.118,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 12.067,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 8.524,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 24.969,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 12.1,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 8.584,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 24.671,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 12.133,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 8.644,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 26.093,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 12.167,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 8.704,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 25.33,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 12.2,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 8.763,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 25.837,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 12.233,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 8.822,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 24.512,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 12.267,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 8.881,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 25.456,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 12.3,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 8.939,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 25.538,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 12.333,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 8.996,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 25.007,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 12.367,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.054,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 24.98,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 12.4,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.111,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 25.556,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 12.433,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.167,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 25.554,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 12.467,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.223,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 25.687,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 12.5,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.279,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 25.8,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 12.533,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.334,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 26.045,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 12.567,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.389,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 26.209,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 12.6,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.444,
+      "distance_estimate_m": 52.724,
+      "host_onnx_inference_ms": 25.552,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 12.633,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.498,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 22.315,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 12.667,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.552,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 23.281,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 12.7,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.6,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 22.45,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 12.733,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.624,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 22.255,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 12.767,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.629,
+      "distance_estimate_m": 44.474,
+      "host_onnx_inference_ms": 23.264,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 12.8,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.619,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 25.06,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 12.833,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.599,
+      "distance_estimate_m": 44.632,
+      "host_onnx_inference_ms": 26.0,
+      "detections": 6,
+      "collision_count": 0
+    },
+    {
+      "t": 12.867,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.57,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 24.676,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 12.9,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.536,
+      "distance_estimate_m": 42.071,
+      "host_onnx_inference_ms": 25.769,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 12.933,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.498,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 25.837,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 12.967,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.46,
+      "distance_estimate_m": 47.465,
+      "host_onnx_inference_ms": 25.542,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 13.0,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.436,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 25.417,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 13.033,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.43,
+      "distance_estimate_m": 40.133,
+      "host_onnx_inference_ms": 25.583,
+      "detections": 3,
+      "collision_count": 0
+    },
+    {
+      "t": 13.067,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.437,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 25.855,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 13.1,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.455,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 25.88,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 13.133,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.482,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 25.535,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 13.167,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.515,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 26.361,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 13.2,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.547,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 25.499,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 13.233,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.56,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 26.145,
+      "detections": 2,
+      "collision_count": 0
+    },
+    {
+      "t": 13.267,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.557,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 25.463,
+      "detections": 1,
+      "collision_count": 0
+    },
+    {
+      "t": 13.3,
+      "state": "RUN",
+      "action": "SetOutput",
+      "speed_mps": 9.542,
+      "distance_estimate_m": 60.0,
+      "host_onnx_inference_ms": 26.6,
+      "detections": 2,
+      "collision_count": 0
+    }
+  ],
+  "collisions": 0,
+  "collision_events": 0,
+  "minimum_person_clearance_m": 2.223,
+  "person_clearance_pass": true,
+  "video": "/home/huhu/tgoskits-very_special/tmp/task123-video-storyboard/sim/out/carla_five_scenarios/02-pedestrian-crossing_vision.mp4",
+  "board_reference": {
+    "inference_ms": 62.6,
+    "control_status_ms": 55.0,
+    "inference_status_ms": 255.2,
+    "source": "本次真实 RK3588 / RKNN / T2N1 / Zephyr"
+  }
+}

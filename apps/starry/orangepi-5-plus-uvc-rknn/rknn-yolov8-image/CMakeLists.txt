@@ -49,6 +49,17 @@ add_executable(uvc_capture_mjpeg_selftest
     cpp/uvc_capture_mjpeg_selftest.cc
 )
 
+add_executable(detection_validation_selftest
+    cpp/detection_validation.cc
+    cpp/detection_validation_selftest.cc
+)
+
+target_include_directories(detection_validation_selftest PRIVATE
+    ${RKNN_IMAGE_ROOT}/cpp
+    ${RKNN_IMAGE_ROOT}/utils
+    ${LIBRKNNRT_INCLUDES}
+)
+
 target_include_directories(rknn_yolov8_image PRIVATE
     ${RKNN_IMAGE_ROOT}/cpp
     ${RKNN_IMAGE_ROOT}/utils
@@ -92,6 +103,7 @@ endif()
 
 add_test(NAME uvc_capture_layout_selftest COMMAND uvc_capture_layout_selftest)
 add_test(NAME uvc_capture_mjpeg_selftest COMMAND uvc_capture_mjpeg_selftest)
+add_test(NAME detection_validation_selftest COMMAND detection_validation_selftest)
 
 target_link_libraries(rknn_yolov8_image
     imageutils

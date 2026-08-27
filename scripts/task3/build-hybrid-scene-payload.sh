@@ -12,6 +12,7 @@ busybox="${BUSYBOX_STATIC:-}"
 task2_binary="${TASK2_BINARY:-}"
 rknn_bundle="${RKNN_BUNDLE:-}"
 manifest="$repo_root/scripts/task3/task3-continuous-manifest.tsv"
+scene_images="${TASK3_SCENE_IMAGES:-$repo_root/scripts/task3/hybrid-scene-images.txt}"
 
 usage() {
     printf 'usage: BUSYBOX_STATIC=... TASK2_BINARY=... %s <fixed|rknn> <output.cpio>\n' \
@@ -85,24 +86,39 @@ if [[ "$mode" == rknn ]]; then
     install -d "$root_dir/rknn"
     cp -a "$rknn_bundle/." "$root_dir/rknn/"
     install -d "$root_dir/rknn/validation"
-    install -m 0644 "$repo_root/scripts/task3/hybrid-scene-images.txt" \
+    if [[ ! -f "$scene_images" ]]; then
+        printf 'error: Task 3 scene image list is missing: %s\n' "$scene_images" >&2
+        exit 1
+    fi
+    install -m 0644 "$scene_images" \
         "$root_dir/rknn/validation/scene-images.txt"
 
-    while IFS=$'\t' read -r _sequence _image_id event _source _source_frame \
-        _timestamp_ms jpeg jpeg_sha256 _ppm _ppm_sha256 _expected_class \
-        _truth_target _expected_decision; do
-        [[ -z "$_sequence" || "$_sequence" == \#* || "$event" == reset ]] && continue
-        image="$root_dir/rknn/validation/$jpeg"
-        if [[ ! -f "$image" ]]; then
-            printf 'error: RKNN validation image is missing: %s\n' "$jpeg" >&2
-            exit 1
-        fi
-        actual_sha256="$(sha256sum "$image" | awk '{print $1}')"
-        if [[ "$actual_sha256" != "$jpeg_sha256" ]]; then
-            printf 'error: RKNN validation image hash mismatch for %s\n' "$jpeg" >&2
-            exit 1
-        fi
-    done < "$manifest"
+    if [[ "$scene_images" == "$repo_root/scripts/task3/hybrid-scene-images.txt" ]]; then
+        while IFS=$'\t' read -r _sequence _image_id event _source _source_frame \
+            _timestamp_ms jpeg jpeg_sha256 _ppm _ppm_sha256 _expected_class \
+            _truth_target _expected_decision; do
+            [[ -z "$_sequence" || "$_sequence" == \#* || "$event" == reset ]] && continue
+            image="$root_dir/rknn/validation/$jpeg"
+            if [[ ! -f "$image" ]]; then
+                printf 'error: RKNN validation image is missing: %s\n' "$jpeg" >&2
+                exit 1
+            fi
+            actual_sha256="$(sha256sum "$image" | awk '{print $1}')"
+            if [[ "$actual_sha256" != "$jpeg_sha256" ]]; then
+                printf 'error: RKNN validation image hash mismatch for %s\n' "$jpeg" >&2
+                exit 1
+            fi
+        done < "$manifest"
+    else
+        while IFS= read -r relative; do
+            [[ -z "$relative" || "$relative" == \#* ]] && continue
+            if [[ "$relative" != validation/* || ! -f "$root_dir/rknn/$relative" ]]; then
+                printf 'error: custom RKNN scene image is missing or outside validation/: %s\n' \
+                    "$relative" >&2
+                exit 1
+            fi
+        done < "$scene_images"
+    fi
 fi
 
 mkdir -p "$(dirname "$output")"

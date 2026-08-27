@@ -60,6 +60,12 @@ bool WriteExpectedFile(const std::string &path, const ExpectedFile &expected, st
 
 std::vector<DetectionEntry> ConvertDetections(const object_detect_result_list &results);
 
+// Select the detection published to the safety controller. A hazard in the
+// forward safety corridor takes precedence over a higher-confidence object
+// that cannot affect vehicle motion.
+const DetectionEntry *SelectControlDetection(const std::vector<DetectionEntry> &detections,
+                                             int image_width, int image_height);
+
 double DetectionIoU(const DetectionEntry &a, const DetectionEntry &b);
 bool ValidateDetections(const ExpectedImage &expected, const std::vector<DetectionEntry> &actual,
                         std::vector<std::string> *messages);

@@ -1,0 +1,94 @@
+{
+  "source": "本次真实 RK3588 / RKNN / T2N1 / Zephyr",
+  "scheduler": "FP-RR",
+  "fit_sha256": "ac1111be9057516c40ad46644e4468d4032c4fff476761fb2d4190a487c2b583",
+  "log": "logs/carla-five-board-run-final.log",
+  "topology": {
+    "starry_vcpu0_pcpu": "0x200",
+    "starry_vcpu0_role": "RKNN/NPU",
+    "starry_vcpu1_pcpu": "0x100",
+    "starry_vcpu1_role": "T2N1 communication",
+    "zephyr_vcpu0_pcpu": "0x100",
+    "zephyr_priority": 90,
+    "starry_priority": 89,
+    "npu_owner": "StarryOS"
+  },
+  "summary": {
+    "images": 15,
+    "statuses": 20,
+    "npu_run_ms_mean": 18.13,
+    "pipeline_inference_ms_mean": 62.60,
+    "validation": "PASS",
+    "controller_complete": true,
+    "producer_rc": 0
+  },
+  "scenarios": {
+    "01-parked-car": {
+      "detected_class": "car",
+      "class_id": 2,
+      "confidence": 0.851,
+      "npu_run_ms": 42.03,
+      "pipeline_inference_ms": 102.49,
+      "stop_control_status_ms": 150,
+      "inference_status_ms": 255.020,
+      "stop_hold_ms": 2007,
+      "reset_status_ms": 26,
+      "stop_status": "Stopped",
+      "reset_status": "Active"
+    },
+    "02-pedestrian-crossing": {
+      "detected_class": "person",
+      "class_id": 0,
+      "confidence": 0.509,
+      "npu_run_ms": 16.27,
+      "pipeline_inference_ms": 60.31,
+      "stop_control_status_ms": 61,
+      "inference_status_ms": 257.112,
+      "stop_hold_ms": 2006,
+      "reset_status_ms": 26,
+      "stop_status": "Stopped",
+      "reset_status": "Active"
+    },
+    "03-cut-in-car": {
+      "detected_class": "truck",
+      "class_id": 7,
+      "confidence": 0.666,
+      "npu_run_ms": 16.34,
+      "pipeline_inference_ms": 60.04,
+      "stop_control_status_ms": 57,
+      "inference_status_ms": 253.346,
+      "stop_hold_ms": 2000,
+      "reset_status_ms": 27,
+      "stop_status": "Stopped",
+      "reset_status": "Active",
+      "input_note": "CARLA 原始危险帧的前向安全 ROI 数字变焦"
+    },
+    "04-occluded-pedestrian": {
+      "detected_class": "umbrella/occlusion",
+      "class_id": 25,
+      "confidence": 0.574,
+      "npu_run_ms": 16.38,
+      "pipeline_inference_ms": 60.61,
+      "stop_control_status_ms": 58,
+      "inference_status_ms": 252.828,
+      "stop_hold_ms": 2009,
+      "reset_status_ms": 26,
+      "stop_status": "Stopped",
+      "reset_status": "Active",
+      "decision_note": "连续不可跟踪观测触发 fail-safe STOP"
+    },
+    "05-busy-mixed-traffic": {
+      "detected_class": "car",
+      "class_id": 2,
+      "confidence": 0.416,
+      "npu_run_ms": 16.07,
+      "pipeline_inference_ms": 60.29,
+      "stop_control_status_ms": 61,
+      "inference_status_ms": 257.754,
+      "stop_hold_ms": 2001,
+      "reset_status_ms": 26,
+      "stop_status": "Stopped",
+      "reset_status": "Active"
+    }
+  }
+}

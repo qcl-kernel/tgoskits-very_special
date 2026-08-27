@@ -172,6 +172,8 @@ const TASK3_YOLO_MAX_STEP: &str = match option_env!("TASK3_YOLO_MAX_TARGET_STEP"
     Some(value) => value,
     None => "100",
 };
+const TASK3_CARLA_FIVE_SCENES: bool = option_env!("TASK3_CARLA_FIVE_SCENES").is_some();
+const CARLA_STOP_CONFIRM_MS: u64 = 2_000;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum ModelKind {
@@ -290,7 +292,7 @@ mod scenario {
     pub const MIN_CYCLE_MS: u64 = 100;
 }
 
-const SCENE_EVENT_IDS: [&str; 12] = [
+const DEFAULT_SCENE_EVENT_IDS: &[&str] = &[
     "road-0375",
     "road-0380",
     "road-0385",
@@ -304,6 +306,52 @@ const SCENE_EVENT_IDS: [&str; 12] = [
     "explicit-reset",
     "road-0410",
 ];
+
+const CARLA_SCENE_EVENT_IDS: &[&str] = &[
+    "s01-hazard-a",
+    "s01-hazard-b",
+    "s01-reset",
+    "s01-clear",
+    "s02-hazard-a",
+    "s02-hazard-b",
+    "s02-reset",
+    "s02-clear",
+    "s03-hazard-a",
+    "s03-hazard-b",
+    "s03-reset",
+    "s03-clear",
+    "s04-hazard-a",
+    "s04-hazard-b",
+    "s04-reset",
+    "s04-clear",
+    "s05-hazard-a",
+    "s05-hazard-b",
+    "s05-reset",
+    "s05-clear",
+];
+
+fn scene_event_ids() -> &'static [&'static str] {
+    if TASK3_CARLA_FIVE_SCENES {
+        CARLA_SCENE_EVENT_IDS
+    } else {
+        DEFAULT_SCENE_EVENT_IDS
+    }
+}
+
+fn is_scene_reset(event_id: &str) -> bool {
+    event_id.ends_with("-reset")
+}
+
+fn scene_image_ordinal(event_cursor: usize) -> usize {
+    image_ordinal_for(scene_event_ids(), event_cursor)
+}
+
+fn image_ordinal_for(event_ids: &[&str], event_cursor: usize) -> usize {
+    event_ids[..=event_cursor]
+        .iter()
+        .filter(|event_id| !is_scene_reset(event_id))
+        .count()
+}
 
 #[derive(Clone, Copy, Debug)]
 struct SceneCommand {
@@ -685,6 +733,7 @@ struct Controller {
     video_safety: task3_model::video_safety::VideoSafetyController,
     pending_scene: Option<PendingScene>,
     scene_complete: bool,
+    scene_stop_at_ms: Option<u64>,
     #[cfg(not(feature = "arceos"))]
     yolo_worker: Option<YoloInferenceWorker>,
 }
@@ -771,10 +820,15 @@ impl Controller {
             #[cfg(not(feature = "arceos"))]
             video_safety: task3_model::video_safety::VideoSafetyController::new(
                 500,
-                task3_model::video_safety::VideoSafetyPolicy::task3_default(),
+                if TASK3_CARLA_FIVE_SCENES {
+                    task3_model::video_safety::VideoSafetyPolicy::carla_five_scenes()
+                } else {
+                    task3_model::video_safety::VideoSafetyPolicy::task3_default()
+                },
             ),
             pending_scene: None,
             scene_complete: false,
+            scene_stop_at_ms: None,
             #[cfg(not(feature = "arceos"))]
             yolo_worker: None,
         }
@@ -953,9 +1007,9 @@ impl Controller {
 
     fn fixed_scene_command(&mut self) -> Option<SceneCommand> {
         let event_index = self.scene_event_cursor + 1;
-        let event_id = *SCENE_EVENT_IDS.get(self.scene_event_cursor)?;
+        let event_id = *scene_event_ids().get(self.scene_event_cursor)?;
         let timestamp_ns = monotonic_ns();
-        let (action, value, outcome) = if event_index == 11 {
+        let (action, value, outcome) = if is_scene_reset(event_id) {
             (ControlAction::Reset, 0, "reset")
         } else {
             (ControlAction::SetOutput, 500, "fixed")
@@ -979,10 +1033,17 @@ impl Controller {
         now_ms: u64,
     ) -> Result<Option<SceneCommand>, &'static str> {
         let event_index = self.scene_event_cursor + 1;
-        let Some(&event_id) = SCENE_EVENT_IDS.get(self.scene_event_cursor) else {
+        let Some(&event_id) = scene_event_ids().get(self.scene_event_cursor) else {
             return Ok(None);
         };
-        if event_index == 11 {
+        if is_scene_reset(event_id) {
+            if TASK3_CARLA_FIVE_SCENES
+                && self.scene_stop_at_ms.is_some_and(|stopped_at| {
+                    now_ms.saturating_sub(stopped_at) < CARLA_STOP_CONFIRM_MS
+                })
+            {
+                return Ok(None);
+            }
             let timestamp_ns = monotonic_ns();
             let decision = self
                 .video_safety
@@ -993,6 +1054,7 @@ impl Controller {
             ) {
                 return Err("continuous scene reset did not reset the safety state");
             }
+            self.scene_stop_at_ms = None;
             return Ok(Some(SceneCommand {
                 event_index,
                 event_id,
@@ -1019,11 +1081,7 @@ impl Controller {
         if input.generation < self.last_rknn_generation {
             return Err("RKNN generation moved backwards");
         }
-        let image_ordinal = if event_index < 11 {
-            event_index
-        } else {
-            event_index - 1
-        };
+        let image_ordinal = scene_image_ordinal(self.scene_event_cursor);
         if input.generation != self.last_rknn_generation + 1
             || usize::from(input.event_index) != image_ordinal
             || input.event_id != event_id
@@ -1063,7 +1121,10 @@ impl Controller {
             task3_model::video_safety::SceneDecision::Stop {
                 newly_latched: true,
                 ..
-            } => (ControlAction::Stop, 0, "stop-hazard"),
+            } => {
+                self.scene_stop_at_ms = Some(now_ms);
+                (ControlAction::Stop, 0, "stop-hazard")
+            }
             task3_model::video_safety::SceneDecision::Stop {
                 newly_latched: false,
                 ..
@@ -1307,11 +1368,11 @@ impl Controller {
                     status.last_control_request()
                 );
             }
-            if scene.event_index == SCENE_EVENT_IDS.len() {
+            if scene.event_index == scene_event_ids().len() {
                 println!(
                     "TASK3_EXPERIMENT_COMPLETE source={} events={} statuses={} elapsed_ms={now_ms}",
                     self.model.name(),
-                    SCENE_EVENT_IDS.len(),
+                    scene_event_ids().len(),
                     self.sample_count
                 );
                 self.scene_complete = true;
@@ -1751,5 +1812,22 @@ mod tests {
     fn execution_mode_rejects_unknown_or_extra_arguments() {
         assert!(ExecutionMode::parse(Some("unknown"), false).is_err());
         assert!(ExecutionMode::parse(Some("model-loop"), true).is_err());
+    }
+
+    #[test]
+    fn carla_scene_plan_has_one_reset_and_three_images_per_scene() {
+        assert_eq!(CARLA_SCENE_EVENT_IDS.len(), 20);
+        assert_eq!(
+            CARLA_SCENE_EVENT_IDS
+                .iter()
+                .filter(|event_id| is_scene_reset(event_id))
+                .count(),
+            5
+        );
+        assert_eq!(image_ordinal_for(CARLA_SCENE_EVENT_IDS, 0), 1);
+        assert_eq!(image_ordinal_for(CARLA_SCENE_EVENT_IDS, 1), 2);
+        assert_eq!(image_ordinal_for(CARLA_SCENE_EVENT_IDS, 2), 2);
+        assert_eq!(image_ordinal_for(CARLA_SCENE_EVENT_IDS, 3), 3);
+        assert_eq!(image_ordinal_for(CARLA_SCENE_EVENT_IDS, 19), 15);
     }
 }

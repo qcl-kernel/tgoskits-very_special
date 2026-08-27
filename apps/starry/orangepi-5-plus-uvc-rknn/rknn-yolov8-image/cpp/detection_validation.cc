@@ -426,6 +426,45 @@ std::vector<DetectionEntry> ConvertDetections(const object_detect_result_list &r
     return detections;
 }
 
+const DetectionEntry *SelectControlDetection(const std::vector<DetectionEntry> &detections,
+                                             int image_width, int image_height)
+{
+    if (image_width <= 0 || image_height <= 0) {
+        return NULL;
+    }
+
+    const DetectionEntry *best = NULL;
+    const DetectionEntry *best_hazard = NULL;
+    const int64_t image_area = (int64_t)image_width * image_height;
+    for (size_t i = 0; i < detections.size(); i++) {
+        const DetectionEntry &detection = detections[i];
+        if (best == NULL || detection.score_q10000 > best->score_q10000) {
+            best = &detection;
+        }
+
+        const int64_t center_x_twice = (int64_t)detection.left + detection.right;
+        const int64_t center_y_twice = (int64_t)detection.top + detection.bottom;
+        const bool in_forward_corridor =
+            center_x_twice * 1000 >= (int64_t)image_width * 2 * 350 &&
+            center_x_twice * 1000 <= (int64_t)image_width * 2 * 650 &&
+            center_y_twice * 1000 >= (int64_t)image_height * 2 * 300;
+        const int64_t box_area =
+            (int64_t)std::max(0, detection.right - detection.left) *
+            std::max(0, detection.bottom - detection.top);
+        const bool is_vehicle =
+            detection.cls_id == 2 || detection.cls_id == 5 || detection.cls_id == 7;
+        const bool is_hazard =
+            detection.cls_id == 43 || detection.cls_id == 76 ||
+            (detection.cls_id == 0 && in_forward_corridor) ||
+            (is_vehicle && in_forward_corridor && box_area * 1000 >= image_area * 10);
+        if (is_hazard &&
+            (best_hazard == NULL || detection.score_q10000 > best_hazard->score_q10000)) {
+            best_hazard = &detection;
+        }
+    }
+    return best_hazard != NULL ? best_hazard : best;
+}
+
 double DetectionIoU(const DetectionEntry &a, const DetectionEntry &b)
 {
     const int left = std::max(a.left, b.left);

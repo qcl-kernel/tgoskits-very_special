@@ -500,12 +500,8 @@ static bool publish_control_decision(const Options &options, uint64_t generation
     if (extension != std::string::npos) {
         event_id.resize(extension);
     }
-    const rknn_validation::DetectionEntry *best = NULL;
-    for (size_t i = 0; i < detections.size(); i++) {
-        if (best == NULL || detections[i].score_q10000 > best->score_q10000) {
-            best = &detections[i];
-        }
-    }
+    const rknn_validation::DetectionEntry *best =
+        rknn_validation::SelectControlDetection(detections, image_width, image_height);
     std::string temporary_path = std::string(options.control_output_path) + ".tmp";
     FILE *file = fopen(temporary_path.c_str(), "w");
     if (file == NULL) {

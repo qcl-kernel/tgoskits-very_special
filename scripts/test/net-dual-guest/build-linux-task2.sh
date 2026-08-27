@@ -52,6 +52,7 @@ build_role() {
         ${TASK3_YOLO_MAX_TARGET_STEP:+TASK3_YOLO_MAX_TARGET_STEP="$TASK3_YOLO_MAX_TARGET_STEP"} \
         ${TASK3_RKNN_CONTROL_PATH:+TASK3_RKNN_CONTROL_PATH="$TASK3_RKNN_CONTROL_PATH"} \
         ${TASK3_RKNN_ACK_PATH:+TASK3_RKNN_ACK_PATH="$TASK3_RKNN_ACK_PATH"} \
+        ${TASK3_CARLA_FIVE_SCENES:+TASK3_CARLA_FIVE_SCENES="$TASK3_CARLA_FIVE_SCENES"} \
         NCNN_PREFIX="$ncnn_prefix" \
         CXX_aarch64_unknown_linux_musl="$cross_cxx" \
         AR_aarch64_unknown_linux_musl="$cross_ar" \

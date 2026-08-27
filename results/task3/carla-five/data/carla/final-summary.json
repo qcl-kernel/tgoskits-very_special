@@ -1,0 +1,685 @@
+[
+  {
+    "scenario": "01-parked-car",
+    "arms": {
+      "baseline": {
+        "collisions": 1,
+        "minimum_person_clearance_m": null,
+        "person_clearance_pass": true,
+        "states": [
+          "RUN",
+          "COLLIDED"
+        ],
+        "events": [
+          {
+            "t": 0.033,
+            "state": "RUN",
+            "action": "SetOutput(500)",
+            "speed_mps": 0.327
+          },
+          {
+            "t": 4.067,
+            "state": "COLLIDED",
+            "action": "SetOutput(500)",
+            "speed_mps": 1.769
+          }
+        ],
+        "host_onnx_inference_ms_mean": null,
+        "board_reference": {
+          "detected_class": "car",
+          "class_id": 2,
+          "confidence": 0.851,
+          "npu_run_ms": 42.03,
+          "pipeline_inference_ms": 102.49,
+          "stop_control_status_ms": 150,
+          "inference_status_ms": 255.02,
+          "stop_hold_ms": 2007,
+          "reset_status_ms": 26,
+          "stop_status": "Stopped",
+          "reset_status": "Active"
+        },
+        "board_run": {
+          "detected_class": "car",
+          "class_id": 2,
+          "confidence": 0.851,
+          "npu_run_ms": 42.03,
+          "pipeline_inference_ms": 102.49,
+          "stop_control_status_ms": 150,
+          "inference_status_ms": 255.02,
+          "stop_hold_ms": 2007,
+          "reset_status_ms": 26,
+          "stop_status": "Stopped",
+          "reset_status": "Active"
+        },
+        "video": "/home/huhu/tgoskits-very_special/tmp/task123-video-storyboard/sim/out/carla_five_scenarios/01-parked-car_baseline.mp4"
+      },
+      "vision": {
+        "collisions": 0,
+        "minimum_person_clearance_m": null,
+        "person_clearance_pass": true,
+        "states": [
+          "RUN",
+          "STOP",
+          "CONFIRM",
+          "RESET",
+          "RESUME",
+          "RUN"
+        ],
+        "events": [
+          {
+            "t": 0.033,
+            "state": "RUN",
+            "action": "SetOutput",
+            "speed_mps": 0.327
+          },
+          {
+            "t": 5.067,
+            "state": "STOP",
+            "action": "Stop",
+            "speed_mps": 6.638
+          },
+          {
+            "t": 7.3,
+            "state": "CONFIRM",
+            "action": "SetOutput",
+            "speed_mps": 0.086
+          },
+          {
+            "t": 9.3,
+            "state": "RESET",
+            "action": "Reset",
+            "speed_mps": 0.3
+          },
+          {
+            "t": 9.333,
+            "state": "RESUME",
+            "action": "SetOutput",
+            "speed_mps": 0.0
+          },
+          {
+            "t": 9.367,
+            "state": "RUN",
+            "action": "SetOutput",
+            "speed_mps": 0.078
+          }
+        ],
+        "host_onnx_inference_ms_mean": 23.446,
+        "board_reference": {
+          "detected_class": "car",
+          "class_id": 2,
+          "confidence": 0.851,
+          "npu_run_ms": 42.03,
+          "pipeline_inference_ms": 102.49,
+          "stop_control_status_ms": 150,
+          "inference_status_ms": 255.02,
+          "stop_hold_ms": 2007,
+          "reset_status_ms": 26,
+          "stop_status": "Stopped",
+          "reset_status": "Active"
+        },
+        "board_run": {
+          "detected_class": "car",
+          "class_id": 2,
+          "confidence": 0.851,
+          "npu_run_ms": 42.03,
+          "pipeline_inference_ms": 102.49,
+          "stop_control_status_ms": 150,
+          "inference_status_ms": 255.02,
+          "stop_hold_ms": 2007,
+          "reset_status_ms": 26,
+          "stop_status": "Stopped",
+          "reset_status": "Active"
+        },
+        "video": "/home/huhu/tgoskits-very_special/tmp/task123-video-storyboard/sim/out/carla_five_scenarios/01-parked-car_vision.mp4"
+      }
+    }
+  },
+  {
+    "scenario": "02-pedestrian-crossing",
+    "arms": {
+      "baseline": {
+        "collisions": 1,
+        "minimum_person_clearance_m": 0.0,
+        "person_clearance_pass": false,
+        "states": [
+          "RUN",
+          "COLLIDED"
+        ],
+        "events": [
+          {
+            "t": 0.033,
+            "state": "RUN",
+            "action": "SetOutput(500)",
+            "speed_mps": 0.327
+          },
+          {
+            "t": 8.9,
+            "state": "COLLIDED",
+            "action": "SetOutput(500)",
+            "speed_mps": 8.29
+          }
+        ],
+        "host_onnx_inference_ms_mean": null,
+        "board_reference": {
+          "detected_class": "person",
+          "class_id": 0,
+          "confidence": 0.509,
+          "npu_run_ms": 16.27,
+          "pipeline_inference_ms": 60.31,
+          "stop_control_status_ms": 61,
+          "inference_status_ms": 257.112,
+          "stop_hold_ms": 2006,
+          "reset_status_ms": 26,
+          "stop_status": "Stopped",
+          "reset_status": "Active"
+        },
+        "board_run": {
+          "detected_class": "person",
+          "class_id": 0,
+          "confidence": 0.509,
+          "npu_run_ms": 16.27,
+          "pipeline_inference_ms": 60.31,
+          "stop_control_status_ms": 61,
+          "inference_status_ms": 257.112,
+          "stop_hold_ms": 2006,
+          "reset_status_ms": 26,
+          "stop_status": "Stopped",
+          "reset_status": "Active"
+        },
+        "video": "/home/huhu/tgoskits-very_special/tmp/task123-video-storyboard/sim/out/carla_five_scenarios/02-pedestrian-crossing_baseline.mp4"
+      },
+      "vision": {
+        "collisions": 0,
+        "minimum_person_clearance_m": 2.223,
+        "person_clearance_pass": true,
+        "states": [
+          "RUN",
+          "STOP",
+          "CONFIRM",
+          "RESET",
+          "RESUME",
+          "RUN"
+        ],
+        "events": [
+          {
+            "t": 0.033,
+            "state": "RUN",
+            "action": "SetOutput",
+            "speed_mps": 0.327
+          },
+          {
+            "t": 3.033,
+            "state": "STOP",
+            "action": "Stop",
+            "speed_mps": 7.169
+          },
+          {
+            "t": 5.267,
+            "state": "CONFIRM",
+            "action": "SetOutput",
+            "speed_mps": 0.064
+          },
+          {
+            "t": 7.267,
+            "state": "RESET",
+            "action": "Reset",
+            "speed_mps": 0.0
+          },
+          {
+            "t": 7.3,
+            "state": "RESUME",
+            "action": "SetOutput",
+            "speed_mps": 0.079
+          },
+          {
+            "t": 7.333,
+            "state": "RUN",
+            "action": "SetOutput",
+            "speed_mps": 0.093
+          }
+        ],
+        "host_onnx_inference_ms_mean": 24.692,
+        "board_reference": {
+          "detected_class": "person",
+          "class_id": 0,
+          "confidence": 0.509,
+          "npu_run_ms": 16.27,
+          "pipeline_inference_ms": 60.31,
+          "stop_control_status_ms": 61,
+          "inference_status_ms": 257.112,
+          "stop_hold_ms": 2006,
+          "reset_status_ms": 26,
+          "stop_status": "Stopped",
+          "reset_status": "Active"
+        },
+        "board_run": {
+          "detected_class": "person",
+          "class_id": 0,
+          "confidence": 0.509,
+          "npu_run_ms": 16.27,
+          "pipeline_inference_ms": 60.31,
+          "stop_control_status_ms": 61,
+          "inference_status_ms": 257.112,
+          "stop_hold_ms": 2006,
+          "reset_status_ms": 26,
+          "stop_status": "Stopped",
+          "reset_status": "Active"
+        },
+        "video": "/home/huhu/tgoskits-very_special/tmp/task123-video-storyboard/sim/out/carla_five_scenarios/02-pedestrian-crossing_vision.mp4"
+      }
+    }
+  },
+  {
+    "scenario": "03-cut-in-car",
+    "arms": {
+      "baseline": {
+        "collisions": 1,
+        "minimum_person_clearance_m": null,
+        "person_clearance_pass": true,
+        "states": [
+          "RUN",
+          "COLLIDED"
+        ],
+        "events": [
+          {
+            "t": 0.033,
+            "state": "RUN",
+            "action": "SetOutput(500)",
+            "speed_mps": 0.327
+          },
+          {
+            "t": 3.8,
+            "state": "COLLIDED",
+            "action": "SetOutput(500)",
+            "speed_mps": 8.587
+          }
+        ],
+        "host_onnx_inference_ms_mean": null,
+        "board_reference": {
+          "detected_class": "truck",
+          "class_id": 7,
+          "confidence": 0.666,
+          "npu_run_ms": 16.34,
+          "pipeline_inference_ms": 60.04,
+          "stop_control_status_ms": 57,
+          "inference_status_ms": 253.346,
+          "stop_hold_ms": 2000,
+          "reset_status_ms": 27,
+          "stop_status": "Stopped",
+          "reset_status": "Active",
+          "input_note": "CARLA 原始危险帧的前向安全 ROI 数字变焦"
+        },
+        "board_run": {
+          "detected_class": "truck",
+          "class_id": 7,
+          "confidence": 0.666,
+          "npu_run_ms": 16.34,
+          "pipeline_inference_ms": 60.04,
+          "stop_control_status_ms": 57,
+          "inference_status_ms": 253.346,
+          "stop_hold_ms": 2000,
+          "reset_status_ms": 27,
+          "stop_status": "Stopped",
+          "reset_status": "Active",
+          "input_note": "CARLA 原始危险帧的前向安全 ROI 数字变焦"
+        },
+        "video": "/home/huhu/tgoskits-very_special/tmp/task123-video-storyboard/sim/out/carla_five_scenarios/03-cut-in-car_baseline.mp4"
+      },
+      "vision": {
+        "collisions": 0,
+        "minimum_person_clearance_m": null,
+        "person_clearance_pass": true,
+        "states": [
+          "RUN",
+          "STOP",
+          "CONFIRM",
+          "RESET",
+          "RESUME",
+          "RUN"
+        ],
+        "events": [
+          {
+            "t": 0.033,
+            "state": "RUN",
+            "action": "SetOutput",
+            "speed_mps": 0.327
+          },
+          {
+            "t": 4.5,
+            "state": "STOP",
+            "action": "Stop",
+            "speed_mps": 5.84
+          },
+          {
+            "t": 6.733,
+            "state": "CONFIRM",
+            "action": "SetOutput",
+            "speed_mps": 0.16
+          },
+          {
+            "t": 8.733,
+            "state": "RESET",
+            "action": "Reset",
+            "speed_mps": 0.079
+          },
+          {
+            "t": 8.767,
+            "state": "RESUME",
+            "action": "SetOutput",
+            "speed_mps": 0.081
+          },
+          {
+            "t": 8.8,
+            "state": "RUN",
+            "action": "SetOutput",
+            "speed_mps": 0.071
+          }
+        ],
+        "host_onnx_inference_ms_mean": 22.824,
+        "board_reference": {
+          "detected_class": "truck",
+          "class_id": 7,
+          "confidence": 0.666,
+          "npu_run_ms": 16.34,
+          "pipeline_inference_ms": 60.04,
+          "stop_control_status_ms": 57,
+          "inference_status_ms": 253.346,
+          "stop_hold_ms": 2000,
+          "reset_status_ms": 27,
+          "stop_status": "Stopped",
+          "reset_status": "Active",
+          "input_note": "CARLA 原始危险帧的前向安全 ROI 数字变焦"
+        },
+        "board_run": {
+          "detected_class": "truck",
+          "class_id": 7,
+          "confidence": 0.666,
+          "npu_run_ms": 16.34,
+          "pipeline_inference_ms": 60.04,
+          "stop_control_status_ms": 57,
+          "inference_status_ms": 253.346,
+          "stop_hold_ms": 2000,
+          "reset_status_ms": 27,
+          "stop_status": "Stopped",
+          "reset_status": "Active",
+          "input_note": "CARLA 原始危险帧的前向安全 ROI 数字变焦"
+        },
+        "video": "/home/huhu/tgoskits-very_special/tmp/task123-video-storyboard/sim/out/carla_five_scenarios/03-cut-in-car_vision.mp4"
+      }
+    }
+  },
+  {
+    "scenario": "04-occluded-pedestrian",
+    "arms": {
+      "baseline": {
+        "collisions": 1,
+        "minimum_person_clearance_m": 7.761,
+        "person_clearance_pass": false,
+        "states": [
+          "RUN",
+          "COLLIDED"
+        ],
+        "events": [
+          {
+            "t": 0.033,
+            "state": "RUN",
+            "action": "SetOutput(500)",
+            "speed_mps": 0.327
+          },
+          {
+            "t": 3.767,
+            "state": "COLLIDED",
+            "action": "SetOutput(500)",
+            "speed_mps": 4.925
+          }
+        ],
+        "host_onnx_inference_ms_mean": null,
+        "board_reference": {
+          "detected_class": "umbrella/occlusion",
+          "class_id": 25,
+          "confidence": 0.574,
+          "npu_run_ms": 16.38,
+          "pipeline_inference_ms": 60.61,
+          "stop_control_status_ms": 58,
+          "inference_status_ms": 252.828,
+          "stop_hold_ms": 2009,
+          "reset_status_ms": 26,
+          "stop_status": "Stopped",
+          "reset_status": "Active",
+          "decision_note": "连续不可跟踪观测触发 fail-safe STOP"
+        },
+        "board_run": {
+          "detected_class": "umbrella/occlusion",
+          "class_id": 25,
+          "confidence": 0.574,
+          "npu_run_ms": 16.38,
+          "pipeline_inference_ms": 60.61,
+          "stop_control_status_ms": 58,
+          "inference_status_ms": 252.828,
+          "stop_hold_ms": 2009,
+          "reset_status_ms": 26,
+          "stop_status": "Stopped",
+          "reset_status": "Active",
+          "decision_note": "连续不可跟踪观测触发 fail-safe STOP"
+        },
+        "video": "/home/huhu/tgoskits-very_special/tmp/task123-video-storyboard/sim/out/carla_five_scenarios/04-occluded-pedestrian_baseline.mp4"
+      },
+      "vision": {
+        "collisions": 0,
+        "minimum_person_clearance_m": 14.104,
+        "person_clearance_pass": true,
+        "states": [
+          "RUN",
+          "STOP",
+          "CONFIRM",
+          "RESET",
+          "RESUME",
+          "RUN"
+        ],
+        "events": [
+          {
+            "t": 0.033,
+            "state": "RUN",
+            "action": "SetOutput",
+            "speed_mps": 0.327
+          },
+          {
+            "t": 3.267,
+            "state": "STOP",
+            "action": "Stop",
+            "speed_mps": 7.094
+          },
+          {
+            "t": 5.5,
+            "state": "CONFIRM",
+            "action": "SetOutput",
+            "speed_mps": 0.051
+          },
+          {
+            "t": 7.5,
+            "state": "RESET",
+            "action": "Reset",
+            "speed_mps": 0.0
+          },
+          {
+            "t": 7.533,
+            "state": "RESUME",
+            "action": "SetOutput",
+            "speed_mps": 0.079
+          },
+          {
+            "t": 7.567,
+            "state": "RUN",
+            "action": "SetOutput",
+            "speed_mps": 0.083
+          }
+        ],
+        "host_onnx_inference_ms_mean": 23.835,
+        "board_reference": {
+          "detected_class": "umbrella/occlusion",
+          "class_id": 25,
+          "confidence": 0.574,
+          "npu_run_ms": 16.38,
+          "pipeline_inference_ms": 60.61,
+          "stop_control_status_ms": 58,
+          "inference_status_ms": 252.828,
+          "stop_hold_ms": 2009,
+          "reset_status_ms": 26,
+          "stop_status": "Stopped",
+          "reset_status": "Active",
+          "decision_note": "连续不可跟踪观测触发 fail-safe STOP"
+        },
+        "board_run": {
+          "detected_class": "umbrella/occlusion",
+          "class_id": 25,
+          "confidence": 0.574,
+          "npu_run_ms": 16.38,
+          "pipeline_inference_ms": 60.61,
+          "stop_control_status_ms": 58,
+          "inference_status_ms": 252.828,
+          "stop_hold_ms": 2009,
+          "reset_status_ms": 26,
+          "stop_status": "Stopped",
+          "reset_status": "Active",
+          "decision_note": "连续不可跟踪观测触发 fail-safe STOP"
+        },
+        "video": "/home/huhu/tgoskits-very_special/tmp/task123-video-storyboard/sim/out/carla_five_scenarios/04-occluded-pedestrian_vision.mp4"
+      }
+    }
+  },
+  {
+    "scenario": "05-busy-mixed-traffic",
+    "arms": {
+      "baseline": {
+        "collisions": 1,
+        "minimum_person_clearance_m": 0.0,
+        "person_clearance_pass": false,
+        "states": [
+          "RUN",
+          "COLLIDED"
+        ],
+        "events": [
+          {
+            "t": 0.033,
+            "state": "RUN",
+            "action": "SetOutput(500)",
+            "speed_mps": 0.327
+          },
+          {
+            "t": 3.9,
+            "state": "COLLIDED",
+            "action": "SetOutput(500)",
+            "speed_mps": 14.439
+          }
+        ],
+        "host_onnx_inference_ms_mean": null,
+        "board_reference": {
+          "detected_class": "car",
+          "class_id": 2,
+          "confidence": 0.416,
+          "npu_run_ms": 16.07,
+          "pipeline_inference_ms": 60.29,
+          "stop_control_status_ms": 61,
+          "inference_status_ms": 257.754,
+          "stop_hold_ms": 2001,
+          "reset_status_ms": 26,
+          "stop_status": "Stopped",
+          "reset_status": "Active"
+        },
+        "board_run": {
+          "detected_class": "car",
+          "class_id": 2,
+          "confidence": 0.416,
+          "npu_run_ms": 16.07,
+          "pipeline_inference_ms": 60.29,
+          "stop_control_status_ms": 61,
+          "inference_status_ms": 257.754,
+          "stop_hold_ms": 2001,
+          "reset_status_ms": 26,
+          "stop_status": "Stopped",
+          "reset_status": "Active"
+        },
+        "video": "/home/huhu/tgoskits-very_special/tmp/task123-video-storyboard/sim/out/carla_five_scenarios/05-busy-mixed-traffic_baseline.mp4"
+      },
+      "vision": {
+        "collisions": 0,
+        "minimum_person_clearance_m": 2.217,
+        "person_clearance_pass": true,
+        "states": [
+          "RUN",
+          "STOP",
+          "CONFIRM",
+          "RESET",
+          "RESUME",
+          "RUN"
+        ],
+        "events": [
+          {
+            "t": 0.033,
+            "state": "RUN",
+            "action": "SetOutput",
+            "speed_mps": 0.327
+          },
+          {
+            "t": 0.1,
+            "state": "STOP",
+            "action": "Stop",
+            "speed_mps": 0.98
+          },
+          {
+            "t": 2.3,
+            "state": "CONFIRM",
+            "action": "SetOutput",
+            "speed_mps": 0.006
+          },
+          {
+            "t": 4.3,
+            "state": "RESET",
+            "action": "Reset",
+            "speed_mps": 0.079
+          },
+          {
+            "t": 4.333,
+            "state": "RESUME",
+            "action": "SetOutput",
+            "speed_mps": 0.083
+          },
+          {
+            "t": 4.367,
+            "state": "RUN",
+            "action": "SetOutput",
+            "speed_mps": 0.073
+          }
+        ],
+        "host_onnx_inference_ms_mean": 24.246,
+        "board_reference": {
+          "detected_class": "car",
+          "class_id": 2,
+          "confidence": 0.416,
+          "npu_run_ms": 16.07,
+          "pipeline_inference_ms": 60.29,
+          "stop_control_status_ms": 61,
+          "inference_status_ms": 257.754,
+          "stop_hold_ms": 2001,
+          "reset_status_ms": 26,
+          "stop_status": "Stopped",
+          "reset_status": "Active"
+        },
+        "board_run": {
+          "detected_class": "car",
+          "class_id": 2,
+          "confidence": 0.416,
+          "npu_run_ms": 16.07,
+          "pipeline_inference_ms": 60.29,
+          "stop_control_status_ms": 61,
+          "inference_status_ms": 257.754,
+          "stop_hold_ms": 2001,
+          "reset_status_ms": 26,
+          "stop_status": "Stopped",
+          "reset_status": "Active"
+        },
+        "video": "/media/huhu/50528FAE528F977E/huhu-archive/sim/task123-video/carla_five_scenarios/05-busy-mixed-traffic_vision.mp4"
+      }
+    }
+  }
+]

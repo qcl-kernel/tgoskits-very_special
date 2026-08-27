@@ -94,6 +94,34 @@ int main()
         return 1;
     }
 
+    std::vector<DetectionEntry> control_detections;
+    control_detections.push_back(DetectionEntry(9, 9000, 10, 10, 100, 100));
+    control_detections.push_back(DetectionEntry(0, 6100, 520, 300, 700, 700));
+    const DetectionEntry *selected =
+        rknn_validation::SelectControlDetection(control_detections, 1280, 720);
+    if (require_true(selected != NULL && selected->cls_id == 0,
+                     "forward person outranks unrelated high-confidence object") != 0) {
+        return 1;
+    }
+
+    control_detections.clear();
+    control_detections.push_back(DetectionEntry(7, 6600, 450, 220, 830, 620));
+    control_detections.push_back(DetectionEntry(9, 9200, 900, 20, 1000, 120));
+    selected = rknn_validation::SelectControlDetection(control_detections, 1280, 720);
+    if (require_true(selected != NULL && selected->cls_id == 7,
+                     "near truck outranks distant traffic light") != 0) {
+        return 1;
+    }
+
+    control_detections.clear();
+    control_detections.push_back(DetectionEntry(9, 9200, 900, 20, 1000, 120));
+    control_detections.push_back(DetectionEntry(25, 7000, 400, 200, 600, 500));
+    selected = rknn_validation::SelectControlDetection(control_detections, 1280, 720);
+    if (require_true(selected != NULL && selected->cls_id == 9,
+                     "highest confidence remains the fallback without a hazard") != 0) {
+        return 1;
+    }
+
     printf("PASS detection_validation_selftest\n");
     return 0;
 }

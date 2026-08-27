@@ -1,7 +1,14 @@
 # OpenRace 2026：基于 TGOSKits 的智能实时控制系统
 
-本仓库是 OpenRace 2026 Task 1–3 的完整成果仓库。项目基于 TGOSKits，在
-ATK-DLRK3588（RK3588）物理板上组合 AxVisor、StarryOS、Zephyr 与 RKNN/NPU，
+**截止2026-8-24号，已经rebase到dev最新**
+
+**之后的更新未更改核心架构内容(实时性改进算法、通信协议、RK3588 & YOLO AI场景应用)，只会对文档、让评委机器方便运行的脚本、后续发现错误增加一些测例、再次rebase到最新官方等等进行更新**
+
+**本提交已经过了本机的检测和官方的CI，如果老师们有运行不了的，复现失败的，请联系我**
+
+我们使用的是StarryOS进行的三个任务，最终经过了正点原子RK3588的实机开发板一系列实验
+
+本仓库是 OpenRace 2026 Task 1–3 的完整成果仓库。项目基于 TGOSKits，在ATK-DLRK3588（RK3588）物理板上组合 AxVisor、StarryOS、Zephyr 与 RKNN/NPU，
 形成从实时调度、跨 Guest 通信到目标检测和安全控制的完整闭环。
 
 ## 项目成果

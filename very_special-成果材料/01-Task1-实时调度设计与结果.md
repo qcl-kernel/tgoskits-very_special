@@ -165,6 +165,36 @@ FP-RR 组使用同一 StarryOS ncnn/YOLO 负载、Zephyr 二进制、10 ms/300 �
 | `>1 ms` | 15 | 1 | 降低 93.3% |
 | `>10 ms` deadline miss | 0 | 0 | 中位数持平 |
 
+### 指标对比图
+
+下图把上述三轮中位数对应的实测延迟曲线叠在同一时间轴上：
+橙色为 RR，绿色为 bounded FP-RR，横轴为 6000×10 ms 采样对应的 60 秒；
+每张图只标注该指标的两条参考虚线。曲线为实测数据重放，不是示意。
+
+| 延迟指标 | RR | FP-RR | 变化 | 对比图 |
+| --- | ---: | ---: | --- | --- |
+| mean | 0.278 ms | 0.242 ms | 降低 13.1% | ![mean](images/task1/Task1-mean.png) |
+| P50 | 0.249 ms | 0.239 ms | 降低 4.1% | ![P50](images/task1/Task1-p50.png) |
+| P95 | 0.375 ms | 0.248 ms | 降低 33.9% | ![P95](images/task1/Task1-p95.png) |
+| P99 | 0.621 ms | 0.278 ms | 降低 55.3% | ![P99](images/task1/Task1-p99.png) |
+| P99.9 | 7.816 ms | 0.748 ms | 降低 90.4% | ![P99.9](images/task1/Task1-p999.png) |
+| max | 9.122 ms | 1.134 ms | 降低 87.6% | ![max](images/task1/Task1-max.png) |
+
+P50 降低 4.1%、mean 降低 13.1%，而 P99/P99.9/max 分别降低
+55.3%/90.4%/87.6%：平均延迟同样下降，但长尾指标的改善幅度大得多，
+说明 FP-RR 在压低平均延迟的同时，主要价值是抑制偶发长尾。
+
+计数指标（6000 样本中超过阈值的次数）：
+
+| 计数指标 | RR | FP-RR | 变化 | 对比图 |
+| --- | ---: | ---: | --- | --- |
+| 超过 1 ms | 15 | 1 | 降低 93.3% | ![>1ms](images/task1/Task1-over-1ms.png) |
+| 超过 10 ms | 0 | 0 | 中位数持平 | ![>10ms](images/task1/Task1-over-10ms.png) |
+| deadline miss | 0 | 0 | 中位数持平 | ![deadline](images/task1/Task1-deadline-misses.png) |
+
+图表由 `animations/task1_metric_charts.py` 从三轮中位数和
+`matrix-v8-only-3x3` 的实测延迟序列生成，数值与上表一致。
+
 RR 三轮中有一轮出现 6 次超过 10 ms 的 deadline miss，因此不能只用
 “deadline miss 中位数为 0”掩盖尾部风险；FP-RR 三轮均为 0。六轮都有
 `TASK1_PRESSURE_SEED_COMPLETE rc=0`，长生命周期 RKNN 进程在采样后仍为

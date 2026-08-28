@@ -235,6 +235,60 @@ Task 2 输出位于 [`bounded-200/demo`](../results/task2/board-20260825/bounded
 原始日志一起纳入 `artifact-index.json`，不用画面替代协议验证。
 输入日志仍先通过 `quantify-benchmark.py` 的完整序号、计数闭合和 fatal-marker 检查。
 
+### 双端信令时间线图与演示画面
+
+实板串口把两个 Guest 的控制台输出批量混合在一起（VirtIO-console 分批 drain），
+直接看原始日志难以还原"谁先谁后"。用 `scripts/board/task2-signaling-replay.py`
+按 request id 把两端重排成规范的"请求→收到→执行→应答→确认"顺序并加上协议时间戳，
+再用 `scripts/board/task2-signaling-chart.py` 绘成"时间 × 泳道"时间线：
+发送方在上、接收方在下，每条 CONTROL/STATUS/ACK 是穿过两泳道的彩色箭头，
+RTT 与先后关系一眼可见。`scripts/board/task2-signaling-shot.py` 从 feed 渲染
+演示画面（左蓝发送方 / 右绿接收方 / 下方链路状态条，含 REQ→/ANS←/ACK← 等角色标识）。
+
+以下四张图来自 2026-08-28 的实板录制（`results/task2/board-20260828/bounded-200/`，
+单轮 200 笔干净事务，0 重传）与同一仓库的黑障故障录制：
+
+| 图 | 内容 |
+| --- | --- |
+| ![干净 200 笔全时段](assets/task2/2-timeline-clean-full.png) | 200 笔干净收发全时段（8.1 s，1200 条消息，0 重传），两端严格 200:200 |
+| ![放大窗口](assets/task2/3-timeline-clean-zoom.png) | 1.0–1.8 s 放大窗口，看清一问一答与约 40 ms RTT |
+| ![黑障对照](assets/task2/4-timeline-blackout.png) | 黑障故障场景：红色重传丛、Safe 虚线、恢复后序号从 1 重启 |
+| ![演示画面](assets/task2/1-demo-screen.png) | tmux 演示画面渲染：发送方（蓝）/接收方（绿）双 pane + 链路状态条 |
+
+每张图怎么看：
+
+1. **演示画面**（`1-demo-screen.png`）：复刻 tmux 的 I_I 布局——左上是发送方
+   （controller，深蓝底，标题"发送方 · StarryOS 10.0.42.15"），右上是接收方
+   （managed，深绿底，"接收方 · Zephyr 10.0.42.2"），下方是横跨全宽的链路状态条。
+   每行以角色相对标签开头：发送方发出的请求是 `REQ→`、收到的应答是 `ANS←`/`ACK←`；
+   接收方收到的请求是 `REQ←`、回发的应答是 `ANS→`/`ACK←`；`ST` 行是这端当前的
+   协议状态（如"发起请求 seq=N · 等待应答"）。底色区分两端，交换角色名立刻穿帮。
+
+2. **干净 200 笔全时段**（`2-timeline-clean-full.png`）：横轴是协议时间
+   （task2-net 启动后秒数），上泳道=发送方、下泳道=接收方。每条 CONTROL/STATUS/ACK
+   是一条穿泳道的竖箭头，颜色按类型：绿 CONTROL、橙 STATUS、青 ACK。整段 8.1 s 内
+   两端严格 200:200、无重传、无 Safe，说明链路干净。图右上角图例给出颜色对应。
+
+3. **放大窗口**（`3-timeline-clean-zoom.png`）：把 1.0–1.8 s 拉宽，能逐笔读出
+   一问一答——绿色 CONTROL 箭头落到接收方，随后橙色 STATUS 与青色 ACK 回到发送方，
+   再回一条青色 ACK。同一笔的 CONTROL 与 STATUS 之间横跨约 40 ms，即 RTT。
+
+4. **黑障对照**（`4-timeline-blackout.png`）：45 s 全时段，含黑障注入。黑障窗口内
+   发送方反复重发（红色 `重发` 箭头成丛）、无应答后进 Safe（红色虚线），接收方也
+   因 5 s 无合法帧进 Safe；链路恢复后（紫色虚线"恢复"）序号从 1 重新同步，收发恢复。
+
+```bash
+# 时间线（全时段 / 放大窗口）
+scripts/board/task2-signaling-chart.py <run.log> --out timeline-full.png
+scripts/board/task2-signaling-chart.py <run.log> --out timeline-zoom.png --zoom 1.0 1.8
+# 演示画面（从 replay 生成的 feed 渲染）
+scripts/board/task2-signaling-shot.py --feeds /tmp/t2n1-demo/feeds --out shot.png
+```
+
+时间线图与演示画面的配色一致：绿色 CONTROL、橙色 STATUS、青色 ACK、红色重传、
+红/紫虚线为 Safe/恢复。时间线只用于演示协议顺序，协议验证仍以原始日志、双 pcap
+和 verifier 为准。
+
 这个 throughput 是 stop-and-wait 控制事务/s，不是裸 UDP 带宽。受 10 ms 轮询/
 状态节拍、两 Guest 调度、VirtIO 中断和 ACK 往返共同限制；它适合回答工业控制
 闭环容量，不能换算成网卡线速。

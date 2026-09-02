@@ -4,9 +4,10 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 source "$repo_root/scripts/lib/task123-tools.sh"
 zephyr_revision="dccb09599635bdff17633fa7e9dab014b91dce90"
-default_zephyr_base="$repo_root/.deps/zephyr-$zephyr_revision"
+default_zephyr_base="$repo_root/.deps/task123/zephyr-$zephyr_revision"
 zephyr_base="${ZEPHYR_BASE:-$default_zephyr_base}"
 zephyr_source_revision="${ZEPHYR_SOURCE_REVISION:-}"
+task123_python="$(resolve_task123_python "$repo_root" "$zephyr_revision")"
 cross_prefix="$(resolve_task123_cross_prefix)"
 out_dir="${OUT_DIR:-$repo_root/tmp/net-dual-guest/zephyr-task2}"
 build_dir="${BUILD_DIR:-$out_dir/cargo-target}"
@@ -97,6 +98,7 @@ if ! task123_source_is_pristine "$zephyr_base"; then
     printf 'error: refusing to build from a modified Zephyr source; use a clean ZEPHYR_BASE\n' >&2
     exit 1
 fi
+task123_check_zephyr_python "$task123_python"
 if [[ -n "$extra_overlay" && ! -f "$extra_overlay" ]]; then
     printf 'error: Zephyr extra overlay does not exist: %s\n' "$extra_overlay" >&2
     exit 1
@@ -128,6 +130,7 @@ mkdir -p "$build_dir/Kconfig"
 printf 'set(kconfig_env_dirs)\n' > "$build_dir/Kconfig/kconfig_module_dirs.cmake"
 
 ZEPHYR_BASE="$zephyr_base" cmake --fresh -S "$source_dir" -B "$build_dir" -G Ninja \
+    -DPython3_EXECUTABLE="$task123_python" \
     -DBOARD=qemu_cortex_a53 \
     -DBUILD_VERSION="$zephyr_source_revision" \
     -DUSER_CACHE_DIR="$build_dir/user-cache" \

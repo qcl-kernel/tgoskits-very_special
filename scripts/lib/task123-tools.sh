@@ -103,6 +103,62 @@ resolve_task123_cross_prefix() {
     printf '%s\n' "${cross_cc%gcc}"
 }
 
+# Select the interpreter used by Zephyr's configure-time scripts. An explicit
+# override is authoritative; otherwise prefer the repository-managed virtual
+# environment prepared for the pinned Zephyr revision before using host Python.
+resolve_task123_python() {
+    local repo_root="$1"
+    local zephyr_revision="$2"
+    local configured_python="${TASK123_PYTHON:-}"
+    local deps_root="${TASK123_DEPS_DIR:-$repo_root/.deps/task123}"
+    local managed_python="$deps_root/zephyr-python-$zephyr_revision/bin/python3"
+
+    if [[ -n "$configured_python" ]]; then
+        if [[ ! -x "$configured_python" ]]; then
+            printf 'error: TASK123_PYTHON is not executable: %s\n' \
+                "$configured_python" >&2
+            return 1
+        fi
+        realpath --no-symlinks "$configured_python"
+        return
+    fi
+    if [[ -x "$managed_python" ]]; then
+        realpath --no-symlinks "$managed_python"
+        return
+    fi
+
+    local host_python
+    host_python="$(command -v python3 2>/dev/null || true)"
+    if [[ -z "$host_python" ]]; then
+        printf 'error: Python 3 is unavailable; run task123.sh prepare or set TASK123_PYTHON\n' >&2
+        return 1
+    fi
+    realpath --no-symlinks "$host_python"
+}
+
+# Check the imports exercised by Zephyr's standalone CMake/module discovery
+# path before a long Task 1-3 build starts.
+task123_check_zephyr_python() {
+    local python="$1" module
+    local -a missing=()
+
+    if [[ ! -x "$python" ]]; then
+        printf 'error: Zephyr Python interpreter is not executable: %s\n' "$python" >&2
+        return 1
+    fi
+    for module in elftools yaml pykwalify jsonschema packaging; do
+        if ! "$python" -c "import $module" >/dev/null 2>&1; then
+            missing+=("$module")
+        fi
+    done
+    if ((${#missing[@]} > 0)); then
+        printf 'error: Zephyr Python dependencies are missing from %s: %s\n' \
+            "$python" "${missing[*]}" >&2
+        printf 'error: run scripts/competition/task123.sh prepare, or set TASK123_PYTHON to a complete environment\n' >&2
+        return 1
+    fi
+}
+
 # Serialize memory-heavy QEMU runs started by the Task 1-3 entrypoints. The
 # default is scoped to this worktree, while CI or multi-worktree hosts can set
 # TASK123_QEMU_LOCK_FILE to a shared path. Keeping the descriptor open makes

@@ -169,7 +169,7 @@ zephyr_source_revision() {
 
 doctor() {
     configure_cross_tools
-    local failures=0 tool
+    local failures=0 tool task123_python
     local commands=(
         git cargo rustup python3 cmake ninja qemu-system-aarch64 qemu-aarch64
         debugfs e2fsck sha256sum realpath dtc flock
@@ -206,6 +206,19 @@ EOF
         printf '  [OK]      Python Pillow\n'
     else
         printf '  [MISSING] Python Pillow\n'
+        failures=$((failures + 1))
+    fi
+
+    if task123_python="$(resolve_task123_python "$repo_root" "$zephyr_revision")"; then
+        printf '  [INFO]    Zephyr Python (%s)\n' "$task123_python"
+        if task123_check_zephyr_python "$task123_python"; then
+            printf '  [OK]      Zephyr Python dependencies\n'
+        else
+            printf '  [MISSING] Zephyr Python dependencies\n'
+            failures=$((failures + 1))
+        fi
+    else
+        printf '  [MISSING] Zephyr Python interpreter\n'
         failures=$((failures + 1))
     fi
 
@@ -255,7 +268,7 @@ EOF
 Install common Ubuntu dependencies with:
   sudo apt-get update
   sudo apt-get install build-essential cmake ninja-build qemu-system-arm qemu-user \
-    e2fsprogs device-tree-compiler python3 python3-pil git curl xz-utils
+    e2fsprogs device-tree-compiler python3 python3-pil python3-venv git curl xz-utils
 
 The AArch64 musl cross compiler is not Ubuntu's native musl-tools package.
 Install an aarch64-linux-musl toolchain, then either add its bin directory to

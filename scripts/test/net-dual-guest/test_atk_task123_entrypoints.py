@@ -1,5 +1,6 @@
 from pathlib import Path
 import os
+import shutil
 import subprocess
 import tempfile
 import tomllib
@@ -49,6 +50,142 @@ def fixture_environment(root: Path) -> dict[str, str]:
     environment["ATK_ZEPHYR_TASK123_DIR"] = str(zephyr)
     environment["ATK_RTTHREAD_TASK123_DIR"] = str(rtthread)
     return environment
+
+
+def write_executable(path: Path, source: str) -> None:
+    path.write_text(source)
+    path.chmod(0o755)
+
+
+def test_doctor_rejects_selected_zephyr_python_without_jsonschema() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        fixture_root = Path(directory)
+        fake_bin = fixture_root / "bin"
+        fake_bin.mkdir()
+
+        python = fake_bin / "python3"
+        write_executable(
+            python,
+            """#!/usr/bin/env bash
+case "${2:-}" in
+    *jsonschema*) exit 1 ;;
+    *) exit 0 ;;
+esac
+""",
+        )
+
+        for command in (
+            "cargo",
+            "rustup",
+            "cmake",
+            "ninja",
+            "qemu-system-aarch64",
+            "qemu-aarch64",
+            "debugfs",
+            "e2fsck",
+            "dtc",
+            "flock",
+        ):
+            write_executable(fake_bin / command, "#!/usr/bin/env bash\nexit 0\n")
+
+        ncnn = fixture_root / "ncnn"
+        ncnn.mkdir()
+        (ncnn / "CMakeLists.txt").write_text("cmake_minimum_required(VERSION 3.20)\n")
+        real_git = shutil.which("git")
+        assert real_git is not None
+        write_executable(
+            fake_bin / "git",
+            f"""#!/usr/bin/env bash
+if [[ "$1" == "-C" && "$2" == "{ncnn}" && "$3" == "rev-parse" ]]; then
+    printf '%s\\n' 946fe3fb14a8dff8c06df763f67be522167b2f00
+    exit 0
+fi
+exec {real_git} "$@"
+""",
+        )
+
+        zephyr = fixture_root / "zephyr"
+        zephyr.mkdir()
+        (zephyr / "CMakeLists.txt").write_text("cmake_minimum_required(VERSION 3.20)\n")
+        (zephyr / ".task123-source-revision").write_text(
+            "dccb09599635bdff17633fa7e9dab014b91dce90\n"
+        )
+        manifest_lines = []
+        for source in (zephyr / ".task123-source-revision", zephyr / "CMakeLists.txt"):
+            digest = subprocess.check_output(
+                ["sha256sum", source], text=True
+            ).split()[0]
+            manifest_lines.append(f"{digest}  ./{source.name}\n")
+        (zephyr / ".task123-tree-sha256").write_text("".join(manifest_lines))
+
+        pnnx = fake_bin / "pnnx"
+        write_executable(pnnx, "#!/usr/bin/env bash\nexit 0\n")
+        onnx = fixture_root / "yolo11n.onnx"
+        onnx.write_bytes(b"fixture")
+        real_sha256sum = shutil.which("sha256sum")
+        assert real_sha256sum is not None
+        write_executable(
+            fake_bin / "sha256sum",
+            f"""#!/usr/bin/env bash
+if [[ "$#" == 1 && "$1" == "{onnx}" ]]; then
+    printf '%s  %s\\n' 634279b40c07c6391472c51ad45b81ebc48706a9a1fe72dd3396322acd0c053b "$1"
+    exit 0
+fi
+exec {real_sha256sum} "$@"
+""",
+        )
+
+        cross_tools = {}
+        for name in ("CC", "CXX", "AR", "RANLIB"):
+            tool = fake_bin / f"cross-{name.lower()}"
+            write_executable(tool, "#!/usr/bin/env bash\nexit 0\n")
+            cross_tools[f"CROSS_{name}"] = str(tool)
+
+        environment = os.environ.copy()
+        environment.update(cross_tools)
+        environment.update(
+            {
+                "PATH": f"{fake_bin}:{environment['PATH']}",
+                "TASK123_PYTHON": str(python),
+                "NCNN_SOURCE": str(ncnn),
+                "PNNX": str(pnnx),
+                "ZEPHYR_BASE": str(zephyr),
+                "YOLO_ONNX": str(onnx),
+            }
+        )
+
+        result = run(
+            "bash", str(TASK123_ENTRYPOINT), "doctor", environment=environment
+        )
+
+        output = result.stdout + result.stderr
+        assert result.returncode != 0, output
+        assert "jsonschema" in output
+
+
+def test_zephyr_python_resolution_preserves_virtual_environment_path() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        deps_root = Path(directory)
+        revision = "test-revision"
+        python = deps_root / f"zephyr-python-{revision}" / "bin" / "python3"
+        python.parent.mkdir(parents=True)
+        host_python = shutil.which("python3")
+        assert host_python is not None
+        python.symlink_to(host_python)
+
+        environment = os.environ.copy()
+        environment.pop("TASK123_PYTHON", None)
+        environment["TASK123_DEPS_DIR"] = str(deps_root)
+        result = run(
+            "bash",
+            "-c",
+            f"source {TASK123_TOOLS!s}; "
+            f"resolve_task123_python {REPO_ROOT!s} {revision}",
+            environment=environment,
+        )
+
+        assert result.returncode == 0, result.stderr
+        assert result.stdout.strip() == str(python)
 
 
 def test_unified_builder_is_syntax_valid_and_builds_both_schedulers() -> None:

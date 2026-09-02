@@ -17,11 +17,17 @@ scripts/competition/task123.sh suite task2
 scripts/competition/task123.sh suite task3
 ```
 
-`prepare` 下载并校验固定的 AArch64 musl 工具链和 Zephyr 源码，默认解压到
-仓库内被忽略的 `.deps/task123/`；后续 `doctor` 和 `build` 会自动发现它们，
-无需再次设置 `CROSS_ROOT` 或 `ZEPHYR_BASE`。
+`prepare` 下载并校验固定的 AArch64 musl 工具链和 Zephyr 源码，并根据该
+Zephyr revision 自带的 `scripts/requirements-base.txt` 创建专用 Python 虚拟环境；
+它们默认位于仓库内被忽略的 `.deps/task123/`。后续 `doctor` 和 `build` 会自动
+发现这些依赖，无需再次设置 `CROSS_ROOT`、`ZEPHYR_BASE` 或 Python 路径。
 `doctor` 只检查和给出安装提示，不会静默安装系统软件；它还会拒绝本地修改过的
-Zephyr 树。`build full` 可以复用已下载的源码、模型、rootfs 和工具链，但会删除本项目固定输出目录内的 ncnn、Zephyr、StarryOS、AxVisor 编译结果并从当前 checkout 重新生成。运行证据默认写入 `tmp/competition-task123/evidence/`。三个 suite 分别创建 `suite-task1`、`suite-task2`、`suite-task3` 证据目录，不会把不同任务的数据混在一起；每个场景保存 commit、日志、pcap、命令和哈希。
+Zephyr 树，并在进入 CMake 前检查 `jsonschema` 等 Zephyr Python 依赖。
+`build full` 可以复用已下载的源码、模型、rootfs、工具链和专用 Python 环境，
+但会删除本项目固定输出目录内的 ncnn、Zephyr、StarryOS、AxVisor 编译结果并从
+当前 checkout 重新生成。运行证据默认写入 `tmp/competition-task123/evidence/`。
+三个 suite 分别创建 `suite-task1`、`suite-task2`、`suite-task3` 证据目录，不会把
+不同任务的数据混在一起；每个场景保存 commit、日志、pcap、命令和哈希。
 
 ## 下载依赖
 
@@ -58,7 +64,12 @@ export YOLO_ONNX="$PWD/tmp/competition-task123/downloads/yolo11n.onnx"
 ```bash
 export CROSS_ROOT="$PWD/.deps/task123/aarch64-linux-musl-cross"
 export ZEPHYR_BASE="$PWD/.deps/task123/zephyr-dccb09599635bdff17633fa7e9dab014b91dce90"
+export TASK123_PYTHON="$PWD/.deps/task123/zephyr-python-dccb09599635bdff17633fa7e9dab014b91dce90/bin/python3"
 ```
+
+`TASK123_PYTHON` 是显式覆盖项：一旦设置，`doctor` 和两类 Zephyr 构建都会使用
+该解释器，并在缺少依赖时直接失败，不会悄悄退回系统 Python。通常应直接运行
+`prepare`，不要用全局 `pip install jsonschema` 修补宿主环境。
 
 ## 分任务验收顺序
 

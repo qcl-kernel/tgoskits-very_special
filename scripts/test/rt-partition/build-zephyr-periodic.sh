@@ -9,6 +9,7 @@ source "$repo_root/scripts/lib/task123-tools.sh"
 zephyr_revision="dccb09599635bdff17633fa7e9dab014b91dce90"
 zephyr_base="${ZEPHYR_BASE:-$repo_root/.deps/task123/zephyr-$zephyr_revision}"
 zephyr_source_revision="${ZEPHYR_SOURCE_REVISION:-}"
+task123_python="$(resolve_task123_python "$repo_root" "$zephyr_revision")"
 cross_prefix="$(resolve_task123_cross_prefix)"
 app_dir="${repo_root}/scripts/test/zephyr-periodic"
 out_dir="${OUT_DIR:-${repo_root}/tmp/rt-partition}"
@@ -47,6 +48,7 @@ task123_source_is_pristine "$zephyr_base" || {
     printf 'error: refusing to build from a modified Zephyr source; use a clean ZEPHYR_BASE\n' >&2
     exit 1
 }
+task123_check_zephyr_python "$task123_python"
 [[ "$memory_base" =~ ^0x[0-9a-fA-F]+$ && "$memory_size" =~ ^0x[0-9a-fA-F]+$ ]] || {
     printf 'error: Zephyr memory base and size must be hexadecimal\n' >&2
     exit 2
@@ -123,6 +125,7 @@ mkdir -p "$build_dir/Kconfig"
 printf 'set(kconfig_env_dirs)\n' > "$build_dir/Kconfig/kconfig_module_dirs.cmake"
 
 ZEPHYR_BASE="$zephyr_base" cmake --fresh -S "$app_dir" -B "$build_dir" -G Ninja \
+    -DPython3_EXECUTABLE="$task123_python" \
     -DBOARD="$zephyr_board" \
     -DBUILD_VERSION="$zephyr_source_revision" \
     -DUSER_CACHE_DIR="$build_dir/user-cache" \

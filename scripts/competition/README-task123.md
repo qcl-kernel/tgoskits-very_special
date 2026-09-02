@@ -1,6 +1,38 @@
 # Task 1–3 分任务复现入口
 
-所有命令都从仓库根目录执行。首次统一准备环境与产物：
+## 评委复现 Task 1
+
+安装下文列出的 Ubuntu 系统软件后，在仓库根目录按要复现的实验执行一套完整流程。
+由于评审老师当前没有 RK3588 物理板，`task1-multivcpu` 把最终实板的
+CPU 角色、StarryOS 双 vCPU 以及通信 vCPU/Zephyr 共核竞争关系迁移到
+QEMU，使多 vCPU 架构和调度 A/B 可在无板环境中重新构建与验证。
+
+复现老师已经运行过的原 Task 1：
+
+```bash
+scripts/competition/task123.sh prepare
+scripts/competition/task123.sh doctor
+scripts/competition/task123.sh build task1
+scripts/competition/task123.sh suite task1
+```
+
+复现新增的物理板卡拓扑映射实验：
+
+```bash
+scripts/competition/task123.sh prepare
+scripts/competition/task123.sh doctor
+scripts/competition/task123.sh build task1-multivcpu
+scripts/competition/task123.sh suite task1-multivcpu
+```
+
+两套 Task 1 使用同一条显式流程：“准备依赖 → 检查环境 → 按实验构建 →
+运行 suite → 输出结果”，build 和 suite 使用相同的实验名称。`suite` 不会隐式下载或重新构建。原 `task1`
+命令的含义保持不变；`task1-multivcpu`
+运行 RR 3 轮与 bounded FP-RR 3 轮（每轮 6000 个 10 ms 样本）。评委不需要
+修改 JSON/TOML、填写个人路径或设置环境变量。首次运行需要联网，并会因下载、
+编译和 QEMU 实验耗时较长；再次运行会复用下载缓存。
+
+如果要一次构建全部 Task 1–3 场景，使用全量入口：
 
 ```bash
 scripts/competition/task123.sh prepare
@@ -9,15 +41,17 @@ scripts/competition/task123.sh --list
 scripts/competition/task123.sh build full
 ```
 
-准备完成后按 Task 1、Task 2、Task 3 分别运行：
+准备完成后按需运行对应 suite；以下命令彼此独立，不要求全部连续执行：
 
 ```bash
 scripts/competition/task123.sh suite task1
+scripts/competition/task123.sh suite task1-multivcpu
 scripts/competition/task123.sh suite task2
 scripts/competition/task123.sh suite task3
 ```
 
-`prepare` 下载并校验固定的 AArch64 musl 工具链和 Zephyr 源码，并根据该
+`prepare` 下载固定的 AArch64 musl 工具链、Zephyr、ncnn、pnnx 和 YOLO11n
+模型，并根据该
 Zephyr revision 自带的 `scripts/requirements-base.txt` 创建专用 Python 虚拟环境；
 它们默认位于仓库内被忽略的 `.deps/task123/`。后续 `doctor` 和 `build` 会自动
 发现这些依赖，无需再次设置 `CROSS_ROOT`、`ZEPHYR_BASE` 或 Python 路径。
@@ -26,12 +60,14 @@ Zephyr 树，并在进入 CMake 前检查 `jsonschema` 等 Zephyr Python 依赖�
 `build full` 可以复用已下载的源码、模型、rootfs、工具链和专用 Python 环境，
 但会删除本项目固定输出目录内的 ncnn、Zephyr、StarryOS、AxVisor 编译结果并从
 当前 checkout 重新生成。运行证据默认写入 `tmp/competition-task123/evidence/`。
-三个 suite 分别创建 `suite-task1`、`suite-task2`、`suite-task3` 证据目录，不会把
-不同任务的数据混在一起；每个场景保存 commit、日志、pcap、命令和哈希。
+各 suite 分别创建 `suite-task1`、`suite-task1-multivcpu`、`suite-task2`、
+`suite-task3` 证据目录，不会把不同实验的数据混在一起；每个场景保存
+commit、日志、pcap、命令和哈希。
 
-## 下载依赖
+## 可选：使用已有依赖
 
-下载内容可以放在任意目录，通过环境变量传入；不要把个人主目录写进脚本。下面使用仓库内被忽略的 `tmp/competition-task123/downloads/` 作为示例：
+正常使用一键入口时无需执行本节。已有下载内容也可以放在任意目录，通过环境变量
+传入；不要把个人主目录写进脚本。下面使用仓库相对路径作为示例：
 
 ```bash
 mkdir -p tmp/competition-task123/downloads
@@ -43,7 +79,7 @@ git -C tmp/competition-task123/downloads/ncnn checkout \
 
 ```
 
-另外准备：
+如果不使用 `prepare`，还需自行准备：
 
 - pnnx Linux `20260526`，并设置 `PNNX=/path/to/pnnx`；
 - YOLO11n ONNX，SHA256 必须是 `634279b40c07c6391472c51ad45b81ebc48706a9a1fe72dd3396322acd0c053b`，设置 `YOLO_ONNX=/path/to/yolo11n.onnx`；
@@ -79,6 +115,9 @@ export TASK123_PYTHON="$PWD/.deps/task123/zephyr-python-dccb09599635bdff17633fa7
 # Task 1：4 组运行——空载 RR、空载 FP-RR、压力 RR、压力 FP-RR
 scripts/competition/task123.sh suite task1
 
+# Task 1 multi-vCPU：三 pCPU、StarryOS 双 vCPU 的 RR/FP-RR 配对矩阵
+scripts/competition/task123.sh suite task1-multivcpu
+
 # Task 2：6 个 Task2-only 正常/故障通信场景
 scripts/competition/task123.sh suite task2
 
@@ -86,9 +125,30 @@ scripts/competition/task123.sh suite task2
 scripts/competition/task123.sh suite task3
 ```
 
-各命令分别以 `TASK123_SUITE_PASS name=task1`、`name=task2` 或 `name=task3`
-结束。Task 2 的六个场景均使用真正的 Task2-only 模式：不要求或加载 YOLO，且
+各命令以与 suite 同名的 `TASK123_SUITE_PASS name=...` 结束。Task 2 的
+六个场景均使用真正的 Task2-only 模式：不要求或加载 YOLO，且
 验证器拒绝任何 Task 3 模型活动。
+
+`build task1` 和 `build task1-multivcpu` 都构建各自实验所需的
+StarryOS/YOLO 共同产物，但只构建所选实验的 RTOS 负载；对应的 `suite` 只消费
+这些已构建产物并运行。`build full` 会额外构建另一套 Task 1 以及 Task 2、Task 3，
+只适合需要全量产物的场景。
+`task1-multivcpu` 启动 3 个 QEMU pCPU，并固定以下映射：StarryOS Guest CPU 0
+绑定 pCPU2 运行 ncnn/YOLO 压力；StarryOS Guest CPU 1 绑定 pCPU1 运行 T2N1；
+Zephyr vCPU0 也绑定 pCPU1。Zephyr 优先级为 90，StarryOS 为 89。RR 与 FP-RR
+两臂复用相同的 StarryOS、rootfs、Zephyr、VM 配置、样本数和 workload；矩阵
+验证器拒绝这些不可变产物的哈希差异。
+
+这个入口复现的是 CPU 数量、vCPU/pCPU 放置、Guest 内角色绑定和调度竞争关系。
+QEMU 中的 ncnn CPU 推理只是实板 RKNN/NPU 路径的压力替身；它不复现 RK3588 NPU、
+设备直通、DMA/IRQ、SoC 内存带宽或绝对时延，因此结果不能解释成 NPU 性能或实板
+硬实时性能。一键 `suite` 默认每臂运行 3 轮、每轮采集 6000 个 10 ms 样本，可用
+`TASK1_TOPOLOGY_SAMPLE_COUNT` 和 `TASK1_TOPOLOGY_DUMP_CHUNK_ROWS` 调整构建参数。
+
+该入口已完成一次正式 RR 3 轮 + bounded FP-RR 3 轮长测。三轮中位
+P99 从 `2.314 ms` 降到 `1.781 ms`（降低 23.05%），P99.9 降低
+42.05%，max 降低 53.56%，超过 1 ms 的样本数降低 90.96%。六轮均保持
+YOLO 压力与 T2N1 通信存活，并通过拓扑、pcap 和不变产物哈希校验。
 
 Task 2+3 的真实联合闭环单独运行，不并入 Task 2 或 Task 3 的独立统计：
 
@@ -96,9 +156,9 @@ Task 2+3 的真实联合闭环单独运行，不并入 Task 2 或 Task 3 的独�
 scripts/competition/task123.sh run task23-integrated
 ```
 
-QEMU TCG 用于功能、故障和同平台调度机制对照，其绝对推理时间不代表
-RK3588 NPU 性能。仓库中的 `very_special-成果材料/board-fits/` 只供物理板
-RAM 启动，不作为 QEMU suite 的预编译替代品。
+QEMU TCG 用于功能、故障和同平台调度机制对照，其绝对推理时间不代表 RK3588 NPU
+性能。仓库中的 `very_special-成果材料/board-fits/` 只供物理板 RAM 启动，不作为
+QEMU suite 的预编译替代品。
 
 `suite acceptance` 和 `suite full` 仅保留给自动化回归使用，不是人工核验的推荐入口。
 `ci-contracts` 也是独立 gate。单独构建 Task 2 endpoint 时可设置

@@ -15,9 +15,9 @@ Usage:
   scripts/competition/task123.sh doctor
   scripts/competition/task123.sh prepare
   scripts/competition/task123.sh --list
-  scripts/competition/task123.sh build [quick|full]
+  scripts/competition/task123.sh build [quick|task1|task1-multivcpu|full]
   scripts/competition/task123.sh run SCENARIO
-  scripts/competition/task123.sh suite [task1|task2|task3|quick|acceptance|full|video]
+  scripts/competition/task123.sh suite [task1|task1-multivcpu|task2|task3|quick|acceptance|full|video]
   scripts/competition/task123.sh board COMMAND
 
 Run `scripts/competition/task123.sh --list` for scenario and suite names.
@@ -50,7 +50,9 @@ Gates:
   ci-contracts             Task 2/3 Rust and Python contract/regression gate
 
 Task-specific suites (recommended for separate evidence):
-  task1       RR versus FP-RR scheduler A/B
+  task1       Original two-pCPU idle/pressure RR versus FP-RR matrix
+  task1-multivcpu
+              Three-pCPU, dual-vCPU RR versus FP-RR matrix
   task2       Normal control loop plus all protocol fault scenarios
   task3       Real YOLO smoke and rejected-output safety
 
@@ -110,9 +112,11 @@ configured_tool() {
 }
 
 find_ncnn_source() {
-    local candidate
+    local candidate deps_root
+    deps_root="${TASK123_DEPS_DIR:-$repo_root/.deps/task123}"
     for candidate in \
         "${NCNN_SOURCE:-}" \
+        "$deps_root/ncnn-$ncnn_revision" \
         "$repo_root/tmp/task3-yolo/ncnn-source" \
         "$repo_root/tmp/task3-yolo/ncnn-source-fresh" \
         "$repo_root/tmp/competition-task123/downloads/ncnn"; do
@@ -124,10 +128,12 @@ find_ncnn_source() {
 }
 
 find_pnnx() {
-    local candidate
+    local candidate deps_root
+    deps_root="${TASK123_DEPS_DIR:-$repo_root/.deps/task123}"
     for candidate in \
         "${PNNX:-}" \
         "$(command -v pnnx 2>/dev/null || true)" \
+        "$deps_root/pnnx-20260526-linux/pnnx" \
         "$repo_root/tmp/task3-yolo/pnnx-tool/20260526/pnnx-20260526-linux/pnnx" \
         "$repo_root/tmp/competition-task123/downloads/pnnx-20260526-linux/pnnx"; do
         if [[ -n "$candidate" && -x "$candidate" ]]; then
@@ -228,7 +234,7 @@ EOF
     zephyr_base="$(find_zephyr_base || true)"
     onnx="$(find_yolo_onnx || true)"
     if [[ -n "$ncnn_source" ]] &&
-        [[ "$(git -C "$ncnn_source" rev-parse HEAD 2>/dev/null || true)" == "$ncnn_revision" ]]; then
+        [[ "$(task123_source_revision "$ncnn_source" 2>/dev/null || true)" == "$ncnn_revision" ]]; then
         printf '  [OK]      ncnn source %s\n' "$ncnn_revision"
     else
         printf '  [MISSING] pinned ncnn source; set NCNN_SOURCE (commit %s)\n' "$ncnn_revision"
@@ -275,7 +281,7 @@ Install an aarch64-linux-musl toolchain, then either add its bin directory to
 PATH or export CROSS_ROOT=/path/to/aarch64-linux-musl-cross.
 
 Downloaded sources may be reused. Compiled outputs are removed and rebuilt by
-`task123.sh build full`. See scripts/competition/README-task123.md for the
+`task123.sh build TARGET`. See scripts/competition/README-task123.md for the
 pinned source setup commands.
 EOF
         return 1
@@ -288,7 +294,8 @@ fresh_output_dir() {
     case "$directory" in
         "$repo_root/tmp/task3-yolo/"*|\
         "$repo_root/tmp/net-dual-guest/"*|\
-        "$repo_root/tmp/starry-task1-periodic") ;;
+        "$repo_root/tmp/starry-task1-periodic"|\
+        "$repo_root/tmp/starry-task1-multivcpu") ;;
         *) printf 'error: refusing to clear unexpected output path: %s\n' "$directory" >&2; return 1 ;;
     esac
     rm -rf -- "$directory"
@@ -309,14 +316,48 @@ build_quick() {
     (cd "$repo_root" && bash scripts/test/net-dual-guest/run-ci-regression.sh)
 }
 
-build_full() {
-    doctor
-    configure_cross_tools
-    local ncnn_source pnnx zephyr_base onnx
+build_ncnn_guest_assets() {
+    local ncnn_source pnnx onnx
     ncnn_source="$(find_ncnn_source)"
     pnnx="$(find_pnnx)"
-    zephyr_base="$(find_zephyr_base)"
     onnx="$(find_yolo_onnx)"
+
+    fresh_output_dir "$repo_root/tmp/task3-yolo/ncnn-aarch64"
+    NCNN_SOURCE="$ncnn_source" \
+        "$repo_root/scripts/task3/build-ncnn-aarch64.sh"
+    fresh_output_dir "$repo_root/tmp/task3-yolo/ncnn-model"
+    YOLO_ONNX="$onnx" PNNX="$pnnx" \
+        "$repo_root/scripts/task3/convert-yolo-ncnn.sh"
+    "$repo_root/scripts/task3/prepare-yolo-ncnn-input.sh"
+    "$repo_root/scripts/task3/prepare-yolo-ncnn-ab-inputs.sh"
+}
+
+stage_starry_task23_guest() {
+    (cd "$repo_root" && cargo xtask starry rootfs --arch aarch64)
+    (cd "$repo_root" && cargo xtask starry app qemu \
+        --test-case starryos-task2 --arch aarch64 \
+        --qemu-config scripts/competition/qemu-aarch64-starry-build-smoke.toml)
+    local starry_elf rootfs fsck_status=0
+    starry_elf="$repo_root/target/aarch64-unknown-none-softfloat/release/starryos"
+    rootfs="$repo_root/tmp/axbuild/rootfs/rootfs-aarch64-alpine.img"
+    if ! grep -aFq 'registered virtio network device' "$starry_elf"; then
+        printf 'error: freshly built StarryOS image does not contain the virtio-net driver\n' >&2
+        return 1
+    fi
+    # App staging updates ext4 through debugfs. Repair metadata before a run
+    # makes a disposable copy of the image.
+    e2fsck -fy "$rootfs" || fsck_status=$?
+    if ((fsck_status > 1)); then
+        printf 'error: failed to repair freshly staged rootfs (e2fsck=%d)\n' \
+            "$fsck_status" >&2
+        return 1
+    fi
+    e2fsck -fn "$rootfs"
+}
+
+prepare_task123_build() {
+    doctor
+    configure_cross_tools
 
     # These images are built through nested/custom Cargo workspaces, for which
     # `cargo clean -p ...` at the repository root can report "Removed 0 files".
@@ -325,21 +366,65 @@ build_full() {
     fresh_release_dir "$repo_root/target/aarch64-unknown-none-softfloat/release"
     fresh_release_dir "$repo_root/target/aarch64-unknown-linux-musl/release"
     rm -rf -- "$repo_root/target/starryos-task2-rust"
-    build_quick
-    fresh_output_dir "$repo_root/tmp/task3-yolo/ncnn-aarch64"
-    NCNN_SOURCE="$ncnn_source" \
-        "$repo_root/scripts/task3/build-ncnn-aarch64.sh"
+}
 
-    fresh_output_dir "$repo_root/tmp/task3-yolo/ncnn-model"
-    YOLO_ONNX="$onnx" PNNX="$pnnx" \
-        "$repo_root/scripts/task3/convert-yolo-ncnn.sh"
-    "$repo_root/scripts/task3/prepare-yolo-ncnn-input.sh"
-    "$repo_root/scripts/task3/prepare-yolo-ncnn-ab-inputs.sh"
+build_starry_yolo_guest() {
+    build_ncnn_guest_assets
+    stage_starry_task23_guest
+}
+
+build_task1_periodic() {
+    local zephyr_base
+    zephyr_base="$(find_zephyr_base)"
+
+    fresh_output_dir "$repo_root/tmp/starry-task1-periodic"
+    ZEPHYR_BASE="$zephyr_base" \
+        ZEPHYR_START_GATED=1 ZEPHYR_DUMP_GATED=1 \
+        ZEPHYR_SAMPLE_COUNT="${TASK1_SAMPLE_COUNT:-6000}" \
+        ZEPHYR_DUMP_CHUNK_ROWS="${TASK1_DUMP_CHUNK_ROWS:-256}" \
+        OUT_DIR="$repo_root/tmp/starry-task1-periodic" \
+        BUILD_DIR="$repo_root/tmp/starry-task1-periodic/cargo-target" \
+        "$repo_root/scripts/test/rt-partition/build-zephyr-periodic.sh"
+}
+
+build_task1_multivcpu_zephyr() {
+    local zephyr_base
+    zephyr_base="$(find_zephyr_base)"
+
+    fresh_output_dir "$repo_root/tmp/starry-task1-multivcpu"
+    ZEPHYR_BASE="$zephyr_base" TASK2_ZEPHYR_VIRTIO_SLOT=0 \
+        TASK2_FAULT_MODE=none \
+        TASK1_ZEPHYR_SAMPLE_COUNT="${TASK1_TOPOLOGY_SAMPLE_COUNT:-6000}" \
+        TASK1_ZEPHYR_DUMP_CHUNK_ROWS="${TASK1_TOPOLOGY_DUMP_CHUNK_ROWS:-256}" \
+        OUT_DIR="$repo_root/tmp/starry-task1-multivcpu" \
+        BUILD_DIR="$repo_root/tmp/starry-task1-multivcpu/cargo-target" \
+        "$repo_root/scripts/test/net-dual-guest/build-zephyr-task2.sh"
+}
+
+build_task1() {
+    prepare_task123_build
+    build_starry_yolo_guest
+    build_task1_periodic
+    printf 'TASK123_BUILD_PASS target=task1\n'
+}
+
+build_task1_multivcpu() {
+    prepare_task123_build
+    build_starry_yolo_guest
+    build_task1_multivcpu_zephyr
+    printf 'TASK123_BUILD_PASS target=task1-multivcpu\n'
+}
+
+build_full() {
+    prepare_task123_build
+    build_quick
+    build_starry_yolo_guest
 
     fresh_output_dir "$repo_root/tmp/task3-yolo/ncnn-smoke"
     "$repo_root/scripts/task3/run-ncnn-smoke.sh"
 
-    local variant fault
+    local variant fault zephyr_base
+    zephyr_base="$(find_zephyr_base)"
     while read -r variant fault; do
         fresh_output_dir "$repo_root/tmp/net-dual-guest/zephyr-task2-starry-$variant"
         ZEPHYR_BASE="$zephyr_base" TASK2_ZEPHYR_VIRTIO_SLOT=0 \
@@ -362,34 +447,8 @@ EOF
     cp "$repo_root/tmp/net-dual-guest/zephyr-task2-starry-normal/manifest.toml" \
         "$repo_root/tmp/net-dual-guest/zephyr-task2/manifest.toml"
 
-    fresh_output_dir "$repo_root/tmp/starry-task1-periodic"
-    ZEPHYR_BASE="$zephyr_base" \
-        ZEPHYR_START_GATED=1 ZEPHYR_DUMP_GATED=1 \
-        OUT_DIR="$repo_root/tmp/starry-task1-periodic" \
-        BUILD_DIR="$repo_root/tmp/starry-task1-periodic/cargo-target" \
-        "$repo_root/scripts/test/rt-partition/build-zephyr-periodic.sh"
-
-    (cd "$repo_root" && cargo xtask starry rootfs --arch aarch64)
-    (cd "$repo_root" && cargo xtask starry app qemu \
-        --test-case starryos-task2 --arch aarch64 \
-        --qemu-config scripts/competition/qemu-aarch64-starry-build-smoke.toml)
-    local starry_elf rootfs
-    starry_elf="$repo_root/target/aarch64-unknown-none-softfloat/release/starryos"
-    rootfs="$repo_root/tmp/axbuild/rootfs/rootfs-aarch64-alpine.img"
-    if ! grep -aFq 'registered virtio network device' "$starry_elf"; then
-        printf 'error: freshly built StarryOS image does not contain the virtio-net driver\n' >&2
-        return 1
-    fi
-    # App staging updates ext4 through debugfs. Finish its metadata repair now,
-    # before any scenario makes a disposable copy of the image.
-    local fsck_status=0
-    e2fsck -fy "$rootfs" || fsck_status=$?
-    if ((fsck_status > 1)); then
-        printf 'error: failed to repair freshly staged rootfs (e2fsck=%d)\n' \
-            "$fsck_status" >&2
-        return 1
-    fi
-    e2fsck -fn "$rootfs"
+    build_task1_periodic
+    build_task1_multivcpu_zephyr
     local build_vm_dir build_rtos_vm
     build_vm_dir="$repo_root/tmp/competition-task123/build"
     build_rtos_vm="$build_vm_dir/vm-aarch64-p2-switch-rtos.runtime.toml"
@@ -466,9 +525,16 @@ run_suite() {
     local suite="$1" suite_dir scenario
     local -a scenarios
     case "$suite" in
-        task1)
+        task1|task1-multivcpu)
             suite_dir="$(new_evidence_path "suite-$suite")"
-            "$repo_root/scripts/competition/run-starry-task1-qemu-matrix.sh" "$suite_dir"
+            if [[ "$suite" == task1 ]]; then
+                "$repo_root/scripts/competition/run-starry-task1-qemu-matrix.sh" \
+                    "$suite_dir"
+            else
+                STARRY_TASK1_TOPOLOGY_REPEATS="${STARRY_TASK1_TOPOLOGY_REPEATS:-3}" \
+                    "$repo_root/scripts/competition/run-starry-task1-multivcpu.sh" \
+                        "$suite_dir"
+            fi
             printf 'TASK123_SUITE_PASS name=%s evidence=%s\n' "$suite" "$suite_dir"
             return
             ;;
@@ -731,6 +797,8 @@ main() {
             [[ $# -le 2 ]] || { usage >&2; return 2; }
             case "${2:-full}" in
                 quick) build_quick ;;
+                task1) build_task1 ;;
+                task1-multivcpu) build_task1_multivcpu ;;
                 full) build_full ;;
                 *) usage >&2; return 2 ;;
             esac

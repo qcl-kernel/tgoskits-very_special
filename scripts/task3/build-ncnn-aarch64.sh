@@ -8,10 +8,10 @@ out_dir="${OUT_DIR:-$repo_root/tmp/task3-yolo/ncnn-aarch64}"
 expected_revision="946fe3fb14a8dff8c06df763f67be522167b2f00"
 
 if [[ -z "$ncnn_source" || ! -f "$ncnn_source/CMakeLists.txt" ]]; then
-    printf 'error: NCNN_SOURCE must point to the pinned ncnn checkout\n' >&2
+    printf 'error: NCNN_SOURCE must point to the pinned ncnn source tree\n' >&2
     exit 2
 fi
-actual_revision="$(git -C "$ncnn_source" rev-parse HEAD 2>/dev/null || true)"
+actual_revision="$(task123_source_revision "$ncnn_source" 2>/dev/null || true)"
 if [[ "$actual_revision" != "$expected_revision" ]]; then
     printf 'error: ncnn revision mismatch: expected %s got %s\n' \
         "$expected_revision" "${actual_revision:-unknown}" >&2

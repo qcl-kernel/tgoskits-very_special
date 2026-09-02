@@ -149,6 +149,56 @@ FP-RR 组使用同一 StarryOS ncnn/YOLO 负载、Zephyr 二进制、10 ms/300 �
 证据保存在 QEMU Task 1 调度场景目录中，包括六份原始运行、`comparison.md`
 和 `verify.log`。
 
+## 无板条件下的 QEMU multi-vCPU 拓扑复现：RR/FP-RR 各三轮
+
+评审老师当前没有 RK3588 物理板，因此仅提供实板 FIT 和日志不足以让其
+亲自核验“StarryOS 是否真的以两个 vCPU 运行、通信 vCPU 是否真的与
+RTOS 共核”。为此，我们把最终实板的 CPU 角色和调度竞争拓扑迁移到
+QEMU，并作为与原 `task1` 相互独立的 `task1-multivcpu` 入口：
+
+```text
+QEMU -smp 3
+
+pCPU2: StarryOS Guest CPU 0 -> ncnn/YOLO 压力（对应实板 AI/RKNN 角色）
+pCPU1: StarryOS Guest CPU 1 -> VirtIO-net / T2N1 通信，priority 89
+        Zephyr vCPU0        -> 10 ms 周期工作，priority 90
+```
+
+这是“结构等价”的无板复现：QEMU 中的 pCPU 数量、vCPU/pCPU 放置、
+Guest 内 CPU affinity、通信与 RTOS 的共核关系和 90/89 优先级与实板
+冻结架构一致。它不是“硬件等价”：QEMU 不提供 RK3588 NPU 直通，ncnn
+CPU 推理只是可移植的持续压力替身，因此不把 QEMU 绝对时延解释为实板
+NPU 性能。
+
+我们已在该拓扑下完成一次正式长测：RR 3 轮、bounded FP-RR 3 轮，
+每轮均为 6000 个 10 ms 周期样本。六轮均观察到 YOLO 推理、T2N1 通信
+持续存活，拓扑、双侧 pcap 和 RR/FP-RR 不变产物哈希验证通过。
+
+| 轮次 | mean | P99 | P99.9 | max | `>1 ms` |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| RR-01 | 0.941 ms | 2.314 ms | 4.397 ms | 6.294 ms | 1412/6000 |
+| RR-02 | 1.132 ms | 2.196 ms | 3.196 ms | 5.695 ms | 3562/6000 |
+| RR-03 | 1.300 ms | 2.410 ms | 3.718 ms | 6.430 ms | 4861/6000 |
+| FP-RR-01 | 0.809 ms | 1.814 ms | 2.177 ms | 2.923 ms | 322/6000 |
+| FP-RR-02 | 0.820 ms | 1.781 ms | 2.155 ms | 4.090 ms | 335/6000 |
+| FP-RR-03 | 0.797 ms | 1.276 ms | 1.795 ms | 2.610 ms | 184/6000 |
+
+| 三轮中位指标 | RR 组 | bounded FP-RR 组 | 变化 |
+| --- | ---: | ---: | ---: |
+| mean | 1.132 ms | 0.809 ms | 降低 28.55% |
+| P99 | 2.314 ms | 1.781 ms | 降低 23.05% |
+| P99.9 | 3.718 ms | 2.155 ms | 降低 42.05% |
+| max | 6.294 ms | 2.923 ms | 降低 53.56% |
+| `>1 ms` | 3562/6000 | 322/6000 | 降低 90.96% |
+
+这一组结果说明：在与最终实板相同的 CPU 角色和共核竞争关系下，
+FP-RR 的改善不只出现在一次短测，而是同时出现在平均值、P99、P99.9、
+最大值和超阈值计数中。它是对调度修改有实质效果的可重跑证据；改善
+幅度仍应与实板数据分开报告，不将两个平台的绝对数值直接横比。
+
+完整复现命令见 [05-复现与配置指南.md](05-复现与配置指南.md)，本次
+已完成矩阵的证据索引见 [06-证据与演示索引.md](06-证据与演示索引.md)。
+
 ## 正式通信共核实板矩阵：RR/FP-RR 各三轮
 
 在 `StarryOS communication vCPU1 + Zephyr vCPU0 -> pCPU1` 拓扑下，
@@ -257,5 +307,6 @@ RK3588 上还完成了每格 30,000 样本的 idle/stress 四格矩阵和另一�
 | AxVisor 实时机制 | bounded FP-RR、优先级抢占、CNTV 所有权、vIRQ/LR、亲和性 | 调度器、AxVM runtime、vtimer 和 GIC 源码 |
 | 多核 StarryOS Guest | 2 vCPU、1 GiB 内存、NPU/eMMC/VirtIO 与中断归属 | VM 配置、运行时配置和启动日志 |
 | 调度对比 | 正式通信共核 RR/FP-RR 实板各三轮 | 6000 样本日志、CSV、长尾和压力活性证据 |
+| 无板复现 | QEMU 三 pCPU、StarryOS 双 vCPU、通信/RTOS 共核 RR/FP-RR 各三轮 | 每轮 6000 样本、双 pcap、拓扑校验、不变产物哈希和活性证据 |
 | idle/stress | 实板四格 30,000 样本和高竞争 QEMU 参考 | 独立矩阵报告 |
 | 原生 RTOS | 原生 Zephyr/QEMU 与 AxVisor Zephyr 使用同类周期任务 | 6000 样本日志、配置和统计 |

@@ -1,4 +1,5 @@
 target = "aarch64-unknown-none-softfloat"
+max_cpu_num = 2
 features = [
   "ax-driver/nvme",
   "ax-driver/virtio-net",

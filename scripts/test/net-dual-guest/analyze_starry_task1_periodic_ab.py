@@ -127,16 +127,29 @@ def build_report(
     rtos_name: str,
     sample_count: int,
     load_mode: str,
+    contention_role: str = "ai",
 ) -> str:
     probe_label = "RT-Thread" if rtos_name == "rtthread" else "Zephyr"
     load_label = "in-Guest ncnn/YOLO pressure" if load_mode == "yolo" else "idle StarryOS"
+    if contention_role == "communication":
+        topology_summary = (
+            f"The {sample_count}-sample, 10 ms {probe_label} periodic probe "
+            "(priority 90) shares pCPU1 with the StarryOS T2N1 communication "
+            f"vCPU (priority 89); {load_label} runs separately on pCPU2."
+        )
+    else:
+        topology_summary = (
+            f"The {sample_count}-sample, 10 ms {probe_label} periodic probe "
+            f"(priority 90) shares pCPU1 with {load_label} (priority 89)."
+        )
     lines = [
         "# StarryOS Task 1 periodic-latency evidence",
         "",
-        f"The {sample_count}-sample, 10 ms {probe_label} periodic probe (priority 90) "
-        f"shares pCPU1 with {load_label} (priority 89).",
+        topology_summary,
     ]
     if rr and fp:
+        rr_mean = statistics.median(run.mean_ns for run in rr)
+        fp_mean = statistics.median(run.mean_ns for run in fp)
         rr_p99 = median_int([run.p99_ns for run in rr])
         fp_p99 = median_int([run.p99_ns for run in fp])
         rr_p999 = median_int([run.p99_9_ns for run in rr])
@@ -152,10 +165,11 @@ def build_report(
                 "",
                 "| Metric (median across runs) | RR | bounded FP-RR | Change |",
                 "|---|---:|---:|---:|",
+                f"| Mean wake-up jitter | {fmt_ns(rr_mean)} | {fmt_ns(fp_mean)} | {reduction(rr_mean, fp_mean):.2f}% lower |",
                 f"| P99 wake-up jitter | {fmt_ns(rr_p99)} | {fmt_ns(fp_p99)} | {ratio:.3f}x / {reduction(rr_p99, fp_p99):.2f}% lower |",
                 f"| P99.9 wake-up jitter | {fmt_ns(rr_p999)} | {fmt_ns(fp_p999)} | {reduction(rr_p999, fp_p999):.2f}% lower |",
                 f"| Maximum wake-up jitter | {fmt_ns(rr_max)} | {fmt_ns(fp_max)} | {reduction(rr_max, fp_max):.2f}% lower |",
-                f"| Misses above 1 ms | {rr_misses:g}/{sample_count} | {fp_misses:g}/{sample_count} | {reduction(rr_misses, fp_misses):.2f}% lower |",
+                f"| Samples above 1 ms | {rr_misses:g}/{sample_count} | {fp_misses:g}/{sample_count} | {reduction(rr_misses, fp_misses):.2f}% lower |",
             )
         )
     lines.extend(
@@ -191,6 +205,12 @@ def main() -> int:
     parser.add_argument("--fp-rr", nargs="*", default=[], type=Path)
     parser.add_argument("--sample-count", type=int, default=300)
     parser.add_argument("--load-mode", choices=("idle", "yolo"), default="yolo")
+    parser.add_argument(
+        "--contention-role",
+        choices=("ai", "communication"),
+        default="ai",
+        help="StarryOS role that shares the periodic RTOS pCPU",
+    )
     parser.add_argument("--min-inferences", type=int, default=1)
     parser.add_argument(
         "--rtos-name",
@@ -234,7 +254,14 @@ def main() -> int:
     except (OSError, ValueError) as error:
         parser.error(str(error))
     args.output.write_text(
-        build_report(rr, fp, args.rtos_name, args.sample_count, args.load_mode)
+        build_report(
+            rr,
+            fp,
+            args.rtos_name,
+            args.sample_count,
+            args.load_mode,
+            args.contention_role,
+        )
     )
     print(f"PASS: verified {len(rr)} RR and {len(fp)} FP-RR periodic runs")
     print(f"comparison={args.output}")

@@ -38,6 +38,14 @@ class AnalyzeStarryTask1PeriodicTests(unittest.TestCase):
 
             self.assertEqual(metrics.infer_us, 20_804_665)
 
+    def test_communication_contention_report_keeps_ai_on_pcpu2(self) -> None:
+        report = MODULE.build_report(
+            [], [], "zephyr", 6000, "yolo", contention_role="communication"
+        )
+
+        self.assertIn("shares pCPU1 with the StarryOS T2N1 communication vCPU", report)
+        self.assertIn("ncnn/YOLO pressure runs separately on pCPU2", report)
+
 
 if __name__ == "__main__":
     unittest.main()

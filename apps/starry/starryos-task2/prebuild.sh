@@ -85,11 +85,18 @@ env "${build_environment[@]}" cargo build --release --target aarch64-unknown-lin
     --manifest-path "$app_dir/rust/Cargo.toml" --target-dir "$build_dir"
 out="$build_dir/aarch64-unknown-linux-musl/release/starryos-task2-endpoint"
 test -x "$out"
+affinity_helper="$build_dir/task123-affinity"
+"$cc" -std=c11 -O2 -Wall -Wextra -Werror -static -no-pie \
+    "$app_dir/affinity_exec.c" -o "$affinity_helper"
 
 install -Dm0755 "$out" "$overlay_dir/usr/bin/starry-udp-probe"
 install -Dm0755 "$app_dir/udp-probe.sh" "$overlay_dir/usr/bin/starry-udp-probe.sh"
 install -Dm0755 "$out" "$overlay_dir/usr/bin/starry-t2n1-endpoint"
 install -Dm0755 "$app_dir/t2n1-run.sh" "$overlay_dir/usr/bin/t2n1-run.sh"
+install -Dm0755 "$affinity_helper" "$overlay_dir/usr/bin/task123-affinity"
+install -Dm0755 "$app_dir/wait-log.sh" "$overlay_dir/usr/bin/task123-wait-log"
+install -Dm0755 "$app_dir/task1-topology.sh" "$overlay_dir/usr/bin/task123-topology"
+install -Dm0755 "$app_dir/task1-topology.sh" "$overlay_dir/usr/bin/t1"
 if [[ "$build_scope" == integrated ]]; then
     install -Dm0644 "$yolo_assets/yolo11n.ncnn.param" \
         "$overlay_dir/usr/share/task3-yolo/yolo11n.ncnn.param"

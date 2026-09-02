@@ -25,6 +25,37 @@ QEMU 验证按 Task 1、Task 2、Task 3 分别启动、分别保存证据、分�
 pCPU1 共享 StarryOS 通信 vCPU 与 Zephyr。QEMU 数据用于同平台机制对照，
 不替代正式实板 RR/FP-RR 统计。
 
+### Task 1 multi-vCPU：无板条件下的最终实板拓扑复现
+
+`suite task1-multivcpu` 不是另一个强竞争消融。它的用途是解决评审老师
+没有 RK3588 板卡时无法亲自验证多 vCPU 架构的问题。QEMU 启动 3 个
+pCPU：StarryOS Guest CPU 0 绑定 pCPU2 运行 ncnn/YOLO 压力，Guest CPU 1
+绑定 pCPU1 运行 T2N1 通信；Zephyr vCPU0 也绑定 pCPU1 运行 10 ms
+周期工作。优先级仍为 Zephyr 90、StarryOS 89。
+
+已完成的正式矩阵为 RR 3 轮 + bounded FP-RR 3 轮，每轮 6000 个
+10 ms 样本。以三轮中位数对比：
+
+| 指标 | RR | bounded FP-RR | 改善 |
+| --- | ---: | ---: | ---: |
+| mean | 1.132 ms | 0.809 ms | 降低 28.55% |
+| P99 | 2.314 ms | 1.781 ms | 降低 23.05% |
+| P99.9 | 3.718 ms | 2.155 ms | 降低 42.05% |
+| max | 6.294 ms | 2.923 ms | 降低 53.56% |
+| `>1 ms` | 3562/6000 | 322/6000 | 降低 90.96% |
+
+六轮均验证 YOLO 压力和 T2N1 通信在采样窗口内持续推进，且通过
+vCPU/pCPU 映射、Guest 内 affinity、双侧 pcap、调度计数和不变产物
+哈希校验。验证器的矩阵结论为：
+
+```text
+PASS: Task 1 QEMU topology matches the frozen board CPU-role contract
+```
+
+“匹配”只指 CPU 数量、角色放置和调度竞争关系。QEMU 不模拟 RK3588 NPU
+直通、DMA/IRQ 和 SoC 带宽，所以不使用该矩阵推导 NPU 性能或与实板绝对
+时延一致。
+
 ## 2. Task 2：独立通信场景
 
 六个通信场景统一设置 `STARRY_TASK23_SCOPE=task2`，不安装、加载或运行模型。
@@ -78,12 +109,14 @@ socket 和 pcap 路径，清理时只处理本次 PID。
 
 ```bash
 scripts/competition/task123.sh suite task1
+scripts/competition/task123.sh suite task1-multivcpu
 scripts/competition/task123.sh suite task2
 scripts/competition/task123.sh suite task3
 scripts/competition/task123.sh run task23-integrated
 ```
 
-三个任务分别创建独立的 `suite-task1`、`suite-task2`、`suite-task3` 目录，并输出
-对应的 `TASK123_SUITE_PASS name=<task>`。联合闭环输出自己的 scenario 证据目录。
+各个 suite 分别创建独立的 `suite-task1`、`suite-task1-multivcpu`、
+`suite-task2`、`suite-task3` 目录，并输出对应的
+`TASK123_SUITE_PASS name=<task>`。联合闭环输出自己的 scenario 证据目录。
 验证器不仅检查进程退出码，还检查协议闭合、精确帧数、模型隔离、安全状态和
 fatal marker。`suite acceptance/full` 只保留为自动化回归入口。

@@ -232,12 +232,43 @@ https://www.bilibili.com/video/BV11XhF6REHU
 
 所有命令从仓库根目录执行：
 
+由于评审现场没有 RK3588 物理板，我们新增了 `task1-multivcpu`：把最终实板的
+三 pCPU、StarryOS 双 vCPU、通信 vCPU 与 Zephyr 共核竞争关系迁移到 QEMU，
+让老师无需板卡也能检查多 vCPU 架构和 RR/FP-RR 对照。该入口已经完成一次正式
+RR 3 轮 + bounded FP-RR 3 轮长测，每轮采集 6000 个 10 ms 样本；三轮中位数中，
+P99 从 `2.314 ms` 降到 `1.781 ms`，最大值从 `6.294 ms` 降到
+`2.923 ms`，超过 1 ms 的样本从 `3562/6000` 降到 `322/6000`。
+
+这里迁移的是 CPU 拓扑、Guest 角色和调度竞争关系。QEMU 的 ncnn/YOLO CPU
+推理用于代替实板 RKNN/NPU 角色产生持续压力，不等价于 RK3588 NPU 直通、
+DMA/IRQ、SoC 带宽或绝对时延。
+
+复现老师已经运行过的原 Task 1：
+
 ```bash
 scripts/competition/task123.sh prepare
 scripts/competition/task123.sh doctor
-scripts/competition/task123.sh build full
-
+scripts/competition/task123.sh build task1
 scripts/competition/task123.sh suite task1
+```
+
+复现新增的物理板卡拓扑映射实验：
+
+```bash
+scripts/competition/task123.sh prepare
+scripts/competition/task123.sh doctor
+scripts/competition/task123.sh build task1-multivcpu
+scripts/competition/task123.sh suite task1-multivcpu
+```
+
+`task1` 保留老师已使用的原始两 pCPU idle/pressure 矩阵；
+`task1-multivcpu` 运行三 pCPU、StarryOS 双 vCPU 矩阵。两者都使用相同的
+`prepare → doctor → build → suite` 格式，且 build 与 suite 使用相同的
+实验名称。`build full` 仅用于一次构建 Task 1–3 的全部产物。
+
+如果使用 `build full` 完成了全量构建，其他任务可直接运行：
+
+```bash
 scripts/competition/task123.sh suite task2
 scripts/competition/task123.sh suite task3
 ```

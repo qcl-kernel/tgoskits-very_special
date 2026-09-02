@@ -399,7 +399,9 @@ class Task123RuntimeIsolationTest(unittest.TestCase):
         ).read_text()
         runner = (ROOT / "run-starry-task1-periodic-ab.sh").read_text()
 
-        self.assertIn('sample_count="${TASK1_SAMPLE_COUNT:-6000}"', matrix)
+        self.assertIn('probe="${STARRY_TASK1_PERIODIC_DIR:-', matrix)
+        self.assertIn('run task123.sh build task1 first', matrix)
+        self.assertIn('sample_count="$(awk ', matrix)
         self.assertEqual(matrix.count('STARRY_TASK1_PERIODIC_REPEATS=1'), 2)
         self.assertNotIn('STARRY_TASK1_PERIODIC_REPEATS=3', matrix)
         self.assertNotIn('build_probe 60000', matrix)
@@ -411,14 +413,193 @@ class Task123RuntimeIsolationTest(unittest.TestCase):
         self.assertIn('guest_duration_sec=$(((sample_count * 10 + 999) / 1000))', runner)
         self.assertIn('measurement_timeout_sec="${STARRY_TASK1_MEASUREMENT_TIMEOUT_SEC:-$((guest_duration_sec * 4 + 600))}"', runner)
         self.assertIn('qemu_timeout_sec="${STARRY_TASK1_QEMU_TIMEOUT_SEC:-$((guest_duration_sec * 4 + 900))}"', runner)
-        self.assertIn('ZEPHYR_DUMP_GATED=1', matrix)
-        full_build = ENTRYPOINT.read_text().split("build_full() {", 1)[1].split(
-            "new_evidence_path() {", 1
-        )[0]
-        self.assertIn('ZEPHYR_START_GATED=1', full_build)
-        self.assertIn('ZEPHYR_DUMP_GATED=1', full_build)
+        periodic_build = ENTRYPOINT.read_text().split(
+            "build_task1_periodic() {", 1
+        )[1].split("\n}\n", 1)[0]
+        self.assertIn('ZEPHYR_START_GATED=1', periodic_build)
+        self.assertIn('ZEPHYR_DUMP_GATED=1', periodic_build)
+        self.assertIn(
+            'ZEPHYR_SAMPLE_COUNT="${TASK1_SAMPLE_COUNT:-6000}"', periodic_build
+        )
         self.assertIn("PERIODIC LATENCY SAMPLING COMPLETE", runner)
         self.assertIn("PERIODIC LATENCY CHUNK end=", runner)
+
+    def test_task1_multivcpu_matches_frozen_board_cpu_roles(self) -> None:
+        listed = subprocess.run(
+            ["bash", "scripts/competition/task123.sh", "--list"],
+            cwd=REPO,
+            text=True,
+            capture_output=True,
+            check=True,
+        ).stdout
+        self.assertIn("  task1-multivcpu", listed)
+        self.assertNotIn("task1-topology-mirror", listed)
+
+        entrypoint = (REPO / "scripts/competition/task123.sh").read_text()
+        self.assertIn("suite [task1|task1-multivcpu", entrypoint)
+        self.assertNotIn("reproduce task1-topology-mirror", entrypoint)
+        task1_suites = entrypoint.split("        task1|task1-multivcpu)\n", 1)[
+            1
+        ].split("            ;;", 1)[0]
+        self.assertNotIn("prepare-task123-deps.sh", task1_suites)
+        self.assertNotIn("build_task1_qemu", task1_suites)
+        self.assertIn("run-starry-task1-qemu-matrix.sh", task1_suites)
+        self.assertIn("run-starry-task1-multivcpu.sh", task1_suites)
+        self.assertIn('STARRY_TASK1_TOPOLOGY_REPEATS:-3', task1_suites)
+
+        full_build = entrypoint.split("build_full() {", 1)[1].split(
+            "new_evidence_path() {", 1
+        )[0]
+        self.assertIn("build_task1_periodic", full_build)
+        self.assertIn("build_task1_multivcpu_zephyr", full_build)
+        periodic_build = entrypoint.split("build_task1_periodic() {", 1)[1].split(
+            "\n}\n", 1
+        )[0]
+        self.assertIn(
+            'ZEPHYR_SAMPLE_COUNT="${TASK1_SAMPLE_COUNT:-6000}"', periodic_build
+        )
+        multivcpu_build = entrypoint.split(
+            "build_task1_multivcpu_zephyr() {", 1
+        )[1].split("\n}\n", 1)[0]
+        self.assertIn(
+            'TASK1_ZEPHYR_SAMPLE_COUNT="${TASK1_TOPOLOGY_SAMPLE_COUNT:-6000}"',
+            multivcpu_build,
+        )
+        self.assertIn('tmp/starry-task1-periodic', periodic_build)
+        self.assertIn('tmp/starry-task1-multivcpu', multivcpu_build)
+
+        competition_runner = (
+            REPO / "scripts/competition/run-starry-task1-multivcpu.sh"
+        ).read_text()
+        self.assertNotIn("prepare-task123-deps.sh", competition_runner)
+        original_runner = (
+            REPO / "scripts/competition/run-starry-task1-qemu-matrix.sh"
+        ).read_text()
+        self.assertNotIn("prepare-task123-deps.sh", original_runner)
+        self.assertNotIn("build-zephyr-periodic.sh", original_runner)
+        self.assertNotIn("build-zephyr-task2.sh", competition_runner)
+
+        starry = tomllib.loads(
+            (ROOT / "vm-aarch64-starry-task1-multivcpu.toml").read_text()
+        )
+        self.assertEqual(starry["base"]["cpu_num"], 2)
+        self.assertEqual(starry["base"]["phys_cpu_ids"], [2, 1])
+        self.assertEqual(starry["base"]["host_sched_priority"], 89)
+
+        zephyr = tomllib.loads(
+            (ROOT / "vm-aarch64-zephyr-task1-multivcpu.toml").read_text()
+        )
+        self.assertEqual(zephyr["base"]["cpu_num"], 1)
+        self.assertEqual(zephyr["base"]["phys_cpu_ids"], [1])
+        self.assertEqual(zephyr["base"]["host_sched_priority"], 90)
+
+        qemu = tomllib.loads(
+            (ROOT / "qemu-aarch64-starry-zephyr-task1-multivcpu.toml").read_text()
+        )
+        smp_index = qemu["args"].index("-smp")
+        self.assertEqual(qemu["args"][smp_index + 1], "3")
+
+    def test_task1_build_targets_only_build_the_selected_experiment(self) -> None:
+        entrypoint = ENTRYPOINT.read_text()
+
+        self.assertIn("build [quick|task1|task1-multivcpu|full]", entrypoint)
+        build_dispatch = entrypoint.split('        build)\n', 1)[1].split(
+            '            ;;', 1
+        )[0]
+        self.assertIn("task1) build_task1 ;;", build_dispatch)
+        self.assertIn("task1-multivcpu) build_task1_multivcpu ;;", build_dispatch)
+
+        task1_build = entrypoint.split("build_task1() {", 1)[1].split("\n}\n", 1)[0]
+        self.assertIn("build_starry_yolo_guest", task1_build)
+        self.assertIn("build_task1_periodic", task1_build)
+        self.assertNotIn("build_task1_multivcpu_zephyr", task1_build)
+
+        multivcpu_build = entrypoint.split("build_task1_multivcpu() {", 1)[1].split(
+            "\n}\n", 1
+        )[0]
+        self.assertIn("build_starry_yolo_guest", multivcpu_build)
+        self.assertIn("build_task1_multivcpu_zephyr", multivcpu_build)
+        self.assertNotIn("build_task1_periodic", multivcpu_build)
+
+        starry_build = tomllib.loads(
+            (
+                REPO
+                / "apps/starry/starryos-task2/build-aarch64-unknown-none-softfloat.toml"
+            ).read_text()
+        )
+        self.assertEqual(starry_build["max_cpu_num"], 2)
+
+        runner = (ROOT / "run-starry-task1-multivcpu.sh").read_text()
+        topology_helper = (
+            REPO / "apps/starry/starryos-task2/task1-topology.sh"
+        ).read_text()
+        self.assertIn("/usr/bin/task123-affinity 0", topology_helper)
+        self.assertIn("/usr/bin/task123-affinity 1", topology_helper)
+        prebuild = (
+            REPO / "apps/starry/starryos-task2/prebuild.sh"
+        ).read_text()
+        self.assertIn("affinity_exec.c", prebuild)
+        self.assertIn("task123-affinity", prebuild)
+        self.assertIn("task123-wait-log", prebuild)
+        self.assertIn("task123-topology", prebuild)
+        self.assertIn('"$overlay_dir/usr/bin/t1"', prebuild)
+        self.assertTrue(
+            (REPO / "apps/starry/starryos-task2/affinity_exec.c").is_file()
+        )
+        self.assertTrue((REPO / "apps/starry/starryos-task2/wait-log.sh").is_file())
+        self.assertTrue(
+            (REPO / "apps/starry/starryos-task2/task1-topology.sh").is_file()
+        )
+        combined_contract = runner + topology_helper
+        for contract in (
+            "TASK1_TOPOLOGY_CPU_ONLINE count=2",
+            "t2n1-run.sh model-only",
+            "t2n1-run.sh task2",
+            "TASK2_CONTROLLER_READY mode=task2",
+            "PERIODIC LATENCY SAMPLING COMPLETE",
+            "TASK1_TOPOLOGY_WORKLOADS_ALIVE",
+            "vm show 1 --full",
+            "vm show 2 --full",
+            "rt stat",
+            "verify_starry_task1_multivcpu.py",
+        ):
+            self.assertIn(contract, combined_contract)
+
+    def test_task1_multivcpu_uses_short_guest_control_commands(self) -> None:
+        runner = (ROOT / "run-starry-task1-multivcpu.sh").read_text()
+
+        self.assertIn("cmd t1 c", runner)
+        self.assertIn("cmd t1 a", runner)
+        self.assertIn("cmd t1 l", runner)
+        self.assertNotIn("cmd /usr/bin/task123-topology", runner)
+        self.assertNotIn("cmd /usr/bin/task123-affinity 0 /bin/sh -c 'while :;", runner)
+        self.assertNotIn(
+            "SAMPLING COMPLETE samples=%s controls=[1-9]",
+            runner,
+        )
+        topology_helper = (
+            REPO / "apps/starry/starryos-task2/task1-topology.sh"
+        ).read_text()
+        self.assertNotIn("tail -n 40", topology_helper)
+        self.assertIn("STATUS_DELIVERED.*request=3", topology_helper)
+        self.assertIn("host_prompt_pattern='axvisor:/\\$'", runner)
+        self.assertIn(
+            "send-until 10 1 \\x18h $host_prompt_pattern",
+            runner,
+        )
+
+    def test_task1_multivcpu_bounds_capture_before_sample_dump(self) -> None:
+        runner = (ROOT / "run-starry-task1-multivcpu.sh").read_text()
+
+        sampling_complete = runner.index("PERIODIC LATENCY SAMPLING COMPLETE")
+        capture_on = runner.index("cmd virtnet capture on")
+        capture_off = runner.index("cmd virtnet capture off")
+        first_sample_dump = runner.index("raw d")
+
+        self.assertLess(sampling_complete, capture_on)
+        self.assertLess(capture_on, capture_off)
+        self.assertLess(capture_off, first_sample_dump)
+        self.assertIn("hold 10", runner[capture_on:capture_off])
 
     def test_task2_only_endpoint_build_does_not_require_ncnn_assets(self) -> None:
         manifest = (REPO / "apps/starry/starryos-task2/rust/Cargo.toml").read_text()
@@ -614,6 +795,41 @@ class Task123RuntimeIsolationTest(unittest.TestCase):
             self._assert_external_source_integrity(helper, archive_source, True)
             (archive_source / "source.txt").write_text("modified\n")
             self._assert_external_source_integrity(helper, archive_source, False)
+
+    def test_dependency_extraction_does_not_reuse_a_tree_without_its_manifest(
+        self,
+    ) -> None:
+        prepare = (
+            REPO / "scripts/competition/prepare-task123-deps.sh"
+        ).read_text()
+        extract_verified = prepare.split("extract_verified() {", 1)[1].split(
+            "\n}\n", 1
+        )[0]
+        marker_check, reuse = extract_verified.split(
+            "printf 'reuse verified dependency: %s\\n'", 1
+        )
+        self.assertIn('task123_source_is_pristine "$destination"', marker_check)
+        self.assertIn('return', reuse)
+
+    def test_prepare_fetches_all_task1_multivcpu_dependencies(self) -> None:
+        prepare = (
+            REPO / "scripts/competition/prepare-task123-deps.sh"
+        ).read_text()
+
+        self.assertIn(
+            'ncnn_revision="946fe3fb14a8dff8c06df763f67be522167b2f00"',
+            prepare,
+        )
+        self.assertIn('ncnn-$ncnn_revision.tar.gz', prepare)
+        self.assertIn('pnnx_revision="20260526"', prepare)
+        self.assertIn('pnnx-$pnnx_revision-linux.zip', prepare)
+        self.assertIn("yolo11n.onnx", prepare)
+
+        task123 = (REPO / "scripts/competition/task123.sh").read_text()
+        self.assertIn(
+            '"$deps_root/ncnn-$ncnn_revision"',
+            task123,
+        )
 
     def _assert_external_source_integrity(
         self, helper: Path, source: Path, expected: bool

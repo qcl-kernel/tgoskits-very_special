@@ -230,18 +230,19 @@ def test_ram_boot_can_wait_for_a_guest_ready_contract() -> None:
 
 def test_ram_boot_supports_legacy_uimage_without_writing_storage() -> None:
     source = RAM_BOOT.read_text()
+    legacy_boot = source.split("boot_legacy_uimage_from_ram() {", 1)[1].split(
+        "\n}", 1
+    )[0]
     assert 'boot_format="${ATK_BOOT_FORMAT:-fit}"' in source
     assert "legacy-uimage" in source
-    assert "bootm start $FASTBOOT_DOWNLOAD_BUFFER" in source
+    assert "bootm start $FASTBOOT_DOWNLOAD_BUFFER" in legacy_boot
     assert 'legacy_load_address="${ATK_LEGACY_LOAD_ADDRESS:-}"' in source
     assert 'legacy_payload_size="${ATK_LEGACY_PAYLOAD_SIZE:-}"' in source
     assert 'legacy_entry_address="${ATK_LEGACY_ENTRY_ADDRESS:-}"' in source
-    assert "cp.b 0x00c00840" in source
-    assert "send_uboot_command 'dcache flush'" in source
-    assert "send_uboot_command 'dcache off'" in source
-    assert "send_uboot_command 'icache off'" in source
-    assert "bootm loados" not in source
-    assert 'send_console "go $legacy_entry_address"' in source
+    assert "cp.b 0x00c00840" in legacy_boot
+    assert "bootm loados" not in legacy_boot
+    assert "bootm go" not in legacy_boot
+    assert 'send_console "booti $legacy_load_address"' in legacy_boot
     assert "fastboot flash" not in source
     assert "fastboot erase" not in source
 
@@ -249,8 +250,9 @@ def test_ram_boot_supports_legacy_uimage_without_writing_storage() -> None:
 def test_ram_boot_does_not_hardcode_one_fastboot_device() -> None:
     source = RAM_BOOT.read_text()
     assert 'fastboot_sn="${ATK_FASTBOOT_SN:-}"' in source
-    assert "expected exactly one fastboot device" in source
+    assert "found multiple fastboot devices; set ATK_FASTBOOT_SN" in source
     assert "resolve_fastboot_serial" in source
+    assert 'fastboot -s "$fastboot_sn" stage' in source
     assert "8d4bd3e013e56633" not in source
 
 
@@ -258,7 +260,9 @@ def test_native_zephyr_board_runner_archives_strict_evidence() -> None:
     assert run("bash", "-n", str(NATIVE_ZEPHYR_BOARD)).returncode == 0
     source = NATIVE_ZEPHYR_BOARD.read_text()
     assert "mkimage" in source
-    assert "ATK_BOOT_FORMAT=legacy-uimage" in source
+    assert "ATK_BOOT_FORMAT=fit" in source
+    assert 'kernel = "kernel-1"' in source
+    assert 'fdt = "fdt-1"' in source
     assert 'samples="${NATIVE_ZEPHYR_SAMPLES:-6000}"' in source
     assert "expected {expected_samples} native board Zephyr samples" in source
     assert "rt_latency_stats.py" in source
@@ -271,7 +275,6 @@ def test_unified_entrypoint_lists_board_matrices_and_demo() -> None:
     for command in (
         "native",
         "task1-communication",
-        "task1-ai",
         "task2-throughput",
         "task3-build",
         "task3-matrix",
@@ -280,6 +283,10 @@ def test_unified_entrypoint_lists_board_matrices_and_demo() -> None:
         "demo-video",
     ):
         assert command in result.stdout
+    assert "task1-ai" not in result.stdout
+    ablation = run("bash", str(TASK123_ENTRYPOINT), "board", "task1-ai")
+    assert ablation.returncode != 0
+    assert "task1-ai is a non-official ablation" in ablation.stderr
     source = TASK123_ENTRYPOINT.read_text()
     assert "fastboot flash" not in source
     assert "fastboot erase" not in source

@@ -2,6 +2,7 @@ import importlib.util
 import hashlib
 import json
 import os
+import shutil
 import subprocess
 import tempfile
 import tomllib
@@ -23,6 +24,21 @@ VM_SPEC = importlib.util.spec_from_file_location("render_vm_runtime", VM_RENDER_
 assert VM_SPEC is not None and VM_SPEC.loader is not None
 VM_MODULE = importlib.util.module_from_spec(VM_SPEC)
 VM_SPEC.loader.exec_module(VM_MODULE)
+
+
+def write_executable(path: Path, source: str) -> None:
+    path.write_text(source)
+    path.chmod(0o755)
+
+
+def create_yolo_smoke_assets(root: Path) -> tuple[Path, Path]:
+    model_dir = root / "model"
+    model_dir.mkdir()
+    (model_dir / "yolo11n.ncnn.param").write_bytes(b"param")
+    (model_dir / "yolo11n.ncnn.bin").write_bytes(b"model")
+    input_path = model_dir / "input.ppm"
+    input_path.write_bytes(b"P6\n1 1\n255\n\0\0\0")
+    return model_dir, input_path
 
 
 class Task123RuntimeIsolationTest(unittest.TestCase):
@@ -170,19 +186,17 @@ class Task123RuntimeIsolationTest(unittest.TestCase):
             cross_bin = root / "cross" / "bin"
             cross_bin.mkdir(parents=True)
             compiler = cross_bin / "aarch64-linux-musl-g++"
-            compiler.write_text(
+            write_executable(
+                compiler,
                 "#!/bin/sh\n"
                 "while [ \"$1\" != -o ]; do shift; done\n"
                 "shift\n"
                 "printf '#!/bin/sh\\nexit 0\\n' > \"$1\"\n"
-                "chmod +x \"$1\"\n"
+                "chmod +x \"$1\"\n",
             )
-            compiler.chmod(0o755)
             qemu = root / "qemu-aarch64"
-            qemu.write_text("#!/bin/sh\nexec \"$1\"\n")
-            qemu.chmod(0o755)
-            input_path = root / "input.ppm"
-            input_path.write_bytes(b"P6\n1 1\n255\n\0\0\0")
+            write_executable(qemu, "#!/bin/sh\nexec \"$1\"\n")
+            model_dir, input_path = create_yolo_smoke_assets(root)
 
             environment = os.environ.copy()
             for variable in (
@@ -198,6 +212,7 @@ class Task123RuntimeIsolationTest(unittest.TestCase):
                     "ALLOW_DIRTY": "1",
                     "CROSS_ROOT": str(root / "cross"),
                     "QEMU_AARCH64": str(qemu),
+                    "TASK3_NCNN_MODEL_DIR": str(model_dir),
                     "TASK3_NCNN_INPUT": str(input_path),
                     "TASK123_EVIDENCE_DIR": str(root / "evidence"),
                 }
@@ -230,19 +245,24 @@ class Task123RuntimeIsolationTest(unittest.TestCase):
             )
             cross_bin.mkdir(parents=True)
             compiler = cross_bin / "aarch64-linux-musl-g++"
-            compiler.write_text(
+            write_executable(
+                compiler,
                 "#!/bin/sh\n"
                 "while [ \"$1\" != -o ]; do shift; done\n"
                 "shift\n"
                 "printf '#!/bin/sh\\nexit 0\\n' > \"$1\"\n"
-                "chmod +x \"$1\"\n"
+                "chmod +x \"$1\"\n",
             )
-            compiler.chmod(0o755)
             qemu = root / "qemu-aarch64"
-            qemu.write_text("#!/bin/sh\nexec \"$1\"\n")
-            qemu.chmod(0o755)
-            input_path = root / "input.ppm"
-            input_path.write_bytes(b"P6\n1 1\n255\n\0\0\0")
+            write_executable(qemu, "#!/bin/sh\nexec \"$1\"\n")
+            model_dir, input_path = create_yolo_smoke_assets(root)
+
+            isolated_bin = root / "isolated-bin"
+            isolated_bin.mkdir()
+            for command in ("bash", "date", "dirname", "env", "mkdir", "realpath", "tee"):
+                executable = shutil.which(command)
+                self.assertIsNotNone(executable)
+                (isolated_bin / command).symlink_to(executable)
 
             environment = os.environ.copy()
             for variable in (
@@ -258,8 +278,10 @@ class Task123RuntimeIsolationTest(unittest.TestCase):
                 {
                     "ALLOW_DIRTY": "1",
                     "HOME": str(root),
+                    "PATH": str(isolated_bin),
                     "TASK123_DEPS_DIR": str(root / "repository-deps"),
                     "QEMU_AARCH64": str(qemu),
+                    "TASK3_NCNN_MODEL_DIR": str(model_dir),
                     "TASK3_NCNN_INPUT": str(input_path),
                     "TASK123_EVIDENCE_DIR": str(root / "evidence"),
                 }

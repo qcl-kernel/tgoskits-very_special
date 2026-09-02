@@ -83,6 +83,8 @@ def test_fresh_ubuntu_install_instructions_include_rustup() -> None:
     assert "pkg-config" in readme
     assert "libudev-dev" in install_hint
     assert "libudev-dev" in readme
+    assert "libclang-dev" in install_hint
+    assert "libclang-dev" in readme
 
 
 def test_doctor_rejects_selected_zephyr_python_without_jsonschema() -> None:
@@ -106,6 +108,7 @@ esac
             "cargo",
             "rustup",
             "pkg-config",
+            "clang",
             "cmake",
             "ninja",
             "qemu-system-aarch64",
@@ -116,6 +119,14 @@ esac
             "flock",
         ):
             write_executable(fake_bin / command, "#!/usr/bin/env bash\nexit 0\n")
+
+        fake_libclang = fixture_root / "libclang.so"
+        fake_libclang.write_bytes(b"fixture")
+        write_executable(
+            fake_bin / "ldconfig",
+            "#!/usr/bin/env bash\n"
+            f"printf '%s\\n' 'libclang.so (libc6) => {fake_libclang!s}'\n",
+        )
 
         ncnn = fixture_root / "ncnn"
         ncnn.mkdir()
@@ -192,7 +203,7 @@ exec {real_sha256sum} "$@"
         assert "jsonschema" in output
 
 
-def test_doctor_discovers_all_dependencies_from_prepare_directories() -> None:
+def test_doctor_discovers_and_validates_all_build_dependencies() -> None:
     with tempfile.TemporaryDirectory() as directory:
         fixture_root = Path(directory)
         fake_bin = fixture_root / "bin"
@@ -213,6 +224,7 @@ def test_doctor_discovers_all_dependencies_from_prepare_directories() -> None:
             "rustup",
             "python3",
             "pkg-config",
+            "clang",
             "cmake",
             "ninja",
             "qemu-system-aarch64",
@@ -223,6 +235,14 @@ def test_doctor_discovers_all_dependencies_from_prepare_directories() -> None:
             "flock",
         ):
             write_executable(fake_bin / command, "#!/usr/bin/env bash\nexit 0\n")
+
+        fake_libclang = fixture_root / "libclang.so"
+        fake_libclang.write_bytes(b"fixture")
+        write_executable(
+            fake_bin / "ldconfig",
+            "#!/usr/bin/env bash\n"
+            f"printf '%s\\n' 'libclang.so (libc6) => {fake_libclang!s}'\n",
+        )
         write_executable(
             fake_bin / "git",
             "#!/usr/bin/env bash\nprintf 'fixture-commit\\n'\n",
@@ -313,6 +333,16 @@ exec {real_sha256sum} "$@"
         missing_output = missing_libudev.stdout + missing_libudev.stderr
         assert missing_libudev.returncode != 0, missing_output
         assert "libudev" in missing_output
+
+        write_executable(fake_bin / "pkg-config", "#!/usr/bin/env bash\nexit 0\n")
+        write_executable(fake_bin / "ldconfig", "#!/usr/bin/env bash\nexit 0\n")
+        missing_libclang = run(
+            "bash", str(fixture_entrypoint), "doctor", environment=environment
+        )
+
+        missing_output = missing_libclang.stdout + missing_libclang.stderr
+        assert missing_libclang.returncode != 0, missing_output
+        assert "libclang" in missing_output
 
 
 def test_task123_toolchain_installs_starry_endpoint_target() -> None:

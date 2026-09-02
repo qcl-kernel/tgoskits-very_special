@@ -175,12 +175,26 @@ zephyr_source_revision() {
     task123_source_revision "$1"
 }
 
+libclang_is_available() {
+    local library
+
+    if [[ -n "${LIBCLANG_PATH:-}" && -d "$LIBCLANG_PATH" ]]; then
+        for library in "$LIBCLANG_PATH"/libclang.so* "$LIBCLANG_PATH"/libclang-*.so*; do
+            [[ -f "$library" ]] && return 0
+        done
+    fi
+
+    command -v ldconfig >/dev/null 2>&1 || return 1
+    ldconfig -p 2>/dev/null |
+        awk '$1 ~ /^libclang(-[0-9]+)?\.so(\.|$)/ { found = 1 } END { exit !found }'
+}
+
 doctor() {
     configure_cross_tools
     local failures=0 tool task123_python
     local commands=(
         git cargo rustup python3 cmake ninja qemu-system-aarch64 qemu-aarch64
-        debugfs e2fsck sha256sum realpath dtc flock pkg-config
+        debugfs e2fsck sha256sum realpath dtc flock pkg-config clang ldconfig
     )
     printf 'Task 1-3 environment check\n'
     printf '  repository: %s\n' "$repo_root"
@@ -201,6 +215,13 @@ doctor() {
             printf '  [MISSING] libudev development files (pkg-config name: libudev)\n'
             failures=$((failures + 1))
         fi
+    fi
+
+    if libclang_is_available; then
+        printf '  [OK]      libclang shared library\n'
+    else
+        printf '  [MISSING] libclang shared library (set LIBCLANG_PATH if installed outside the linker cache)\n'
+        failures=$((failures + 1))
     fi
 
     local override command_name resolved
@@ -286,7 +307,7 @@ Install common Ubuntu dependencies with:
   sudo apt-get update
   sudo apt-get install build-essential cmake ninja-build qemu-system-arm qemu-user \
     e2fsprogs device-tree-compiler python3 python3-pil python3-venv git curl rustup \
-    xz-utils pkg-config libudev-dev
+    xz-utils pkg-config libudev-dev clang libclang-dev
 
 The AArch64 musl cross compiler is not Ubuntu's native musl-tools package.
 Install an aarch64-linux-musl toolchain, then either add its bin directory to

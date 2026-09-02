@@ -180,7 +180,7 @@ doctor() {
     local failures=0 tool task123_python
     local commands=(
         git cargo rustup python3 cmake ninja qemu-system-aarch64 qemu-aarch64
-        debugfs e2fsck sha256sum realpath dtc flock
+        debugfs e2fsck sha256sum realpath dtc flock pkg-config
     )
     printf 'Task 1-3 environment check\n'
     printf '  repository: %s\n' "$repo_root"
@@ -193,6 +193,15 @@ doctor() {
             failures=$((failures + 1))
         fi
     done
+
+    if command -v pkg-config >/dev/null 2>&1; then
+        if pkg-config --exists libudev; then
+            printf '  [OK]      libudev development files\n'
+        else
+            printf '  [MISSING] libudev development files (pkg-config name: libudev)\n'
+            failures=$((failures + 1))
+        fi
+    fi
 
     local override command_name resolved
     while read -r override command_name; do
@@ -276,7 +285,8 @@ EOF
 Install common Ubuntu dependencies with:
   sudo apt-get update
   sudo apt-get install build-essential cmake ninja-build qemu-system-arm qemu-user \
-    e2fsprogs device-tree-compiler python3 python3-pil python3-venv git curl rustup xz-utils
+    e2fsprogs device-tree-compiler python3 python3-pil python3-venv git curl rustup \
+    xz-utils pkg-config libudev-dev
 
 The AArch64 musl cross compiler is not Ubuntu's native musl-tools package.
 Install an aarch64-linux-musl toolchain, then either add its bin directory to

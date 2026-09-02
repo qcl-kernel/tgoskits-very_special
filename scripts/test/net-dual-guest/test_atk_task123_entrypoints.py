@@ -79,6 +79,10 @@ def test_fresh_ubuntu_install_instructions_include_rustup() -> None:
 
     assert "rustup" in install_hint
     assert "rustup" in readme
+    assert "pkg-config" in install_hint
+    assert "pkg-config" in readme
+    assert "libudev-dev" in install_hint
+    assert "libudev-dev" in readme
 
 
 def test_doctor_rejects_selected_zephyr_python_without_jsonschema() -> None:
@@ -101,6 +105,7 @@ esac
         for command in (
             "cargo",
             "rustup",
+            "pkg-config",
             "cmake",
             "ninja",
             "qemu-system-aarch64",
@@ -207,6 +212,7 @@ def test_doctor_discovers_all_dependencies_from_prepare_directories() -> None:
             "cargo",
             "rustup",
             "python3",
+            "pkg-config",
             "cmake",
             "ninja",
             "qemu-system-aarch64",
@@ -298,6 +304,15 @@ exec {real_sha256sum} "$@"
         output = result.stdout + result.stderr
         assert result.returncode == 0, output
         assert "DOCTOR_PASS" in output
+
+        write_executable(fake_bin / "pkg-config", "#!/usr/bin/env bash\nexit 1\n")
+        missing_libudev = run(
+            "bash", str(fixture_entrypoint), "doctor", environment=environment
+        )
+
+        missing_output = missing_libudev.stdout + missing_libudev.stderr
+        assert missing_libudev.returncode != 0, missing_output
+        assert "libudev" in missing_output
 
 
 def test_task123_toolchain_installs_starry_endpoint_target() -> None:

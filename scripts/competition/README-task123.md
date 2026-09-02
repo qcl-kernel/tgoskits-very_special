@@ -13,7 +13,8 @@ Ubuntu 24.04 可直接安装完整的系统前置软件；`rustup` 会根据仓�
 ```bash
 sudo apt-get update
 sudo apt-get install build-essential cmake ninja-build qemu-system-arm qemu-user \
-  e2fsprogs device-tree-compiler python3 python3-pil python3-venv git curl rustup xz-utils
+  e2fsprogs device-tree-compiler python3 python3-pil python3-venv git curl rustup \
+  xz-utils pkg-config libudev-dev
 ```
 
 复现老师已经运行过的原 Task 1：

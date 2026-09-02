@@ -1,0 +1,2 @@
+# Host-side test runner used by the Task 1-3 quick/full build gates.
+pytest==9.1.1

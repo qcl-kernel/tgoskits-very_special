@@ -16,7 +16,7 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 source "$repo_root/scripts/lib/task123-tools.sh"
-rootfs="${STARRY_TASK23_ROOTFS:-$repo_root/tmp/axbuild/rootfs/rootfs-aarch64-alpine.img}"
+rootfs="$(resolve_task123_rootfs "$repo_root")"
 label="${1:?label required}"
 mode="${2:-yolo}"
 workdir="$repo_root/tmp/net-dual-guest"

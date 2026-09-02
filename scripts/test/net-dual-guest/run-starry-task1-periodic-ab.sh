@@ -22,7 +22,7 @@ serial_sock=""
 periodic_dir="${STARRY_TASK1_PERIODIC_DIR:-$repo_root/tmp/starry-task1-periodic}"
 periodic_bin="$periodic_dir/zephyr-periodic.bin"
 periodic_manifest="$periodic_dir/zephyr-periodic.manifest"
-rootfs="${STARRY_TASK23_ROOTFS:-$repo_root/tmp/axbuild/rootfs/rootfs-aarch64-alpine.img}"
+rootfs="$(resolve_task123_rootfs "$repo_root")"
 run_pid=""
 
 [[ "$repeats" =~ ^[1-9][0-9]*$ ]] || {

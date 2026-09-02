@@ -144,10 +144,11 @@ find_pnnx() {
 }
 
 find_yolo_onnx() {
-    local candidate
+    local candidate cache_dir
+    cache_dir="${TASK123_DOWNLOAD_CACHE:-$repo_root/tmp/competition-task123/downloads}"
     for candidate in \
         "${YOLO_ONNX:-}" \
-        "$repo_root/tmp/competition-task123/downloads/yolo11n.onnx" \
+        "$cache_dir/yolo11n.onnx" \
         "$repo_root/tmp/task3-yolo/yolo11n.onnx"; do
         if [[ -n "$candidate" && -s "$candidate" ]]; then
             printf '%s\n' "$candidate"
@@ -157,10 +158,11 @@ find_yolo_onnx() {
 }
 
 find_zephyr_base() {
-    local candidate
+    local candidate deps_root
+    deps_root="${TASK123_DEPS_DIR:-$repo_root/.deps/task123}"
     for candidate in \
         "${ZEPHYR_BASE:-}" \
-        "$repo_root/.deps/task123/zephyr-$zephyr_revision" \
+        "$deps_root/zephyr-$zephyr_revision" \
         "$repo_root/tmp/competition-task123/downloads/zephyr-$zephyr_revision"; do
         if [[ -n "$candidate" && -f "$candidate/CMakeLists.txt" ]]; then
             printf '%s\n' "$candidate"
@@ -274,7 +276,7 @@ EOF
 Install common Ubuntu dependencies with:
   sudo apt-get update
   sudo apt-get install build-essential cmake ninja-build qemu-system-arm qemu-user \
-    e2fsprogs device-tree-compiler python3 python3-pil python3-venv git curl xz-utils
+    e2fsprogs device-tree-compiler python3 python3-pil python3-venv git curl rustup xz-utils
 
 The AArch64 musl cross compiler is not Ubuntu's native musl-tools package.
 Install an aarch64-linux-musl toolchain, then either add its bin directory to
@@ -337,9 +339,10 @@ stage_starry_task23_guest() {
     (cd "$repo_root" && cargo xtask starry app qemu \
         --test-case starryos-task2 --arch aarch64 \
         --qemu-config scripts/competition/qemu-aarch64-starry-build-smoke.toml)
-    local starry_elf rootfs fsck_status=0
+    local starry_elf rootfs rootfs_dir fsck_status=0
     starry_elf="$repo_root/target/aarch64-unknown-none-softfloat/release/starryos"
-    rootfs="$repo_root/tmp/axbuild/rootfs/rootfs-aarch64-alpine.img"
+    rootfs_dir="${TGOS_IMAGE_EXTRACT_DIR:-$repo_root/tmp/axbuild/rootfs}"
+    rootfs="$rootfs_dir/rootfs-aarch64-alpine.img"
     if ! grep -aFq 'registered virtio network device' "$starry_elf"; then
         printf 'error: freshly built StarryOS image does not contain the virtio-net driver\n' >&2
         return 1

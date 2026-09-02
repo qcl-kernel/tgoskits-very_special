@@ -23,12 +23,18 @@ pnnx_sha256="dde08ce2e2e1744a4ddce576910b451a860663af91d2aeed0d21ebee4fa69955"
 yolo_onnx_sha256="634279b40c07c6391472c51ad45b81ebc48706a9a1fe72dd3396322acd0c053b"
 
 prepare_zephyr_python() {
-    local zephyr_base="$1" requirements requirements_sha256
+    local zephyr_base="$1" requirements task123_requirements requirements_sha256
     local python_env python_bin temporary bootstrap_python
     requirements="$zephyr_base/scripts/requirements-base.txt"
+    task123_requirements="$repo_root/scripts/competition/requirements-task123.txt"
     [[ -f "$requirements" ]] || {
         printf 'error: pinned Zephyr Python requirements are missing: %s\n' \
             "$requirements" >&2
+        return 1
+    }
+    [[ -f "$task123_requirements" ]] || {
+        printf 'error: pinned Task 1-3 Python requirements are missing: %s\n' \
+            "$task123_requirements" >&2
         return 1
     }
 
@@ -41,7 +47,10 @@ prepare_zephyr_python() {
 
     python_env="$deps_dir/zephyr-python-$zephyr_revision"
     python_bin="$python_env/bin/python3"
-    requirements_sha256="$(sha256sum "$requirements" | awk '{print $1}')"
+    requirements_sha256="$(
+        sha256sum "$requirements" "$task123_requirements" |
+            awk '{print $1}' | sha256sum | awk '{print $1}'
+    )"
     if [[ "$(cat "$python_env/.task123-requirements-sha256" 2>/dev/null || true)" == \
         "$requirements_sha256" ]] && task123_check_zephyr_python "$python_bin" &&
         "$python_bin" -m pip check >/dev/null; then
@@ -60,7 +69,9 @@ prepare_zephyr_python() {
         printf 'error: failed to create a Python virtual environment; install python3-venv\n' >&2
         return 1
     fi
-    if ! "$temporary/bin/python3" -m pip install --requirement "$requirements" ||
+    if ! "$temporary/bin/python3" -m pip install \
+        --requirement "$requirements" \
+        --requirement "$task123_requirements" ||
         ! "$temporary/bin/python3" -m pip check ||
         ! task123_check_zephyr_python "$temporary/bin/python3"; then
         rm -rf -- "$temporary"

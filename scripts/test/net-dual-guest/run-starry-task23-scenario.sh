@@ -152,7 +152,7 @@ if ! grep -q "^fault_mode = \"$expected_fault_mode\"$" "$selected_rtos_dir/manif
     exit 1
 fi
 
-rootfs="${STARRY_TASK23_ROOTFS:-$repo_root/tmp/axbuild/rootfs/rootfs-aarch64-alpine.img}"
+rootfs="$(resolve_task123_rootfs "$repo_root")"
 endpoint="$repo_root/target/starryos-task2-rust/aarch64-unknown-linux-musl/release/starryos-task2-endpoint"
 endpoint_script="$repo_root/apps/starry/starryos-task2/t2n1-run.sh"
 yolo_assets="${TASK3_YOLO_ASSETS:-${TASK3_NCNN_MODEL_DIR:-$repo_root/tmp/task3-yolo/ncnn-model}}"

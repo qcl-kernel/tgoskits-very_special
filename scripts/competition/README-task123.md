@@ -7,6 +7,15 @@
 CPU 角色、StarryOS 双 vCPU 以及通信 vCPU/Zephyr 共核竞争关系迁移到
 QEMU，使多 vCPU 架构和调度 A/B 可在无板环境中重新构建与验证。
 
+Ubuntu 24.04 可直接安装完整的系统前置软件；`rustup` 会根据仓库的
+`rust-toolchain.toml` 下载固定 nightly、组件和目标：
+
+```bash
+sudo apt-get update
+sudo apt-get install build-essential cmake ninja-build qemu-system-arm qemu-user \
+  e2fsprogs device-tree-compiler python3 python3-pil python3-venv git curl rustup xz-utils
+```
+
 复现老师已经运行过的原 Task 1：
 
 ```bash
@@ -51,12 +60,16 @@ scripts/competition/task123.sh suite task3
 ```
 
 `prepare` 下载固定的 AArch64 musl 工具链、Zephyr、ncnn、pnnx 和 YOLO11n
-模型，并根据该
-Zephyr revision 自带的 `scripts/requirements-base.txt` 创建专用 Python 虚拟环境；
+模型，并根据该 Zephyr revision 自带的 `scripts/requirements-base.txt` 和仓库的
+`scripts/competition/requirements-task123.txt` 创建专用 Python 虚拟环境；后者
+固定全量构建门禁使用的 `pytest` 版本。仓库的 `rust-toolchain.toml` 同时声明了
+StarryOS endpoint 所需的 `aarch64-unknown-linux-musl` target，空 Rustup 环境在
+首次执行 Rust 构建时会自动下载对应的标准库组件。
 它们默认位于仓库内被忽略的 `.deps/task123/`。后续 `doctor` 和 `build` 会自动
 发现这些依赖，无需再次设置 `CROSS_ROOT`、`ZEPHYR_BASE` 或 Python 路径。
 `doctor` 只检查和给出安装提示，不会静默安装系统软件；它还会拒绝本地修改过的
-Zephyr 树，并在进入 CMake 前检查 `jsonschema` 等 Zephyr Python 依赖。
+Zephyr 树，并在进入 CMake 或 Python 回归门禁前检查 `jsonschema`、`pytest` 等
+专用 Python 环境依赖。
 `build full` 可以复用已下载的源码、模型、rootfs、工具链和专用 Python 环境，
 但会删除本项目固定输出目录内的 ncnn、Zephyr、StarryOS、AxVisor 编译结果并从
 当前 checkout 重新生成。运行证据默认写入 `tmp/competition-task123/evidence/`。

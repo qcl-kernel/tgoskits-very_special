@@ -21,7 +21,7 @@ serial_sock=""
 periodic_dir="$repo_root/tmp/starry-task1-periodic-rtthread"
 periodic_bin="$periodic_dir/rtthread-periodic.bin"
 periodic_manifest="$periodic_dir/rtthread-periodic.manifest"
-rootfs="${STARRY_TASK23_ROOTFS:-$repo_root/tmp/axbuild/rootfs/rootfs-aarch64-alpine.img}"
+rootfs="$(resolve_task123_rootfs "$repo_root")"
 run_pid=""
 
 [[ "$repeats" =~ ^[1-9][0-9]*$ ]] || {

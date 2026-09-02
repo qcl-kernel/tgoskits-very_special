@@ -12,6 +12,9 @@ TASK123_TOOLS = REPO_ROOT / "scripts/lib/task123-tools.sh"
 RAM_BOOT = REPO_ROOT / "scripts/board/atk-dlrk3588-ram-boot.sh"
 NATIVE_ZEPHYR_BOARD = REPO_ROOT / "scripts/board/run-atk-native-zephyr.sh"
 TASK123_ENTRYPOINT = REPO_ROOT / "scripts/competition/task123.sh"
+TASK123_README = REPO_ROOT / "scripts/competition/README-task123.md"
+CI_REGRESSION = REPO_ROOT / "scripts/test/net-dual-guest/run-ci-regression.sh"
+RUST_TOOLCHAIN = REPO_ROOT / "rust-toolchain.toml"
 DEMO_RENDERER = REPO_ROOT / "scripts/competition/render-task123-demo.py"
 DEMO_RECORDER = REPO_ROOT / "scripts/competition/record-task123-demo.py"
 TASK3_MATRIX_BUILD = REPO_ROOT / "scripts/board/build-atk-task3-matrix.sh"
@@ -55,6 +58,27 @@ def fixture_environment(root: Path) -> dict[str, str]:
 def write_executable(path: Path, source: str) -> None:
     path.write_text(source)
     path.chmod(0o755)
+
+
+def write_archive_manifest(directory: Path) -> None:
+    manifest_lines = []
+    for source in sorted(directory.iterdir()):
+        if source.name == ".task123-tree-sha256" or not source.is_file():
+            continue
+        digest = subprocess.check_output(["sha256sum", source], text=True).split()[0]
+        manifest_lines.append(f"{digest}  ./{source.name}\n")
+    (directory / ".task123-tree-sha256").write_text("".join(manifest_lines))
+
+
+def test_fresh_ubuntu_install_instructions_include_rustup() -> None:
+    entrypoint = TASK123_ENTRYPOINT.read_text()
+    install_hint = entrypoint.split(
+        "Install common Ubuntu dependencies with:", 1
+    )[1].split("\n\n", 1)[0]
+    readme = TASK123_README.read_text()
+
+    assert "rustup" in install_hint
+    assert "rustup" in readme
 
 
 def test_doctor_rejects_selected_zephyr_python_without_jsonschema() -> None:
@@ -163,6 +187,185 @@ exec {real_sha256sum} "$@"
         assert "jsonschema" in output
 
 
+def test_doctor_discovers_all_dependencies_from_prepare_directories() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        fixture_root = Path(directory)
+        fake_bin = fixture_root / "bin"
+        deps_root = fixture_root / "deps"
+        download_cache = fixture_root / "downloads"
+        fixture_repo = fixture_root / "repository"
+        fixture_entrypoint = fixture_repo / "scripts" / "competition" / "task123.sh"
+        fixture_tools = fixture_repo / "scripts" / "lib" / "task123-tools.sh"
+        fake_bin.mkdir()
+        download_cache.mkdir()
+        fixture_entrypoint.parent.mkdir(parents=True)
+        fixture_tools.parent.mkdir(parents=True)
+        shutil.copy2(TASK123_ENTRYPOINT, fixture_entrypoint)
+        shutil.copy2(TASK123_TOOLS, fixture_tools)
+
+        for command in (
+            "cargo",
+            "rustup",
+            "python3",
+            "cmake",
+            "ninja",
+            "qemu-system-aarch64",
+            "qemu-aarch64",
+            "debugfs",
+            "e2fsck",
+            "dtc",
+            "flock",
+        ):
+            write_executable(fake_bin / command, "#!/usr/bin/env bash\nexit 0\n")
+        write_executable(
+            fake_bin / "git",
+            "#!/usr/bin/env bash\nprintf 'fixture-commit\\n'\n",
+        )
+
+        cross_bin = deps_root / "aarch64-linux-musl-cross" / "bin"
+        cross_bin.mkdir(parents=True)
+        for command in (
+            "aarch64-linux-musl-gcc",
+            "aarch64-linux-musl-g++",
+            "aarch64-linux-musl-ar",
+            "aarch64-linux-musl-ranlib",
+        ):
+            write_executable(cross_bin / command, "#!/usr/bin/env bash\nexit 0\n")
+
+        ncnn_revision = "946fe3fb14a8dff8c06df763f67be522167b2f00"
+        ncnn = deps_root / f"ncnn-{ncnn_revision}"
+        ncnn.mkdir()
+        (ncnn / "CMakeLists.txt").write_text("cmake_minimum_required(VERSION 3.20)\n")
+        (ncnn / ".task123-source-revision").write_text(f"{ncnn_revision}\n")
+
+        zephyr_revision = "dccb09599635bdff17633fa7e9dab014b91dce90"
+        zephyr = deps_root / f"zephyr-{zephyr_revision}"
+        zephyr.mkdir()
+        (zephyr / "CMakeLists.txt").write_text("cmake_minimum_required(VERSION 3.20)\n")
+        (zephyr / ".task123-source-revision").write_text(f"{zephyr_revision}\n")
+        write_archive_manifest(zephyr)
+
+        pnnx = deps_root / "pnnx-20260526-linux" / "pnnx"
+        pnnx.parent.mkdir()
+        write_executable(pnnx, "#!/usr/bin/env bash\nexit 0\n")
+
+        managed_python = deps_root / f"zephyr-python-{zephyr_revision}" / "bin" / "python3"
+        managed_python.parent.mkdir(parents=True)
+        write_executable(managed_python, "#!/usr/bin/env bash\nexit 0\n")
+
+        onnx = download_cache / "yolo11n.onnx"
+        onnx.write_bytes(b"fixture")
+        real_sha256sum = shutil.which("sha256sum")
+        assert real_sha256sum is not None
+        write_executable(
+            fake_bin / "sha256sum",
+            f"""#!/usr/bin/env bash
+if [[ "$#" == 1 && "$1" == "{onnx}" ]]; then
+    printf '%s  %s\\n' 634279b40c07c6391472c51ad45b81ebc48706a9a1fe72dd3396322acd0c053b "$1"
+    exit 0
+fi
+exec {real_sha256sum} "$@"
+""",
+        )
+
+        environment = os.environ.copy()
+        for name in (
+            "CROSS_ROOT",
+            "CROSS_CC",
+            "CROSS_CXX",
+            "CROSS_AR",
+            "CROSS_RANLIB",
+            "CROSS_COMPILE",
+            "TASK123_PYTHON",
+            "NCNN_SOURCE",
+            "PNNX",
+            "ZEPHYR_BASE",
+            "YOLO_ONNX",
+        ):
+            environment.pop(name, None)
+        environment.update(
+            {
+                "PATH": f"{fake_bin}:{environment['PATH']}",
+                "TASK123_DEPS_DIR": str(deps_root),
+                "TASK123_DOWNLOAD_CACHE": str(download_cache),
+            }
+        )
+
+        result = run(
+            "bash", str(fixture_entrypoint), "doctor", environment=environment
+        )
+
+        output = result.stdout + result.stderr
+        assert result.returncode == 0, output
+        assert "DOCTOR_PASS" in output
+
+
+def test_task123_toolchain_installs_starry_endpoint_target() -> None:
+    with RUST_TOOLCHAIN.open("rb") as source:
+        toolchain = tomllib.load(source)["toolchain"]
+
+    assert "aarch64-unknown-linux-musl" in toolchain["targets"]
+
+
+def test_starry_staging_checks_the_configured_image_extract_directory() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        fixture_root = Path(directory)
+        fixture_repo = fixture_root / "repository"
+        fixture_entrypoint = fixture_repo / "scripts" / "competition" / "task123.sh"
+        fixture_tools = fixture_repo / "scripts" / "lib" / "task123-tools.sh"
+        fake_bin = fixture_root / "bin"
+        e2fsck_log = fixture_root / "e2fsck.log"
+        extract_dir = fixture_root / "images"
+        rootfs = extract_dir / "rootfs-aarch64-alpine.img"
+
+        fixture_entrypoint.parent.mkdir(parents=True)
+        fixture_tools.parent.mkdir(parents=True)
+        fake_bin.mkdir()
+        extract_dir.mkdir()
+        source, separator, _ = TASK123_ENTRYPOINT.read_text().rpartition('\nmain "$@"')
+        assert separator
+        fixture_entrypoint.write_text(f"{source}\n")
+        shutil.copy2(TASK123_TOOLS, fixture_tools)
+        rootfs.write_bytes(b"rootfs")
+
+        starry_elf = (
+            fixture_repo
+            / "target"
+            / "aarch64-unknown-none-softfloat"
+            / "release"
+            / "starryos"
+        )
+        starry_elf.parent.mkdir(parents=True)
+        starry_elf.write_bytes(b"registered virtio network device")
+
+        write_executable(fake_bin / "cargo", "#!/usr/bin/env bash\nexit 0\n")
+        write_executable(
+            fake_bin / "e2fsck",
+            "#!/usr/bin/env bash\nprintf '%s\\n' \"$*\" >> \"$E2FSCK_LOG\"\n",
+        )
+
+        environment = os.environ.copy()
+        environment.update(
+            {
+                "PATH": f"{fake_bin}:{environment['PATH']}",
+                "TGOS_IMAGE_EXTRACT_DIR": str(extract_dir),
+                "E2FSCK_LOG": str(e2fsck_log),
+            }
+        )
+        result = run(
+            "bash",
+            "-c",
+            f"source {fixture_entrypoint!s}; stage_starry_task23_guest",
+            environment=environment,
+        )
+
+        assert result.returncode == 0, result.stdout + result.stderr
+        assert e2fsck_log.read_text().splitlines() == [
+            f"-fy {rootfs}",
+            f"-fn {rootfs}",
+        ]
+
+
 def test_zephyr_python_resolution_preserves_virtual_environment_path() -> None:
     with tempfile.TemporaryDirectory() as directory:
         deps_root = Path(directory)
@@ -186,6 +389,97 @@ def test_zephyr_python_resolution_preserves_virtual_environment_path() -> None:
 
         assert result.returncode == 0, result.stderr
         assert result.stdout.strip() == str(python)
+
+
+def test_task123_rootfs_resolution_honors_isolated_image_directory() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        fixture_root = Path(directory)
+        repository = fixture_root / "repository"
+        extract_dir = fixture_root / "images"
+        explicit_rootfs = fixture_root / "explicit.img"
+        environment = os.environ.copy()
+        environment.pop("STARRY_TASK23_ROOTFS", None)
+        environment["TGOS_IMAGE_EXTRACT_DIR"] = str(extract_dir)
+
+        isolated = run(
+            "bash",
+            "-c",
+            f"source {TASK123_TOOLS!s}; resolve_task123_rootfs {repository!s}",
+            environment=environment,
+        )
+
+        assert isolated.returncode == 0, isolated.stdout + isolated.stderr
+        assert isolated.stdout.strip() == str(extract_dir / "rootfs-aarch64-alpine.img")
+
+        environment["STARRY_TASK23_ROOTFS"] = str(explicit_rootfs)
+        explicit = run(
+            "bash",
+            "-c",
+            f"source {TASK123_TOOLS!s}; resolve_task123_rootfs {repository!s}",
+            environment=environment,
+        )
+
+        assert explicit.returncode == 0, explicit.stdout + explicit.stderr
+        assert explicit.stdout.strip() == str(explicit_rootfs)
+
+
+def test_task123_python_check_requires_pytest() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        python = Path(directory) / "python3"
+        write_executable(
+            python,
+            "#!/usr/bin/env bash\n"
+            "case \"${2:-}\" in\n"
+            "    *pytest*) exit 1 ;;\n"
+            "    *) exit 0 ;;\n"
+            "esac\n",
+        )
+
+        result = run(
+            "bash",
+            "-c",
+            f"source {TASK123_TOOLS!s}; task123_check_zephyr_python {python!s}",
+        )
+
+        assert result.returncode != 0
+        assert "pytest" in result.stderr
+
+
+def test_ci_gate_uses_configured_task123_python() -> None:
+    with tempfile.TemporaryDirectory() as directory:
+        fixture_root = Path(directory)
+        fake_bin = fixture_root / "bin"
+        fake_bin.mkdir()
+        invocation_log = fixture_root / "python-invocations"
+
+        write_executable(fake_bin / "cargo", "#!/usr/bin/env bash\nexit 0\n")
+        write_executable(
+            fake_bin / "python3",
+            "#!/usr/bin/env bash\n"
+            "printf 'host python must not run\\n' >&2\n"
+            "exit 37\n",
+        )
+        task123_python = fixture_root / "task123-python"
+        write_executable(
+            task123_python,
+            "#!/usr/bin/env bash\n"
+            f"printf '%s\\n' \"$*\" >> {invocation_log!s}\n",
+        )
+
+        environment = os.environ.copy()
+        environment.update(
+            {
+                "PATH": f"{fake_bin}:{environment['PATH']}",
+                "TASK123_PYTHON": str(task123_python),
+            }
+        )
+        result = run("bash", str(CI_REGRESSION), environment=environment)
+
+        assert result.returncode == 0, result.stdout + result.stderr
+        invocations = invocation_log.read_text().splitlines()
+        assert invocations[0] == "-m pytest -q scripts/test/net-dual-guest"
+        assert invocations[1].startswith("-m pytest -q scripts/task3/test_")
+        assert invocations[1].endswith(".py")
 
 
 def test_unified_builder_is_syntax_valid_and_builds_both_schedulers() -> None:

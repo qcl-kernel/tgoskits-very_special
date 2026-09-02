@@ -103,6 +103,17 @@ resolve_task123_cross_prefix() {
     printf '%s\n' "${cross_cc%gcc}"
 }
 
+# Resolve the StarryOS rootfs produced by axbuild. An explicit scenario
+# override remains authoritative; otherwise follow axbuild's configurable
+# extraction directory before falling back to the repository-local default.
+resolve_task123_rootfs() {
+    local repo_root="$1"
+    local extract_dir="${TGOS_IMAGE_EXTRACT_DIR:-$repo_root/tmp/axbuild/rootfs}"
+
+    printf '%s\n' \
+        "${STARRY_TASK23_ROOTFS:-$extract_dir/rootfs-aarch64-alpine.img}"
+}
+
 # Select the interpreter used by Zephyr's configure-time scripts. An explicit
 # override is authoritative; otherwise prefer the repository-managed virtual
 # environment prepared for the pinned Zephyr revision before using host Python.
@@ -146,7 +157,7 @@ task123_check_zephyr_python() {
         printf 'error: Zephyr Python interpreter is not executable: %s\n' "$python" >&2
         return 1
     fi
-    for module in elftools yaml pykwalify jsonschema packaging; do
+    for module in elftools yaml pykwalify jsonschema packaging pytest; do
         if ! "$python" -c "import $module" >/dev/null 2>&1; then
             missing+=("$module")
         fi

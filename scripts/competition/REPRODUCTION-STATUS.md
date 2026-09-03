@@ -1,6 +1,6 @@
-# Task 1–3 问题修复与复测说明
+# Task 1–3 修复状态与复测指南
 
-老师上次复现时发现的问题均已有对应修复。请更新到
+此前复现发现的问题均已有对应修复。请更新到
 `competition/task123-integration-20260824` 分支的 `fb98a33ae` 或更新提交后复测。
 
 ## 已修复问题
@@ -54,7 +54,7 @@ scripts/competition/task123.sh run task23-integrated
 
 ## Task 1 拓扑说明
 
-老师此前运行的旧 `suite task1` 是早期单 vCPU、AI 压力与 RTOS 竞争的对照场景，
+此前运行的旧 `suite task1` 是早期单 vCPU、AI 压力与 RTOS 竞争的对照场景，
 优化幅度较大，但它不是最终物理板架构。
 
 最终 RK3588 架构中，StarryOS 有两个 vCPU：vCPU0 在 pCPU2 负责 RKNN/NPU 推理，

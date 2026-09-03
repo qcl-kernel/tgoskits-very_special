@@ -1,6 +1,6 @@
 # Task 1–3 分任务复现入口
 
-老师复测可先阅读精简版的[问题修复与复测说明](TEACHER-RETEST.md)。
+复测前可先阅读精简版的[修复状态与复测指南](REPRODUCTION-STATUS.md)。
 
 ## 评委复现 Task 1
 

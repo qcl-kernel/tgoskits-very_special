@@ -223,6 +223,7 @@ https://www.bilibili.com/video/BV11XhF6REHU
 - [复现与配置指南](very_special-成果材料/05-复现与配置指南.md)
 - [证据与演示索引](very_special-成果材料/06-证据与演示索引.md)
 - [任务要求与实现覆盖](very_special-成果材料/07-任务要求与实现覆盖.md)
+- [完成细节与代码索引](very_special-成果材料/11-完成细节与代码索引.md)
 - [CARLA 五场景代码、JSON、板卡日志与校验清单](results/task3/carla-five/)
 
 证据目录保存仿真逐帧 JSON、真实板卡 NPU/通信日志、冻结配置及 SHA-256

@@ -98,4 +98,6 @@ rdrive.workspace = true
 rdif-clk.workspace = true
 
 [dev-dependencies]
+ax-std = { workspace = true, features = ["host-test"] }
+axdevice = { workspace = true, features = ["host-test"] }
 rdif-clk = { path = "../../drivers/interface/rdif-clk" }

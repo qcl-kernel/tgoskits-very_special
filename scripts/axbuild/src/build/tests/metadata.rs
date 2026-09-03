@@ -90,3 +90,28 @@ fn axvm_os_implementation_dependencies_are_facaded_by_ax_std() {
         "axvm must obtain OS implementation capabilities through ax-std: {direct_forbidden:?}"
     );
 }
+
+#[test]
+fn axvm_unit_tests_enable_host_platform_implementations() {
+    let metadata = repo_metadata();
+    let axvm = workspace_package(&metadata, "axvm").unwrap();
+
+    for dependency_name in ["ax-std", "axdevice"] {
+        let dependency = axvm
+            .dependencies
+            .iter()
+            .find(|dependency| {
+                dependency.name == dependency_name
+                    && dependency.kind == cargo_metadata::DependencyKind::Development
+            })
+            .unwrap_or_else(|| panic!("axvm needs a {dependency_name} development dependency"));
+
+        assert!(
+            dependency
+                .features
+                .iter()
+                .any(|feature| feature == "host-test"),
+            "axvm's {dependency_name} development dependency must enable host-test"
+        );
+    }
+}

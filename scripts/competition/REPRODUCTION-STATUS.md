@@ -61,6 +61,6 @@ scripts/competition/task123.sh run task23-integrated
 vCPU1 在 pCPU1 负责 T2N1 通信；Zephyr 也运行在 pCPU1。因此真正的调度竞争是
 “StarryOS 通信 vCPU 与 Zephyr”共核，优化幅度小于旧 AI-share 场景属于预期结果。
 
-由于老师没有 RK3588 板卡，新增的 `suite task1-multivcpu` 在 QEMU 中保持双 vCPU
+在没有 RK3588 板卡的复测环境中，新增的 `suite task1-multivcpu` 在 QEMU 中保持双 vCPU
 角色和通信共核关系，并完成 RR 3 轮、FP-RR 3 轮长测。QEMU 用 ncnn CPU 推理模拟
 AI 压力，只用于复现拓扑和调度对比，不代表 RK3588 NPU 的绝对性能。

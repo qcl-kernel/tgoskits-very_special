@@ -5,7 +5,7 @@
 ## 评委复现 Task 1
 
 安装下文列出的 Ubuntu 系统软件后，在仓库根目录按要复现的实验执行一套完整流程。
-由于评审老师当前没有 RK3588 物理板，`task1-multivcpu` 把最终实板的
+针对没有 RK3588 物理板的复测环境，`task1-multivcpu` 把最终实板的
 CPU 角色、StarryOS 双 vCPU 以及通信 vCPU/Zephyr 共核竞争关系迁移到
 QEMU，使多 vCPU 架构和调度 A/B 可在无板环境中重新构建与验证。
 
@@ -19,7 +19,7 @@ sudo apt-get install build-essential cmake ninja-build qemu-system-arm qemu-user
   xz-utils pkg-config libudev-dev clang libclang-dev
 ```
 
-复现老师已经运行过的原 Task 1：
+复现此前已经运行过的原 Task 1：
 
 ```bash
 scripts/competition/task123.sh prepare
